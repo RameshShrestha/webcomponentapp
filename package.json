@@ -1,0 +1,49 @@
+{
+  "name": "webcomponentapp",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@ui5/webcomponents": "~1.20.0",
+    "@ui5/webcomponents-fiori": "~1.20.0",
+    "@ui5/webcomponents-icons": "~1.20.0",
+    "@ui5/webcomponents-react": "^1.23.2",
+    "@ui5/webcomponents-react-base": "^1.23.0",
+    "@ui5/webcomponents-react-charts": "^1.23.0",
+    "ol": "^8.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-infinite-scroll-component": "^6.1.0",
+    "react-router-dom": "^6.21.0",
+    "react-scripts": "5.0.1",
+    "react-simple-image-slider": "^2.4.1",
+    "socket.io-client": "^4.7.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "cypress run --component --browser chrome",
+    "eject": "react-scripts eject",
+    "test:open": "cypress open --component --browser chrome"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@ui5/webcomponents-cypress-commands": "^1.23.2",
+    "cypress": "^12.17.4"
+  }
+}

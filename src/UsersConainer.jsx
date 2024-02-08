@@ -1,0 +1,250 @@
+import { ComboBox, ComboBoxItem, Button, FilterBar, FilterGroupItem, Input, Title, Bar ,Toast} from "@ui5/webcomponents-react";
+import Usercard from "./Usercard";
+//import UsersData from './usersData.json';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { UsersContext } from './Data/ContextHandler/UsersContext';
+import { useNavigate } from "react-router-dom";
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { render, createPortal } from 'react-dom';
+function UserContainer() {
+  const { usersData, addInitialUsers } = useContext(UsersContext);
+  const [fetching, setFetching] = useState(true);
+  const [userSkip, setUserSkip] = useState(0);
+  const [userLimit, setUserLimit] = useState(10);
+  const [userTotal, setUserTotal] = useState(10);
+  const [goPressed, setGoPressed] = useState(0);
+  const[allDataLoaded,setAllDataLoaded]= useState(true);
+  let filterQuery = "";
+  console.log(usersData);
+  const controller = new AbortController();
+
+  const navigate = useNavigate();
+  const toast = useRef(null);
+  const showToast = (message) => {
+      const modalRoot = document.getElementById('modal-root');
+      render(createPortal(<Toast ref={toast} duration={3000} style={{ color: "#ebeb84" }}>{message}</Toast>, modalRoot), document.createElement("div"));
+      toast.current.show();
+  };
+  const loadInitialData = (signal,bFromGo,filterString) => {
+
+  //    const url = `https://dummyjson.com/users?skip=${userSkip}&limit=${userLimit}`;
+      let url = `http://localhost:3001/realusers?skip=${bFromGo? 0:userSkip}&limit=${userLimit}`;
+      if(filterString){
+        url = url + filterString;
+      }
+      console.log(signal);
+      setFetching(true);
+    //  credentials: 'include',
+      fetch(url, { signal , credentials: 'include'})
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          addInitialUsers(data.users);
+          setUserTotal(data.total);
+          setFetching(false);
+          if(data.total > data.limit){
+            if(bFromGo){
+              setUserSkip(10);
+            }else{
+              setUserSkip(userSkip+10);
+            }
+           
+            setAllDataLoaded(false);
+          }else{
+            setAllDataLoaded(true);
+          }
+        })
+
+    };
+
+  const loadMoreData =  (signal) => {
+    console.log("load more data");
+    if(userSkip<= userTotal){
+   // const url = `https://dummyjson.com/users?skip=${userSkip}&limit=${userLimit}`;
+    let url = `http://localhost:3001/users?skip=${userSkip}&limit=${userLimit}`;
+
+    if(filterQuery){
+      url = url + filterQuery;
+    }
+    setFetching(true);
+    fetch(url, { signal , credentials: 'include'})
+      .then((res) => res.json())
+      .then((data) => {
+        
+     
+        if(data.total >= (data.skip + 10)){
+          setAllDataLoaded(false);
+          setUserSkip(userSkip + 10);
+          // setFetching(false);
+          setUserTotal(data.total);
+        
+       
+        //  setUserLimit(userLimit + 10);
+          console.log("All data not loaded");
+        }else{
+          setAllDataLoaded(true);
+        
+          console.log("All data  loaded");
+          
+        }
+        setFetching(false);
+        addInitialUsers([...usersData.users, ...data.users]);
+      })
+    }
+  } ;
+  const deleteUser = async (userId)=>{
+    const url = `http://localhost:3001/users/${userId}`;
+    const response = await fetch(url, {
+      method: 'DELETE',
+  
+      headers: {
+          'Content-Type': 'application/json'
+      }
+  });
+  const result = await response.json();
+  if (result.message === 'Removed Successfully') {
+    //  showToast(result.message);
+     // navigate("/products");
+     const usersCopy = [...usersData.users];
+    // usersCopy.findIndex()
+     const userIndex = usersCopy.findIndex(user => user.id == userId);
+     if(userIndex > -1){
+      usersCopy.splice(userIndex, 1);
+     }
+     addInitialUsers([...usersCopy]);
+     showToast("User " + userId + " : " + result.message );
+  }
+  }
+
+  useEffect(() => {
+    const signal = controller.signal;
+    loadInitialData(signal,false,"");
+    return () => {
+      console.log("Cleaning Use Effect after destruction");
+      controller.abort();
+    }
+
+  }, [])
+  return <>
+    <FilterBar
+      id="Filterbar"
+      showGoOnFB="true"
+      filterContainerWidth="12.125rem"
+   
+      onAfterFiltersDialogOpen={function _a() { }}
+      onClear={function _a() { }}
+      onFiltersDialogCancel={function _a() { }}
+      onFiltersDialogClose={function _a() { }}
+      onFiltersDialogOpen={function _a() { }}
+      onFiltersDialogSave={function _a() { }}
+      onFiltersDialogSearch={function _a() { }}
+      onFiltersDialogSelectionChange={function _a() { }}
+      onGo={function _a(e) {
+         const signal = controller.signal;
+         document.getElementById("scrollableDiv").scrollTop=0;
+         
+        console.log(e);
+        let filterString = "";
+        e.detail.filters.map((filter)=>{
+          let filterName = filter.name.replace("Filter","");
+          
+          if(filter.value){
+              filterString += "&" + filterName + "=" + filter.value;
+          }
+        });
+        console.log(filterString);
+        filterQuery = filterString;
+        loadInitialData(signal,true,filterString);
+      }}
+      onRestore={ function _a() { }}
+      onToggleFilters={function _a() { }}
+   
+    >
+      <FilterGroupItem
+        label="First Name"
+      >
+
+        <Input name="firstNameFilter" placeholder="First Name" />
+      </FilterGroupItem>
+      <FilterGroupItem label="Last Name">
+
+        <Input name="lastNameFilter" placeholder="Last Name" />
+      </FilterGroupItem>
+      <FilterGroupItem
+        active
+        label="User Id"
+      >
+        <Input name="userIdFilter" placeholder="User Id" />
+      </FilterGroupItem>
+      <FilterGroupItem label="Age">
+
+        <Input name="ageFilter" placeholder="Age" />
+      </FilterGroupItem>
+
+      {/* <FilterGroupItem
+    label="Sex"
+  >
+    {}
+    <ComboBox
+  
+  onChange={function _a(){}}
+  onInput={function _a(){}}
+  onSelectionChange={function _a(){}}
+>
+  <ComboBoxItem text="Male" />
+  <ComboBoxItem text="Female" />
+</ComboBox>
+  </FilterGroupItem> */}
+
+
+
+      {/* <FilterGroupItem
+    groupName="Group 2"
+    label="Date of Birth"
+  >
+    <DateRangePicker
+      style={{
+        minWidth: 'auto'
+      }}
+     />
+  </FilterGroupItem> */}
+    </FilterBar>
+
+    <Bar
+      endContent={<><Button design="Transparent" icon="add" onClick={() => {
+        navigate(`/users/new`, { state: { id: "new" } });
+      }} /></>}
+      startContent={<> <Title>Users</Title></>}
+    >
+    </Bar>
+    {/* <div style={{ display: "flex", flexWrap: "wrap", background: 'var(--sapShellColor)' }}>
+
+      {!fetching && usersData.users.map((user) => { return <Usercard key={"card " + user.id} user={user} />; })
+      }
+
+    </div> */}
+    <div id="scrollableDiv"style={{  overflow: "auto" }}>
+
+   
+    <InfiniteScroll style={{ display: "flex", flexWrap: "wrap", background: 'var(--sapShellColor)' }}
+      dataLength={usersData.users.length} //This is important field to render the next data
+      next= {loadMoreData}
+      hasMore={!allDataLoaded}
+  
+      loader={<h4 style={{width:"100%",textAlign:"center"}}>Loading...</h4>}
+      endMessage={
+        <p className="userloadedMsg" style={{ textAlign: 'center' ,width:"100%"}}>
+          <b>All {usersData.users.length} Users Loaded</b>
+        </p>
+      }
+      scrollableTarget="scrollableDiv"
+   
+    >
+       { usersData?.users.map((user) => { return <Usercard  key={user._id} user={user} deleteUser={deleteUser}/>; })
+      }
+    </InfiniteScroll>
+    </div>
+
+  </>
+}
+export default UserContainer;
