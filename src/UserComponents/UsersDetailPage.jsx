@@ -10,6 +10,9 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import StandardField from "./StandardField";
 import { useAuth } from "../Data/ContextHandler/AuthContext";
+
+import { LocalStorage } from "../Data/LocalStorage";
+const _myLocalStorageUtility = LocalStorage();
 function UsersDetailPage({ navigation, route }) {
     const [userData, setUserData] = useState({});
     let UserDataChanged = Object.assign({}, userData);
@@ -76,13 +79,16 @@ function UsersDetailPage({ navigation, route }) {
         }
         if (id !== "new" && id) {
             const url = baseURL + `/realusers/${id}`;
+            const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+            const _token = loggedInUser?.token || "";
             // const url = `https://dummyjson.com/users/${id}`;
             fetch(url, {
                 
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }, credentials: 'include'
+                    'Authorization': `Bearer ${_token}`
+                }, 
+                credentials: 'include'
             }).then((res) => {
                 return res.json();
             }).then((data) => {
@@ -120,12 +126,15 @@ function UsersDetailPage({ navigation, route }) {
                     <Button design="Positive" onClick={async (e) => {
                         console.log(UserDataChanged);
                         if (userData._id) {
+                            const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+                            const _token = loggedInUser?.token || "";
                             const response = await fetch(baseURL + `/realusers/${userData.username}`, {
                                 method: 'PUT',
                                  credentials: 'include',
                                 body: JSON.stringify(UserDataChanged),
                                 headers: {
-                                    'Content-Type': 'application/json'
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${_token}`
                                 }
                             });
                             const result = await response.json();
@@ -137,12 +146,15 @@ function UsersDetailPage({ navigation, route }) {
                             }
 
                         } else {
+                            const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+                            const _token = loggedInUser?.token || "";
                             const response = await fetch(baseURL + '/users', {
                                 method: 'POST',
                                  credentials: 'include',
                                 body: JSON.stringify(UserDataChanged),
                                 headers: {
-                                    'Content-Type': 'application/json'
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${_token}`
                                 }
                             });
                             const result = await response.json();
