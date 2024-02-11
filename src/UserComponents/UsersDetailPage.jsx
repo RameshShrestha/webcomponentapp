@@ -19,6 +19,7 @@ function UsersDetailPage({ navigation, route }) {
     const { contextData} = useAuth();
     const { token, user, role } = contextData;
     const toast = useRef(null);
+    const baseURL = process.env.REACT_APP_SERVER_URI;
     const showToast = (message) => {
         const modalRoot = document.getElementById('modal-root');
         render(createPortal(<Toast ref={toast} duration={3000} style={{ color: "#ebeb84" }}>{message}</Toast>, modalRoot), document.createElement("div"));
@@ -74,7 +75,7 @@ function UsersDetailPage({ navigation, route }) {
             setEditMode(true);
         }
         if (id !== "new" && id) {
-            const url = `http://localhost:3001/realusers/${id}`;
+            const url = baseURL + `/realusers/${id}`;
             // const url = `https://dummyjson.com/users/${id}`;
             fetch(url, {
                 
@@ -119,7 +120,7 @@ function UsersDetailPage({ navigation, route }) {
                     <Button design="Positive" onClick={async (e) => {
                         console.log(UserDataChanged);
                         if (userData._id) {
-                            const response = await fetch(`http://localhost:3001/realusers/${userData.username}`, {
+                            const response = await fetch(baseURL + `/realusers/${userData.username}`, {
                                 method: 'PUT',
                                  credentials: 'include',
                                 body: JSON.stringify(UserDataChanged),
@@ -136,7 +137,7 @@ function UsersDetailPage({ navigation, route }) {
                             }
 
                         } else {
-                            const response = await fetch('http://localhost:3001/users', {
+                            const response = await fetch(baseURL + '/users', {
                                 method: 'POST',
                                  credentials: 'include',
                                 body: JSON.stringify(UserDataChanged),
