@@ -1,4 +1,7 @@
 import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
+
+import { LocalStorage } from "../LocalStorage";
+const _myLocalStorageUtility = LocalStorage();
 const baseURL = process.env.REACT_APP_SERVER_URI;
 export let ToDoListContext = createContext({
   contextData: {
@@ -14,7 +17,7 @@ const ToDoListReducer = (todoList, action) => {
     case "AddToDo":
       return [...todoList, action.payload];
     case "RemoveToDo": {
-      console.log("function to remove",action.payload);
+      console.log("function to remove", action.payload);
       todoList = todoList.filter((item) => {
         return item._id !== action.payload
       })
@@ -46,14 +49,16 @@ export default function ToDoListContextProvider({ children }) {
   const [todoList, dispatchTodo] = useReducer(ToDoListReducer, []);
   const addToDo = async (newToDoItem) => {
     console.log("Item to be created", newToDoItem);
-  
+    const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+    const _token = loggedInUser?.token || "";
     try {
       const response = await fetch(baseURL + '/todolist/addTodoList', {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify(newToDoItem),
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${_token}`
         }
       });
       const result = await response.json();
@@ -72,16 +77,18 @@ export default function ToDoListContextProvider({ children }) {
 
 
   }
-  const removeToDo = async(todoItemId) => {
+  const removeToDo = async (todoItemId) => {
     console.log("deleting ", todoItemId);
-
+    const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+    const _token = loggedInUser?.token || "";
     try {
 
       const response = await fetch(baseURL + `/todolist/removeItem/${todoItemId}`, {
         method: 'DELETE',
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${_token}`
         }
       });
       const result = await response.json();
@@ -89,16 +96,17 @@ export default function ToDoListContextProvider({ children }) {
         type: "RemoveToDo",
         payload: todoItemId
       })
-    
+
     } catch (error) {
       console.log(error);
     }
 
-   
-  }
-  const updateToDo = async(updatedToDoItem) => {
-    console.log("Updating ", updatedToDoItem);
 
+  }
+  const updateToDo = async (updatedToDoItem) => {
+    console.log("Updating ", updatedToDoItem);
+    const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+    const _token = loggedInUser?.token || "";
     try {
 
       const response = await fetch(baseURL + `/todolist/updateItem/${updatedToDoItem._id}`, {
@@ -106,7 +114,8 @@ export default function ToDoListContextProvider({ children }) {
         credentials: 'include',
         body: JSON.stringify(updatedToDoItem),
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${_token}`
         }
       });
       const result = await response.json();
@@ -114,14 +123,14 @@ export default function ToDoListContextProvider({ children }) {
         type: "UpdateToDo",
         payload: updatedToDoItem
       })
-    
+
     } catch (error) {
       console.log(error);
     }
 
 
 
-    
+
   }
   const initialToDoList = (initialTodolist) => {
     dispatchTodo({
@@ -130,6 +139,8 @@ export default function ToDoListContextProvider({ children }) {
     })
   }
   const fetchIntialToDolist = async () => {
+    const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+    const _token = loggedInUser?.token || "";
     const baseURL = process.env.REACT_APP_SERVER_URI;
     try {
 
@@ -137,7 +148,8 @@ export default function ToDoListContextProvider({ children }) {
         method: 'GET',
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${_token}`
         }
       });
       const result = await response.json();
