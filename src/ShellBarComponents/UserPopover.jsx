@@ -67,13 +67,13 @@ function UserPopover({ isConnected, setIsConnected }) {
               //Sign out trigger
               console.log("About");
               actionPopover.close();
-              navigate("/about");
+              navigate("/about1");
 
             } else if (selectedItem === "Contact") {
               //Sign out trigger
               console.log("Contact");
               actionPopover.close();
-              navigate("/contact");
+              navigate("/contact1");
 
             } else if (selectedItem === "My Todo Activity") {
               //Sign out trigger
@@ -82,18 +82,18 @@ function UserPopover({ isConnected, setIsConnected }) {
               navigate("/todolist");
 
             }
-            else if (selectedItem === "My Todo Activity") {
+            else if (selectedItem === "Weathers") {
               //Sign out trigger
               console.log("Contact");
               actionPopover.close();
-              navigate("/todolist");
+              navigate("/weather1");
 
             }
             else if (selectedItem === "Images") {
               //Sign out trigger
               console.log("Images");
               actionPopover.close();
-              navigate("/images");
+              navigate("/images1");
 
             }
             else if (selectedItem === "Useful Links") {
@@ -114,14 +114,14 @@ function UserPopover({ isConnected, setIsConnected }) {
               //Sign out trigger
               console.log("Help");
               actionPopover.close();
-              navigate("/help");
+              navigate("/help1");
 
             }
             else if (selectedItem === "Countries") {
               //Sign out trigger
               console.log("Help");
               actionPopover.close();
-              navigate("/countries");
+              navigate("/countries1");
 
             }
             
@@ -166,6 +166,7 @@ function UserPopover({ isConnected, setIsConnected }) {
           </GroupHeaderListItem>
           <StandardListItem key="Usefullinks" icon="information">Useful Links</StandardListItem>
           <StandardListItem key="Countries" icon="information">Countries</StandardListItem>
+          <StandardListItem key="Weathers" icon="information">Weathers</StandardListItem>
           <StandardListItem key="Images" icon="information">Images</StandardListItem>
 
         </List>

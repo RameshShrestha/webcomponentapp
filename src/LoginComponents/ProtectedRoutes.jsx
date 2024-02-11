@@ -1,7 +1,7 @@
 import { Navigate, Outlet, useLocation, useNavigate } from "react-router-dom"
 import { useAuth } from '../Data/ContextHandler/AuthContext';
 import { ThemeProvider } from '@ui5/webcomponents-react';
-import { setTheme } from "@ui5/webcomponents-base/dist/config/Theme.js";
+import { setTheme ,getTheme} from "@ui5/webcomponents-base/dist/config/Theme.js";
 import MyShellBar from '../ShellBarComponents/MyShellBar';
 import UserPopover from '../ShellBarComponents/UserPopover';
 import Notifications from '../ShellBarComponents/Notifications';
@@ -10,7 +10,10 @@ import ChatingBoxContainer from '../chatComponents/ChatingBoxContainer';
 import ChatBox from '../chatComponents/ChatBox';
 import React, { useEffect, useState } from "react";
 import { socket } from '../socket';
+import { LocalStorage } from "../Data/LocalStorage";
+const _myLocalStorageUtility = LocalStorage();
 const ProtectedRoutes = ({ children }) => {
+    console.log("Applied Theme : ", getTheme());
     const [isConnected, setIsConnected] = useState(socket.connected);
     const baseURL = process.env.REACT_APP_SERVER_URI;
     const { contextData } = useAuth();
@@ -21,11 +24,14 @@ const ProtectedRoutes = ({ children }) => {
     console.log("location", location);
     console.log("Executed here Protected router", userDetail);
     const checkIfUserSessionIsValid = async () => {
+        const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+        const _token = loggedInUser?.token || "";
         const response = await fetch(baseURL + '/realusers/nouser', {
             method: 'GET',
             credentials: 'include',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${_token}`
             }
         });
         if (response.status < 300) {
@@ -33,17 +39,20 @@ const ProtectedRoutes = ({ children }) => {
 
         } else {
             // return <Navigate to="/welcome" state={{ from: location }} replace />
-          
+
             navigate("/welcome");
         }
     }
-    if (!userDetail) {
+    if (!user) {
         checkIfUserSessionIsValid();
     }
     if (settingConfig?.theme) {
+        console.log("Applied Theme : ", settingConfig.theme);
         setTheme(settingConfig.theme);
+      //  setTheme("sap_horizon_dark");
     } else {
         setTheme("sap_horizon_dark");
+        console.log("Applied Theme is set", "sap_horizon_dark");
     }
     useEffect(() => {
         function onConnect() {
@@ -82,7 +91,8 @@ const ProtectedRoutes = ({ children }) => {
     }, [user]);
     return (
         <ThemeProvider>
-            <div className="mainContainer" style={{ height: `${user && isConnected ? "82vh" : "91vh"}`, overflow: "auto", overflowX: "hidden", background: "var(--sapBackgroundColor)" }}>
+            <div className="mainContainer" style={{ height: `${user && isConnected ? "100vh" : "100vh"}`, overflow: "auto", overflowX: "hidden", background: getTheme().indexOf("dark") > -1 ? "var(--sapBackgroundColor)" :"#a8b4d9"} }>
+
                 <MyShellBar />
                 <UserPopover isConnected={isConnected} setIsConnected={setIsConnected} />
                 <Notifications />
@@ -95,9 +105,10 @@ const ProtectedRoutes = ({ children }) => {
                         </OnlineUsersContextProvider>
                     </div>
                 }
-            </div>
 
+            </div>
         </ThemeProvider>
+
     );
 
 };

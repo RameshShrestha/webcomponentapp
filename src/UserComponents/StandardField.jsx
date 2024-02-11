@@ -7,7 +7,7 @@ const StandardField = ({ editMode, value, inputType = InputType.None, onChange, 
 
     if (inputType === "Select") {
       return (
-        <Select selectOptions={selectOptions || []} onChange={onChange} {...rest}>
+        <Select selectOptions={selectOptions || []} onChange={onChange}  value={value} {...rest}>
            {selectOptions && selectOptions.map(item=>{
             return ( <Option>
               {item}

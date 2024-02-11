@@ -4,7 +4,8 @@ import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import LoginPage from './LoginComponents/LoginPage';
 import RegisterPage from './LoginComponents/RegisterPage';
 import { useAuth,AuthContext,AuthProvider } from './Data/ContextHandler/AuthContext';
-
+import { ThemeProvider } from '@ui5/webcomponents-react';
+import  '@ui5/webcomponents-react/dist/Assets';
 import MyApp from './MyApp';
 
 function App() {
@@ -31,7 +32,9 @@ function App() {
                
                         <HashRouter>
                         <AuthProvider>
+                        <ThemeProvider>
                           <MyApp />
+                          </ThemeProvider>
                          </AuthProvider>
                         </HashRouter>
                 

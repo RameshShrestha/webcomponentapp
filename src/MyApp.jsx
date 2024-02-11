@@ -30,53 +30,71 @@ import SettingPage from "./SettingPage";
 import HelpPage from "./HelpPage";
 import CountriesMainPage from "./CountriesCompoents/CountriesMainPage";
 import UnProtectedRoutes from "./LoginComponents/UnProtectedRoutes";
+import { setTheme } from "@ui5/webcomponents-base/dist/config/Theme.js";
+import { ThemeProvider } from '@ui5/webcomponents-react';
+import UserLocationContextProvider from "./Data/ContextHandler/UserLocationContext";
 export default function MyApp() {
   const { contextData } = useAuth();
-  const {  user } = contextData;
+  const { user, settingConfig } = contextData;
   //console.log(settingConfig);
   const [isConnected, setIsConnected] = useState(socket.connected);
   // let onlineStatus = "Online";
   //console.log(socket);
   const { logout } = useAuth();
-  
+
   //  const EditProductContext = React.createContext();
   const [editRows, setEditRows] = useState([]);
 
-    return (  
-          <Routes>
-          <Route element={<UnProtectedRoutes />}>
-            <Route exact path="/welcome" element={<WelcomeScreen />} />
-            <Route path="/login" element={<LoginPage /> } />
-            <Route exact path="/register" element={<RegisterPage />} />
-            <Route exact path="/about" element={<AboutPage />} />
-            <Route exact path="/contact" element={<ContactPage />} />
-            <Route exact path="/images" element={<ImageListMainPage />} />
-            <Route exact path="/weather" element={<WeatherMainPage />} />
-            <Route exact path="/news" element={<NewsPage />} />
-            <Route exact path="/countries" element={<CountriesMainPage />} />
-            <Route exact path="/help" element={<HelpPage />} />
-            {/* <Route exact path="/loader" element={<Loader />} /> */}
-            </Route>
-            <Route element={<ProtectedRoutes />}>
-              <Route exact path="/home" element={<Home /> } />
-              <Route exact path="/detail" element={<Detail /> } />
-              <Route exact path="/products" element={<Products setEditRows={setEditRows} /> } />
-              <Route exact path="/settings" element={<SettingPage /> } />
-              <Route exact path="/editproducts" element={<EditProductContext.Provider value={{ editRows }}><EditProducts /> </EditProductContext.Provider>} />
-              <Route exact path="/imagelist" element={<ImageList /> } />
-              <Route exact path="/addproduct" element={<NewProduct /> } />
-              <Route exact path="/users" element={<UserContextProvider><UsersConainer /> </UserContextProvider>} />
-              <Route exact path="/users/:id" element={<UsersDetailPage /> } />
-              <Route exact path="/myprofile" element={<UsersDetailPage /> } />
-              <Route path="/resetPassword" element={<ResetPassword /> } />
-              <Route path="/usefullinks" element={<UsefulLinkMainPage /> } />
-              <Route exact path="/todolist" element={<ToDoListContextProvider><ToDoMainPage user={user} /> </ToDoListContextProvider>} />
-              {/* <Route path="/" element={<Navigate replace to="/home" />} /> */}
-              <Route path="*" element={<Navigate replace to="/home" />} />
-            </Route>
+  setTheme("sap_horizon_dark");
 
-          </Routes>
-      
+  return (
+
+    <div>
+      <Routes>
+        <Route element={<UnProtectedRoutes />}>
+          <Route exact path="/welcome" element={<WelcomeScreen />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route exact path="/register" element={<RegisterPage />} />
+          <Route exact path="/about" element={<AboutPage />} />
+          <Route exact path="/contact" element={<ContactPage />} />
+          <Route exact path="/images" element={<ImageListMainPage />} />
+          <Route exact path="/weather" element={<UserLocationContextProvider><WeatherMainPage /></UserLocationContextProvider>} />
+          <Route exact path="/news" element={<NewsPage />} />
+          <Route exact path="/countries" element={<CountriesMainPage />} />
+          <Route exact path="/help" element={<HelpPage />} />
+          {/* <Route exact path="/loader" element={<Loader />} /> */}
+        </Route>
+       
+        <Route element={<ProtectedRoutes />}>
+          <Route exact path="/home" element={<Home />} />
+          <Route exact path="/detail" element={<Detail />} />
+          <Route exact path="/products" element={<Products setEditRows={setEditRows} />} />
+          <Route exact path="/settings" element={<SettingPage />} />
+          <Route exact path="/editproducts" element={<EditProductContext.Provider value={{ editRows }}><EditProducts /> </EditProductContext.Provider>} />
+          <Route exact path="/imagelist" element={<ImageList />} />
+          <Route exact path="/addproduct" element={<NewProduct />} />
+          <Route exact path="/users" element={<UserContextProvider><UsersConainer /> </UserContextProvider>} />
+          <Route exact path="/users/:id" element={<UsersDetailPage />} />
+          <Route exact path="/myprofile" element={<UsersDetailPage />} />
+          <Route path="/resetPassword" element={<ResetPassword />} />
+          <Route path="/usefullinks" element={<UsefulLinkMainPage />} />
+          <Route exact path="/todolist" element={<ToDoListContextProvider><ToDoMainPage user={user} /> </ToDoListContextProvider>} />
+
+          <Route exact path="/about1" element={<AboutPage />} />
+          <Route exact path="/contact1" element={<ContactPage />} />
+          <Route exact path="/images1" element={<ImageListMainPage />} />
+          <Route exact path="/weather1" element={<UserLocationContextProvider><WeatherMainPage /></UserLocationContextProvider>} />
+          <Route exact path="/news1" element={<NewsPage />} />
+          <Route exact path="/countries1" element={<CountriesMainPage />} />
+          <Route exact path="/help1" element={<HelpPage />} />
+
+          {/* <Route path="/" element={<Navigate replace to="/home" />} /> */}
+
+        </Route>
+        <Route path="*" element={<Navigate replace to="/welcome" />} />
+      </Routes>
+    </div>
+
   );
 }
 

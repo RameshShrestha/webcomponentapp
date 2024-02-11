@@ -1,9 +1,13 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom"
 import { useAuth } from '../Data/ContextHandler/AuthContext';
-
+import { ThemeProvider } from '@ui5/webcomponents-react';
+import { setTheme } from "@ui5/webcomponents-base/dist/config/Theme.js";
 import React, { useEffect, useState } from "react";
 import WelcomeHeader from "../WelcomePage/WelcomeHeader";
 import WelcomeFooter from "../WelcomePage/WelcomeFooter";
+import { LocalStorage } from "../Data/LocalStorage";
+import  '@ui5/webcomponents-react/dist/Assets';
+const _myLocalStorageUtility = LocalStorage();
 const UnProtectedRoutes = ({ children }) => {
     const baseURL = process.env.REACT_APP_SERVER_URI;
     const { contextData } = useAuth();
@@ -34,34 +38,47 @@ const UnProtectedRoutes = ({ children }) => {
     useEffect(() => {
         getServerStatus();
     }, []);
-    console.log("location", location);
-    console.log("Executed here Un Protected router", userDetail);
-    const checkIfUserSessionIsValid = async () => {
-        const response = await fetch(baseURL + '/realusers/nouser', {
-            method: 'GET',
-            credentials: 'include',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        // if (response.status < 300) {
-        //     return children;
-
-        // } else {
-        //     return <Navigate to="/welcome" state={{ from: location }} replace />
-        // }
+    //console.log("location", location);
+   // console.log("Executed here Un Protected router", userDetail);
+    setTheme("sap_horizon_dark");
+    const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+    const _token = loggedInUser?.token || "";
+    const _user = loggedInUser?.user || "";
+    if (_token && _user) {
+        return <Navigate to="/home" state={{ from: location }} replace />
     }
+    //     const checkIfUserSessionIsValid = async () => { 
+    //     if(_token && _user){
+    //     const response = await fetch(baseURL + `/realusers/${_user}`, {
+    //         method: 'GET',
+    //         credentials: 'include',
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //             'Authorization': `Bearer ${_token}`
+    //         }
+    //     });
+
+    //      if (response.status < 300) {
+    //         console.log("User is already logged In");
+    //         return <Navigate to="/home" state={{ from: location }} replace />
+
+    //      } else {
+
+    //      }
+    //     }
+    // }
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", minWidth: "350px", flexWrap: "wrap" }}>
-            <WelcomeHeader dbConnected={dbConnected} />
-            <div className="unprotectedContainer sapScrollBar">
-            <Outlet />
-            </div>
-            <WelcomeFooter />
-            
-        </div>
+        <ThemeProvider>
+            <div style={{ display: "flex", flexDirection: "column", minWidth: "350px", flexWrap: "wrap" }}>
+                <WelcomeHeader dbConnected={dbConnected} />
+                <div className="unprotectedContainer sapScrollBar">
+                    <Outlet/>
+                </div>
+                <WelcomeFooter />
 
+            </div>
+        </ThemeProvider>
 
     );
 

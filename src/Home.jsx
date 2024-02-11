@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "@ui5/webcomponents-icons/dist/AllIcons.js";
 import {
   AnalyticalTable,
@@ -25,6 +25,11 @@ import { useAuth } from "./Data/ContextHandler/AuthContext";
 import WeatherMainPage from "./WeatherPage/WeatherMainPage";
 import Usercard from "./Usercard";
 import AdminNotificationSender from "./AdminComponents/AdminNotificationSender";
+import { LocalStorage } from "./Data/LocalStorage";
+import WeatherCard from "./WeatherPage/WeatherCard";
+import UserLocationContextProvider from "./Data/ContextHandler/UserLocationContext";
+import { UserLocationContext } from "./Data/ContextHandler/UserLocationContext";
+const _myLocalStorageUtility = LocalStorage();
 const dataset = [
   {
     month: "January",
@@ -144,14 +149,19 @@ export default function Home() {
   const { contextData } = useAuth();
   const { token, user, role, settingConfig, userDetail } = contextData;
 console.log("userDetail",userDetail);
+// const { location,locationPermission } = useContext(UserLocationContext);
+// console.log("location : ",location, "locationPermission : ",locationPermission);
   const fetchIntialToDolist = async () => {
+    const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+    const _token = loggedInUser?.token || "";
     const baseURL = process.env.REACT_APP_SERVER_URI;
     try {
       const response = await fetch(baseURL + '/todolist/getList', {
         method: 'GET',
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${_token}`
         }
       });
       const result = await response.json();
@@ -182,12 +192,15 @@ console.log("userDetail",userDetail);
 
   const getUsersStatus = async () => {
     const baseURL = process.env.REACT_APP_SERVER_URI;
+    const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+    const _token = loggedInUser?.token || "";
     try {
       const response = await fetch(baseURL + '/serverstatus', {
         method: 'GET',
         credentials: 'include',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${_token}`
         }
       });
 
@@ -256,6 +269,10 @@ console.log("userDetail",userDetail);
     console.log("clicked Progress header");
     navigate("/todolist");
   };
+  const handleWeatherClick = () => {
+    console.log("clicked Weather header");
+    navigate("/weather1");
+  };
   const handleProductHeaderClick = () => {
     console.log("clicked Product header");
     navigate("/products");
@@ -291,12 +308,35 @@ console.log("userDetail",userDetail);
         style={spacing.sapUiContentPadding}
       >
 
-        
-          <div height={"220px"}>
+          <Card
+           header={
+            <CardHeader
+              titleText="My Profile"
+              avatar={<Icon name="employee" />}
+            />
+          }
+           style={{ maxWidth: "340px", ...spacing.sapUiContentPadding }}>
+          <div >
             <Usercard user={userDetail} />
           </div>
-       
-
+          </Card>
+          {settingConfig?.showWeatherCard &&
+          <Card
+            header={
+              <CardHeader
+                titleText="Weather Today"
+                interactive
+                onClick={handleWeatherClick}
+                avatar={<Icon name={tableViewIcon} />}
+              />
+            }
+           
+            style={{ maxWidth: "300px", ...spacing.sapUiContentPadding }}
+          >
+            {/* <WeatherMainPage /> */}
+            <UserLocationContextProvider><WeatherCard/></UserLocationContextProvider>
+          </Card>
+        }
         {role === "ADMIN" &&
   
             <Card
@@ -563,19 +603,7 @@ console.log("userDetail",userDetail);
             </div>
           </Card>
         }
-   {settingConfig?.showWeatherCard &&
-          <Card
-            header={
-              <CardHeader
-                titleText="Weather Report"
-                avatar={<Icon name={tableViewIcon} />}
-              />
-            }
-            style={{ ...spacing.sapUiContentPadding }}
-          >
-            <WeatherMainPage />
-          </Card>
-        }
+
       </FlexBox>
     </>
   );

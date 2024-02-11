@@ -132,7 +132,7 @@ function SettingPage() {
                         </FormItem>
                         <FormItem label="Theme">
                             <StandardField editMode={editMode} value={settingData.theme}
-                                inputType="Select" selectOptions={["sap_horizon","sap_horizon_dark","sap_horizon", "sap_horizon_dark", "sap_fiori_3", "sap_fiori_3_dark", "sap_belize"]}
+                                inputType="Select" selectOptions={["" ,"sap_horizon","sap_horizon_dark", "sap_fiori_3", "sap_fiori_3_dark", "sap_belize"]}
                                 onChange={onChangeValue} name="theme" />
                         </FormItem>
 

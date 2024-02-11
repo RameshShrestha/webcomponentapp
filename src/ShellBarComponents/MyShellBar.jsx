@@ -6,7 +6,7 @@ import { useAuth } from "../Data/ContextHandler/AuthContext";
 function MyShellBar(){
     const navigate = useNavigate();
     const handleLogoClick = () => {
-        navigate("./");
+        navigate("/home");
       };
       const { contextData } = useAuth();
 const { userDetail,settingConfig } = contextData;

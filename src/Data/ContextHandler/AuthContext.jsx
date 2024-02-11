@@ -14,17 +14,17 @@ const validDummyUsers = [{ username: "Ramesh", "password": "Ramesh" },
 { username: "User2", "password": "User2" }];
 
 const AuthContext = createContext({
-  contextData :{
-        user: null,
-        token: null,
-        role : null,
-        settingConfig : null,
-        login: async () => { },
-        register: async () => { },
-        logout: async () => { },
-        userDetail : null
-      }
-  });
+  contextData: {
+    user: null,
+    token: null,
+    role: null,
+    settingConfig: null,
+    login: async () => { },
+    register: async () => { },
+    logout: async () => { },
+    userDetail: null
+  }
+});
 
 // Create a hook to access the AuthContext
 const useAuth = () => useContext(AuthContext);
@@ -58,7 +58,7 @@ const AuthProvider = ({ children }) => {
 
 
     if (data.username && data.password) {
-      console.log("login",data);
+      console.log("login", data);
       // const loggedInUser = validDummyUsers.find((dummyUser) => {
       //   if (dummyUser.username === data.username) {
       //     return dummyUser;
@@ -82,74 +82,82 @@ const AuthProvider = ({ children }) => {
       //   console.log("User Does not exist");
       // }
       const baseURL = process.env.REACT_APP_SERVER_URI;
-    try{
-     
-    const response = await fetch(baseURL + '/realusers/login', {
-      method: 'POST',
-      credentials: 'include',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json'
+      try {
+
+        const response = await fetch(baseURL + '/realusers/login', {
+          method: 'POST',
+          credentials: 'include',
+          body: JSON.stringify(data),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        const result = await response.json();
+        console.log("returning", result);
+        if (result?.message === "Logged in successfully") {
+          setUser(result.user.username);
+          setRole(result.user.role);
+          setToken(result.accessToken);
+          _myLocalStorageUtility.setLoggedInUserData(result.user.username, result.accessToken, result.user.role);
+          loadUserSettings();
+          loadLoggedInUserDetail(result.user.username);
+          //navigate("/home");
+        }
+        return result;
+
+      } catch (e) {
+        console.log(e);
       }
-    });
-  
-    const result = await response.json();
-    console.log("returning",result);
-    if(result?.message === "Logged in successfully"){
-      setUser(result.user.username);
-      setRole(result.user.role);
-      setToken("Dummy Token");
-      _myLocalStorageUtility.setLoggedInUserData(result.user.username, "dummyToken",result.user.role);
-      loadUserSettings();
-      loadLoggedInUserDetail(result.user.username);
-      //     navigate("/home");
-    }
-    return result;
-   
-  }catch(e){
-    console.log(e);
-  }
     }
   };
-  const loadUserSettings = async()=>{
-    const response = await fetch(baseURL + '/settings', {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    if(response.status < 300){
-    const result = await response.json();
-      console.log(result);
-      setSettingConfig(result[0]);
-  }else{
-   
-  }
-  }
-  const loadLoggedInUserDetail = async(username)=>{
-    const response = await fetch(baseURL + '/realusers/'+ username, {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    if(response.status < 300){
+  const loadUserSettings = async () => {
+    const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+    const _token = loggedInUser?.token || "";
+    if (_token) {
+      const response = await fetch(baseURL + '/settings', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${_token}`
+        }
+      });
+      if (response.status < 300) {
+        const result = await response.json();
+        console.log(result);
+        setSettingConfig(result[0]);
+      } else {
 
-  
-    const result = await response.json();
-    setUserDetail(result);
-    if(!user){
-      setUser(result.username);
-      setRole(result.role);
+      }
     }
-  }else{
-    setToken("");
-    _myLocalStorageUtility.removeLoggedInUserData();
-    setUser(null);
-     // navigate("/welcome");
   }
+  const loadLoggedInUserDetail = async (username) => {
+    const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+    const _token = loggedInUser?.token || "";
+    if (_token) {
+      const response = await fetch(baseURL + '/realusers/' + username, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${_token}`
+        }
+      });
+      if (response.status < 300) {
+        const result = await response.json();
+        setUserDetail(result);
+        if (!user) {
+          setUser(result.username);
+          setRole(result.role);
+        }
+      } else {
+        setToken("");
+        _myLocalStorageUtility.removeLoggedInUserData();
+        setUser(null);
+        // navigate("/welcome");
+      }
+    }
   }
 
   // Function to handle user registration
@@ -166,23 +174,24 @@ const AuthProvider = ({ children }) => {
     // );
     const baseURL = process.env.REACT_APP_SERVER_URI;
     console.log(baseURL);
-    try{
-     
-    const response = await fetch(baseURL + '/realusers/createUser', {
-      method: 'POST',
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-  
-    const result = await response.json();
-    console.log("returning",result);
-    return result;
-   
-  }catch(e){
-    console.log(e);
-  }
+    try {
+
+      const response = await fetch(baseURL + '/realusers/createUser', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const result = await response.json();
+      console.log("returning", result);
+      return result;
+
+    } catch (e) {
+      console.log(e);
+    }
     // if (result.message === 'Added Successfully') {
     //     showToast(result.message);
     //     navigate("/products");
@@ -207,25 +216,26 @@ const AuthProvider = ({ children }) => {
 
     const baseURL = process.env.REACT_APP_SERVER_URI;
     console.log(baseURL);
-    try{
-     
-    const response = await fetch(baseURL + '/realusers/logout', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-  
-    const result = await response.json();
-    console.log("Logout");
-    setUser(null);
-    setToken("");
-    _myLocalStorageUtility.removeLoggedInUserData();
-    navigate("/welcome", { "replace": true });
-  }catch(error){
-    console.log(error);
-  }
+    try {
+
+      const response = await fetch(baseURL + '/realusers/logout', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      const result = await response.json();
+      console.log("Logout");
+      setUser(null);
+      setToken("");
+      _myLocalStorageUtility.removeLoggedInUserData();
+      navigate("/welcome");
+    } catch (error) {
+      console.log(error);
+    }
     // await requestHandler(
     //   async () => await logoutUser(),
     //   setIsLoading,
@@ -242,33 +252,31 @@ const AuthProvider = ({ children }) => {
   // Check for saved user and token in local storage during component initialization
   useEffect(() => {
     //Commented to not store in local storage
-    // setIsLoading(true);
-    // const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
-    // const _token = loggedInUser?.token || "";
-    // const _user = loggedInUser?.user || "";
-    // const _role = loggedInUser?.role || "";
-    // if (_token && _user) {
-    //   setUser(_user);
-    //   setToken(_token);
-    //   setRole(_role);
-    //   loadLoggedInUserDetail(_user);
+    setIsLoading(true);
+    const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+    const _token = loggedInUser?.token || "";
+    const _user = loggedInUser?.user || "";
+    const _role = loggedInUser?.role || "";
+    if (_token && _user) {
+      setUser(_user);
+      setToken(_token);
+      setRole(_role);
+      loadLoggedInUserDetail(_user);
 
-    // }
-    // setIsLoading(false);
-    if(!userDetail){
+    }
+    setIsLoading(false);
+    if (!userDetail) {
 
       console.log("Executed here AuthContext UseEffect");
-    loadLoggedInUserDetail('nouser');
-    //loadUserSettings();
-  }
+      loadLoggedInUserDetail('nouser');
+      loadUserSettings();
+    }
   }, []);
 
   // Provide authentication-related data and functions through the context
   return (
-    <AuthContext.Provider value={{contextData:{ user,role, login, settingConfig,setSettingConfig,register, logout, token, resetPassword ,userDetail}}}>
-
+    <AuthContext.Provider value={{ contextData: { user, role, login, settingConfig, setSettingConfig, register, logout, token, resetPassword, userDetail } }}>
       {isLoading ? <Loader /> : children}
-
       {/* Display a loader while loading */}
     </AuthContext.Provider>
   );

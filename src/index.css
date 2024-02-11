@@ -81,7 +81,7 @@ code {
   justify-content: flex-end;
   height: 50px;
   z-index: 100;
-  position: absolute;
+  position: fixed;
 }
 
 .chatButton {
@@ -131,12 +131,19 @@ code {
   align-items: center;
   align-content: center;
   overflow: hidden auto;
-
   padding: 30px;
-  height: 89vh;
-
+  height: 65vh;
 }
-
+.mainRegisterScreen {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+  overflow: hidden auto;
+  padding-top: 30px;
+  height: 85vh;
+}
 .loginComponents {
   align-items: center;
   align-content: center;
@@ -209,14 +216,14 @@ code {
   height: 50px;
   width: 100%;
  
-  background-color: var(--sapAccentBackgroundColor5);
+  background-color: var(--sapBrandColor);
   align-items: center;
 }
 
 .MainWS {
   text-align: center;
   position: relative;
-  height: 81vh;
+  height: 84vh;
   overflow: scroll;
   overflow-x: hidden;
 }
@@ -432,12 +439,12 @@ code {
 
 .userMessage {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .senderMessage {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
 }
 
 .chatMessage {
