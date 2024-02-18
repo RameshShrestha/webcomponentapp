@@ -6,6 +6,8 @@ import { UsersContext } from './Data/ContextHandler/UsersContext';
 import { useNavigate } from "react-router-dom";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { render, createPortal } from 'react-dom';
+import { LocalStorage } from './Data/LocalStorage';
+const _myLocalStorageUtility = LocalStorage();
 const baseURL = process.env.REACT_APP_SERVER_URI;
 function UserContainer() {
   const { usersData, addInitialUsers } = useContext(UsersContext);
@@ -32,9 +34,16 @@ function UserContainer() {
       url = url + filterString;
     }
     console.log(signal);
+      const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+    const _token = loggedInUser?.token || "";
     setFetching(true);
     //  credentials: 'include',
-    fetch(url, { signal, credentials: 'include' })
+    fetch(url, { signal, 
+                headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${_token}`
+        },
+                credentials: 'include' })
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
@@ -61,12 +70,19 @@ function UserContainer() {
     if (userSkip <= userTotal) {
       // const url = `https://dummyjson.com/users?skip=${userSkip}&limit=${userLimit}`;
       let url = `${baseURL}/users?skip=${userSkip}&limit=${userLimit}`;
-
+  const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+    const _token = loggedInUser?.token || "";
       if (filterQuery) {
         url = url + filterQuery;
       }
       setFetching(true);
-      fetch(url, { signal, credentials: 'include' })
+      fetch(url, { signal, 
+        
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${_token}`
+        },
+                  credentials: 'include' })
         .then((res) => res.json())
         .then((data) => {
           if (data.total >= (data.skip + 10)) {
@@ -87,10 +103,17 @@ function UserContainer() {
   };
   const deleteUser = async (userId) => {
     const url = `${baseURL}/users/${userId}`;
+      const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+    const _token = loggedInUser?.token || "";
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${_token}`
+        },
+        credentials: 'include'
       }
     });
     const result = await response.json();
