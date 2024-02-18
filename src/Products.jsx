@@ -1,11 +1,12 @@
-import { Table, TableRow, TableCell, Label, TableColumn, Button, TableGrowingMode, Panel, Toolbar, Title, ToolbarSpacer, Icon, Toast } from '@ui5/webcomponents-react';
+import { Table, TableRow, TableCell, Label, TableColumn, Button, TableGrowingMode, Panel, Toolbar, Title, ToolbarSpacer, Icon, Toast, FilterBar, FilterItem, FilterGroupItem, Input } from '@ui5/webcomponents-react';
 import { useEffect, useRef, useState } from 'react';
 import { RatingIndicator } from '@ui5/webcomponents-react';
-import { spacing, ThemingParameters } from "@ui5/webcomponents-react-base";
 import navigationRightArrow from "@ui5/webcomponents-icons/dist/navigation-right-arrow";
 import ProductDetailDialog from './ProductDetailDialog';
 import { useNavigate } from 'react-router-dom';
-
+import { LocalStorage } from "./Data/LocalStorage";
+const _myLocalStorageUtility = LocalStorage();
+const baseURL = process.env.REACT_APP_SERVER_URI;
 function Products({ setEditRows }) {
     const [selectedRows, setSelectedRows] = useState([]);
     const [products, setProducts] = useState([]);
@@ -13,18 +14,24 @@ function Products({ setEditRows }) {
     const [limit, setLimit] = useState(10);
     const [openState, setOpenState] = useState(false);
     const [dialogData, setDialogData] = useState({});
-    const [maxRecord,setMaxRecord] = useState(100);
-  //  var maxRecord = 100;
+    const [maxRecord, setMaxRecord] = useState(100);
+    const [filterQuery,setFilterQuery] = useState("");
+    //  var maxRecord = 100;
     const navigate = useNavigate();
     const toast = useRef(null);
     const showToast = (message) => {
         toast.current.innerHTML = message;
         toast.current.show();
     };
-    useEffect(() => {
-        //  const url = "products.json";
-        const url = `http://localhost:3001/products?skip=${skip}&limit=${limit}`;
-        //   const url = `https://dummyjson.com/products?skip=${skip}&limit=${limit}`;
+    const fetchData = async(filterString, goClicked)=>{
+       
+        let url = `${baseURL}/products?skip=${skip}&limit=${limit}`;
+        if(goClicked){
+            url = `${baseURL}/products?skip=${0}&limit=${10}`;
+           }
+        if(filterString){
+            url = url + filterString;
+        }
         fetch(url, {
             headers: {
                 'Content-Type': 'application/json',
@@ -33,26 +40,28 @@ function Products({ setEditRows }) {
         }).then((res) => {
             return res.json();
         }).then((data) => {
-            const productList = data.products.map((product) => {
-                const imagelist = product.images.map((image) => { return { url: image } });
-                product.images = imagelist;
-                //product.isSelected = false;
-                if(data.total){
-                    setMaxRecord(data.total);
-                }
-                return product;
-            });
-            setProducts(productList);
-            setSkip(limit)
-            setLimit(limit + 10);
-          
-           
+            if (data.total) {
+                setMaxRecord(data.total);
+            }
+            setProducts(data.products);
+            setSkip(data.limit)
+            setLimit(data.limit + 10);
         });
+    };
+    useEffect(() => {
+        fetchData("",false);//Will be true when clicked Go
     }, []);
     const onLoadMore = async () => {
         //     const url = `https://dummyjson.com/products?skip=${skip}&limit=${limit}`;
-        const url = `http://localhost:3001/products?skip=${skip}&limit=${limit}`;
+        let url = `${baseURL}/products?skip=${skip}&limit=${limit}`;
+        if(filterQuery){
+            console.log("Filter will be found here", filterQuery);
+            url = url + filterQuery;
+        }
+
+       
         if (skip >= maxRecord) {
+            console.log("No more records");
             return;
         }
         fetch(url, {
@@ -77,10 +86,67 @@ function Products({ setEditRows }) {
     }
 
     //setProducts(aaa);
-    return (
-
-
-
+    return (<div>
+        <FilterBar
+        id="FilterbarProducts"
+        showGoOnFB="true"
+        filterContainerWidth="12.125rem"
+  
+        onAfterFiltersDialogOpen={function _a() { }}
+        onClear={function _a() { }}
+        onFiltersDialogCancel={function _a() { }}
+        onFiltersDialogClose={function _a() { }}
+        onFiltersDialogOpen={function _a() { }}
+        onFiltersDialogSave={function _a() { }}
+        onFiltersDialogSearch={function _a() { }}
+        onFiltersDialogSelectionChange={function _a() { }}
+        onGo={function _a(e) {
+        //   const signal = controller.signal;
+        //   document.getElementById("scrollableDiv").scrollTop = 0;
+  
+        //   console.log(e);
+           let filterString = "";
+           e.detail.filters.map((filter) => {
+             let filterName = filter.name.replace("Filter", "");
+  
+             if (filter.value) {
+               filterString += "&" + filterName + "=" + filter.value;
+             }
+           });
+           console.log(filterString);
+           setFilterQuery(filterString);
+           setSkip(0)
+           setLimit(10);
+           fetchData(filterString, true);
+        
+        //   filterQuery = filterString;
+        //   loadInitialData(signal, true, filterString);
+        }}
+        onRestore={function _a() { }}
+        onToggleFilters={function _a() { }}
+  
+      >
+        <FilterGroupItem
+          label="Id"
+        >
+  
+          <Input name="idFilter" placeholder="Id" />
+        </FilterGroupItem>
+        <FilterGroupItem label="Title">
+  
+          <Input name="titleFilter" placeholder="Title" />
+        </FilterGroupItem>
+        <FilterGroupItem
+          active
+          label="Description"
+        >
+          <Input name="descriptionFilter" placeholder="Description" />
+        </FilterGroupItem>
+        <FilterGroupItem label="Rating">
+  
+          <Input name="ratingFilter" placeholder="Rating" />
+        </FilterGroupItem>
+      </FilterBar>
 
         <Panel
             style={{ maxWidth: "100%" }}
@@ -111,40 +177,46 @@ function Products({ setEditRows }) {
                             const removeData = products.filter((product) => {
                                 return selectedRows.includes(product.id.toString());
                             });
-                            const url = 'http://localhost:3001/products/' + removeData[0].id; 
+                            const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+                            const _token = loggedInUser?.token || "";
+                            const url = `${baseURL}/products/${removeData[0].id}`;
                             const response = await fetch(url, {
-                                    method: 'DELETE',
-                                   
-                                    });
-                                    const result = await response.json();
-                                 console.log(result);
-                                 if (result.message==="Removed Successfully"){
-                                    const newData = products.filter((product) => {
-                                        return product.id !== removeData[0].id
-                                    });
-                                    setProducts(newData);
-                                    setMaxRecord(maxRecord - 1);
-                                  
-                                 }
+                                method: 'DELETE',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${_token}`
+                                }
+                            });
+                            const result = await response.json();
+                            console.log(result);
+                            if (result.message === "Removed Successfully") {
+                                const newData = products.filter((product) => {
+                                    return product.id !== removeData[0].id
+                                });
+                                setProducts(newData);
+                                setMaxRecord(maxRecord - 1);
+                                showToast(result.message);
+
+                            }
 
                             // setEditRows(editData);
 
 
-                           // navigate("/editproducts");
+                            // navigate("/editproducts");
                         }}
 
                 >Remove</Button>
                 <Button design="Emphasized"
-                  onClick={
-                   function  _AddClicked(e) {
-                        navigate("/addproduct");
-                    }}>Add</Button>
+                    onClick={
+                        function _AddClicked(e) {
+                            navigate("/addproduct");
+                        }}>Add</Button>
 
                 <Toast ref={toast} duration={3000} style={{ color: "#ebeb84" }}></Toast></Toolbar>}
             headerText="Panel"
             onToggle={function _a() { }}
         >
-            <div className="sapScrollBar VerticalScrollbar-scrollbar-0-2-55" style={{ overflow: "scroll", height: "500px", overflowX: "hidden" }} >
+            <div className="sapScrollBar VerticalScrollbar-scrollbar-0-2-55" style={{ overflow: "scroll", height: "300px", overflowX: "hidden" }} >
                 <Table
                     id="productTable"
                     mode="MultiSelect"
@@ -228,7 +300,7 @@ function Products({ setEditRows }) {
                 <ProductDetailDialog openState={openState} data={dialogData} setOpenState={setOpenState}></ProductDetailDialog>
             </div>
         </Panel>
-
+        </div>
     )
 }
 export default Products;

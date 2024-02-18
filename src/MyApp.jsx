@@ -33,6 +33,8 @@ import UnProtectedRoutes from "./LoginComponents/UnProtectedRoutes";
 import { setTheme } from "@ui5/webcomponents-base/dist/config/Theme.js";
 import { ThemeProvider } from '@ui5/webcomponents-react';
 import UserLocationContextProvider from "./Data/ContextHandler/UserLocationContext";
+import UsefulLinksContextProvider from "./Data/ContextHandler/UsefulLinksContext";
+import AllLinksContent from "./UsefulLinks/AllLinksContent";
 export default function MyApp() {
   const { contextData } = useAuth();
   const { user, settingConfig } = contextData;
@@ -62,11 +64,12 @@ export default function MyApp() {
           <Route exact path="/news" element={<NewsPage />} />
           <Route exact path="/countries" element={<CountriesMainPage />} />
           <Route exact path="/help" element={<HelpPage />} />
+          <Route path="/usefullinks" element={<UsefulLinksContextProvider><AllLinksContent/></UsefulLinksContextProvider>} />
           {/* <Route exact path="/loader" element={<Loader />} /> */}
         </Route>
        
         <Route element={<ProtectedRoutes />}>
-          <Route exact path="/home" element={<Home />} />
+          <Route exact path="/home" element={<UserLocationContextProvider><Home /> </UserLocationContextProvider>} />
           <Route exact path="/detail" element={<Detail />} />
           <Route exact path="/products" element={<Products setEditRows={setEditRows} />} />
           <Route exact path="/settings" element={<SettingPage />} />
@@ -77,7 +80,7 @@ export default function MyApp() {
           <Route exact path="/users/:id" element={<UsersDetailPage />} />
           <Route exact path="/myprofile" element={<UsersDetailPage />} />
           <Route path="/resetPassword" element={<ResetPassword />} />
-          <Route path="/usefullinks" element={<UsefulLinkMainPage />} />
+          <Route path="/usefullinks1" element={<UsefulLinksContextProvider><UsefulLinkMainPage /></UsefulLinksContextProvider>} />
           <Route exact path="/todolist" element={<ToDoListContextProvider><ToDoMainPage user={user} /> </ToDoListContextProvider>} />
 
           <Route exact path="/about1" element={<AboutPage />} />

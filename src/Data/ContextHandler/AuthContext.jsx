@@ -234,6 +234,9 @@ const AuthProvider = ({ children }) => {
       _myLocalStorageUtility.removeLoggedInUserData();
       navigate("/welcome");
     } catch (error) {
+      setUser(null);
+      setToken("");
+      _myLocalStorageUtility.removeLoggedInUserData();
       console.log(error);
     }
     // await requestHandler(

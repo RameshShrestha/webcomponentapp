@@ -26,14 +26,18 @@ function TodoActivity({ todoData, removeToDo, updateToDo }) {
                             setUpdatedContent({ ...updatedContent, "content": e.target.value });
                         }} />) :
                     (<p style={{ margin: "0px" }}>{todoData.content}  </p>)}
-                <div><span>0</span>
+                <div>
                     {/* <input style={{ width: "80%" }} type="range" min={0} max={100} /> */}
-                    <Slider style={{ width: "80%" }} min={0} max={100} showTooltip value={40} showTickmarks={false}
-                        onChange={function _a() { }}
+                    <Slider style={{ width: "80%" }} min={0} max={100} showTooltip value={todoData.complitionPercent} showTickmarks={false}
+                        onChange={
+                            function _a(e) { 
+                                setUpdatedContent({ ...updatedContent, "complitionPercent": e.target.value });
+                            }
+                        }
                         disabled = {!editMode}
                         onInput={function _a() { }}
                     />
-                    <span>100</span></div>
+                    <span>{todoData.complitionPercent}</span></div>
 
             </div>
             <div style={{ background: "var(--sapBlockLayer_Background)", width: "40%", padding: "5px" }}>
@@ -50,9 +54,9 @@ function TodoActivity({ todoData, removeToDo, updateToDo }) {
                             onLiveChange={function _a() { }}
                             onOpen={function _a() { }}
                         >
-                            <Option >New</Option>
-                            <Option>In Progress</Option>
-                            <Option>Done</Option>
+                            <Option key="New">New</Option>
+                            <Option key="In Progress">In Progress</Option>
+                            <Option key="Done">Done</Option>
                         </Select><Button icon="save" onClick={(e) => {
                             console.log(updatedContent);
                             updateToDo(updatedContent);

@@ -35,7 +35,8 @@ const ProtectedRoutes = ({ children }) => {
             }
         });
         if (response.status < 300) {
-            return children;
+           // setIsConnected(true);
+            //return children;
 
         } else {
             // return <Navigate to="/welcome" state={{ from: location }} replace />

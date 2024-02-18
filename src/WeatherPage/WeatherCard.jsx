@@ -6,6 +6,7 @@ function WeatherCard() {
     //   const [todayWeather, setTodayWeather] = useState(weatherDataBengaluru);
     const { weatherToday } = useContext(UserLocationContext);
     let todayWeather = weatherToday;
+    console.log( todayWeather);
     // let weatherData = weatherForcast?.list;
     return <>
      {todayWeather && 

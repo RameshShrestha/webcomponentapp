@@ -100,7 +100,7 @@ function UserPopover({ isConnected, setIsConnected }) {
               //Sign out trigger
               console.log("Useful Links");
               actionPopover.close();
-              navigate("/usefullinks");
+              navigate("/usefullinks1");
 
             }
             else if (selectedItem === "Settings") {
@@ -143,7 +143,7 @@ function UserPopover({ isConnected, setIsConnected }) {
                   socket.connect();
                   socket.emit('getOnline', {
                     "name": user,
-                    "image": "https://robohash.org/cupiditatererumquos.png",
+                    "image": userDetail?.image,
                     "loginTime": new Date().toLocaleTimeString()
                   })
                 }

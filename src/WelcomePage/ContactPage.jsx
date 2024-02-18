@@ -1,4 +1,4 @@
-import { Form, FormGroup, FormItem, Input, Label, Select, Option, TextArea, Button } from "@ui5/webcomponents-react";
+import { Form, FormGroup, FormItem, Input, Label,  TextArea, Button } from "@ui5/webcomponents-react";
 
 function ContactPage() {
     return <div className="contactContainer">
@@ -13,7 +13,7 @@ function ContactPage() {
                 <div className="contactRow">
                     <label>Address</label>
                     <span>:</span>
-                    <address style={{ maxWidth: "450px" }}>Ashraya Layout, Phase 1, 6th cross ,Garudacharpalya, Bangalore ,
+                    <address style={{ maxWidth: "450px" }}>Ashraya Layout ,Garudacharpalya, Bangalore ,
                         560048, Karnataka, Bangalore</address>
                 </div>
                 <div className="contactRow">
@@ -30,7 +30,7 @@ function ContactPage() {
                 <div className="contactRow"><label>Designation </label><span>:</span> <div>Associate Consultant</div></div>
             </div>
             <div style={{ marginLeft: "auto", marginRight: "20px" }}>
-                <img src="/penguin.jpg"
+                <img src="/penguin.jpg" alt="Contact person"
                     height="200px" width="200px" style={{ borderRadius: "120px" }} />
             </div>
 

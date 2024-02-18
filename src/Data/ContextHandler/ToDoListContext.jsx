@@ -2,7 +2,9 @@ import React, { createContext, useContext, useEffect, useReducer, useState } fro
 
 import { LocalStorage } from "../LocalStorage";
 const _myLocalStorageUtility = LocalStorage();
+const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
 const baseURL = process.env.REACT_APP_SERVER_URI;
+
 export let ToDoListContext = createContext({
   contextData: {
     todoList: [],
@@ -17,7 +19,7 @@ const ToDoListReducer = (todoList, action) => {
     case "AddToDo":
       return [...todoList, action.payload];
     case "RemoveToDo": {
-      console.log("function to remove", action.payload);
+      console.log("function to remove",action.payload);
       todoList = todoList.filter((item) => {
         return item._id !== action.payload
       })
@@ -28,9 +30,9 @@ const ToDoListReducer = (todoList, action) => {
       return [...action.payload];
     }
     case "UpdateToDo": {
-      //  console.log("User found",action.payload);
+        console.log("User found",action.payload);
       let newToDoList = todoList.map((todo) => {
-        if (todo.id === action.payload.id) {
+        if (todo._id === action.payload._id) {
           return action.payload;//updated todo
         } else {
           return todo; // old todo
@@ -77,9 +79,8 @@ export default function ToDoListContextProvider({ children }) {
 
 
   }
-  const removeToDo = async (todoItemId) => {
+  const removeToDo = async(todoItemId) => {
     console.log("deleting ", todoItemId);
-    const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
     const _token = loggedInUser?.token || "";
     try {
 
@@ -91,24 +92,24 @@ export default function ToDoListContextProvider({ children }) {
           'Authorization': `Bearer ${_token}`
         }
       });
-      const result = await response.json();
+     // const result = await response.json();
       dispatchTodo({
         type: "RemoveToDo",
         payload: todoItemId
       })
-
+    
     } catch (error) {
       console.log(error);
     }
 
-
+   
   }
-  const updateToDo = async (updatedToDoItem) => {
+  const updateToDo = async(updatedToDoItem) => {
     console.log("Updating ", updatedToDoItem);
-    const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
-    const _token = loggedInUser?.token || "";
-    try {
 
+    try {
+      const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+      const _token = loggedInUser?.token || "";
       const response = await fetch(baseURL + `/todolist/updateItem/${updatedToDoItem._id}`, {
         method: 'PUT',
         credentials: 'include',
@@ -123,14 +124,14 @@ export default function ToDoListContextProvider({ children }) {
         type: "UpdateToDo",
         payload: updatedToDoItem
       })
-
+    
     } catch (error) {
       console.log(error);
     }
 
 
 
-
+    
   }
   const initialToDoList = (initialTodolist) => {
     dispatchTodo({
@@ -139,11 +140,10 @@ export default function ToDoListContextProvider({ children }) {
     })
   }
   const fetchIntialToDolist = async () => {
-    const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
-    const _token = loggedInUser?.token || "";
     const baseURL = process.env.REACT_APP_SERVER_URI;
     try {
-
+      const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+      const _token = loggedInUser?.token || "";
       const response = await fetch(baseURL + '/todolist/getList', {
         method: 'GET',
         credentials: 'include',

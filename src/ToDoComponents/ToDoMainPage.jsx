@@ -1,4 +1,4 @@
-import { BusyIndicator, Button, DatePicker, Form, FormItem, Input, Label, TextArea } from "@ui5/webcomponents-react";
+import {  Button, DatePicker, Form, FormItem, Input, TextArea } from "@ui5/webcomponents-react";
 import TodoActivity from "./TodoActivity";
 import { useState } from "react";
 import { useToDoContext } from "../Data/ContextHandler/ToDoListContext";
@@ -11,9 +11,9 @@ function ToDoMainPage({ user }) {
         title: "",
         content: "",
         status: "New",
+        complitionPercent : 0,
         targetCompletionDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
     });
-    const [todoListData, setToDoList] = useState([]);
     return <>
         <div style={{ background: "#b1c0b1", color: "white", minHeight: "91vh" }}>
             <h1 style={{ margin: "0px", marginLeft: "20px" }}>To Do Activity List</h1>
@@ -53,7 +53,7 @@ function ToDoMainPage({ user }) {
                     <FormItem>
                         <Button icon="add" onClick={async () => {
                             console.log("Trigger Add");
-                            const result = await addToDo(newTodoItem);
+                            await addToDo(newTodoItem);
                             console.log(" Add Finished");
                             setNewTodoItem({ ...newTodoItem, title: "", content: "", targetCompletionDate: "" });
                         }}>Add</Button>

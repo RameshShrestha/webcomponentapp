@@ -6,6 +6,9 @@ import ImageList from "./ImageList";
 import { useNavigate } from "react-router-dom";
 import { render, createPortal } from 'react-dom';
 import ReactDOM from "react";
+import { LocalStorage } from "./Data/LocalStorage";
+const baseURL = process.env.REACT_APP_SERVER_URI;
+const _myLocalStorageUtility = LocalStorage();
 function NewProduct() {
     const navigate = useNavigate();
     const toast = useRef(null);
@@ -25,7 +28,7 @@ function NewProduct() {
         "brand": "",
         "category": "",
         "thumbnail": "",
-        "images": [{ url: "" }]
+        "images": [""]
     });
     //  const data = editData[0];
     // console.log(editData);
@@ -75,11 +78,14 @@ function NewProduct() {
             footer={<Bar design="FloatingFooter"
                 endContent={<>
                     <Button onClick={async (e) => {
-                        const response = await fetch('http://localhost:3001/products', {
+                          const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+                          const _token = loggedInUser?.token || "";
+                        const response = await fetch(`${baseURL}/products`, {
                             method: 'POST',
                             body: JSON.stringify(data),
                             headers: {
-                                'Content-Type': 'application/json'
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${_token}`
                             }
                         });
                         const result = await response.json();

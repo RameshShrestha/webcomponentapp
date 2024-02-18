@@ -29,7 +29,7 @@ function ImageList({ images, dataId , removeImage,updateImage}) {
 
                     <div key = {"Text" + dataId + "" + index}  style={{ flexGrow: 10, margin: "5px" }}>
                         {/* <Text  style={{ color :"#cba332", marginLeft: "5px" ,fontSize:"25px" , fontWeight:"bold"}}>URL : </Text> */}
-                        <TextArea key={index}value={image} rows={2} onChange={(e) => {
+                        <TextArea key={index} value={image} rows={2} onChange={(e) => {
                             const newURL = e.target.value;
                             const newImageData = ImageData;
                             newImageData[index] = newURL ;

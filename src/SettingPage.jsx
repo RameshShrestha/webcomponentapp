@@ -1,8 +1,11 @@
-import { Bar, Button, CheckBox, Form, FormGroup, FormItem, InputType, Label, Page, Toast } from "@ui5/webcomponents-react";
+import { Bar, Button, CheckBox, Form, FormGroup, FormItem,  Label, Page, Toast } from "@ui5/webcomponents-react";
 import StandardField from "./UserComponents/StandardField";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from './Data/ContextHandler/AuthContext';
 import { render, createPortal } from 'react-dom';
+import { LocalStorage } from "./Data/LocalStorage";
+const _myLocalStorageUtility = LocalStorage();
+const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
 function SettingPage() {
     const { contextData } = useAuth();
     const { settingConfig, setSettingConfig } = contextData;
@@ -13,11 +16,13 @@ function SettingPage() {
         toast.current.show();
     };
     const loadUserSettings = async()=>{
+        const _token = loggedInUser?.token || "";
         const response = await fetch(baseURL + '/settings', {
           method: 'GET',
           credentials: 'include',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${_token}`
           }
         });
         if(response.status < 300){
@@ -41,19 +46,20 @@ function SettingPage() {
         showProductCard: true,
         showMyActivityCard: true,
         showStockPriceCard: true
-
     }
     const [settingData, setSettingData] = useState(settingConfig);
     const [settingDataOriginal, setSettingDataOriginal] = useState(settingConfig);
     const [editMode, setEditMode] = useState(false);
     const baseURL = process.env.REACT_APP_SERVER_URI;
     const triggerSaveData = async () => {
+        const _token = loggedInUser?.token || "";
         const response = await fetch(baseURL + '/settings', {
             method: 'PUT',
             credentials: 'include',
             body: JSON.stringify(settingData),
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${_token}`
             }
         });
         if (response.status < 300) {
@@ -62,13 +68,11 @@ function SettingPage() {
             setEditMode(false);
             showToast(result.message);
             setSettingConfig(result.data);
-
         } else {
             console.log(response);
         }
     }
     const onChangeValue = (e) => {
-
         if (e.target.tagName.toLowerCase().indexOf("checkbox") > -1) {
             console.log(e.target.name, e.target.checked)
             setSettingData({ ...settingData, [e.target.name]: e.target.checked });
@@ -81,14 +85,11 @@ function SettingPage() {
     return <Page
         footer={editMode && (<Bar design="FloatingFooter" endContent={<><Button design="Positive"
             onClick={(e) => {
-
                 triggerSaveData()
-
             }}>Save</Button>
             <Button design="Emphasized" onClick={(e) => {
                 setSettingData({ ...settingDataOriginal });
             }}>Reset</Button>
-
             <Button design="Transparent" onClick={(e) => {
                 setEditMode(false);
                 setSettingData({ ...settingDataOriginal });
@@ -135,7 +136,6 @@ function SettingPage() {
                                 inputType="Select" selectOptions={["" ,"sap_horizon","sap_horizon_dark", "sap_fiori_3", "sap_fiori_3_dark", "sap_belize"]}
                                 onChange={onChangeValue} name="theme" />
                         </FormItem>
-
                         <FormItem label="Show Notifications">
                             <CheckBox
                                 disabled={!editMode}
@@ -153,7 +153,6 @@ function SettingPage() {
                             />
                         </FormItem>
                         <FormItem label="Show Product Card">
-
                             <CheckBox
                                 disabled={!editMode}
                                 onChange={onChangeValue}
@@ -162,7 +161,6 @@ function SettingPage() {
                             />
                         </FormItem>
                         <FormItem label="Show MyActivity Card">
-
                             <CheckBox
                                 disabled={!editMode}
                                 onChange={onChangeValue}
@@ -178,13 +176,10 @@ function SettingPage() {
                                 checked={settingData.showStockPriceCard}
                             />
                         </FormItem>
-
                     </FormGroup>
-
                 </Form>
             </div>
         </div>
     </Page>
-            
 }
 export default SettingPage;

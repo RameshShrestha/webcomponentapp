@@ -2,6 +2,9 @@
   "name": "webcomponentapp",
   "version": "0.1.0",
   "private": true,
+  "nodemonConfig": {
+    "ignore": ["*.json", "public/javascripts/*.js"]
+  },
   "dependencies": {
     "@ui5/webcomponents": "~1.20.0",
     "@ui5/webcomponents-fiori": "~1.20.0",

@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import "@ui5/webcomponents-icons/dist/AllIcons.js";
 import {
   AnalyticalTable,
-  Button,
   Card,
   CardHeader,
   FlexBox,
@@ -14,7 +13,7 @@ import {
   Text,
   ValueState,
 } from "@ui5/webcomponents-react";
-import { spacing, ThemingParameters } from "@ui5/webcomponents-react-base";
+import { spacing } from "@ui5/webcomponents-react-base";
 import { BarChart, DonutChart, LineChart } from "@ui5/webcomponents-react-charts";
 import lineChartIcon from "@ui5/webcomponents-icons/dist/line-chart.js";
 import barChartIcon from "@ui5/webcomponents-icons/dist/horizontal-bar-chart.js";
@@ -22,13 +21,12 @@ import listIcon from "@ui5/webcomponents-icons/dist/list.js";
 import tableViewIcon from "@ui5/webcomponents-icons/dist/table-view.js";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./Data/ContextHandler/AuthContext";
-import WeatherMainPage from "./WeatherPage/WeatherMainPage";
 import Usercard from "./Usercard";
 import AdminNotificationSender from "./AdminComponents/AdminNotificationSender";
 import { LocalStorage } from "./Data/LocalStorage";
 import WeatherCard from "./WeatherPage/WeatherCard";
 import UserLocationContextProvider from "./Data/ContextHandler/UserLocationContext";
-import { UserLocationContext } from "./Data/ContextHandler/UserLocationContext";
+//import { UserLocationContext } from "./Data/ContextHandler/UserLocationContext";
 const _myLocalStorageUtility = LocalStorage();
 const dataset = [
   {
@@ -107,7 +105,6 @@ const productTableColumns = [
     accessor: "description",
     width: "240",
     Cell: (instance) => {
-
       const { cell, row, data, webComponentsReactProperties } = instance;
       // console.log("row", row);
       //  console.log(data[row.index]);
@@ -148,9 +145,9 @@ export default function Home() {
   const [usersStatus, setUsersStatus] = useState([]);
   const { contextData } = useAuth();
   const { token, user, role, settingConfig, userDetail } = contextData;
-console.log("userDetail",userDetail);
-// const { location,locationPermission } = useContext(UserLocationContext);
-// console.log("location : ",location, "locationPermission : ",locationPermission);
+  console.log("userDetail", userDetail);
+  // const { location,locationPermission } = useContext(UserLocationContext);
+  // console.log("location : ",location, "locationPermission : ",locationPermission);
   const fetchIntialToDolist = async () => {
     const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
     const _token = loggedInUser?.token || "";
@@ -189,7 +186,6 @@ console.log("userDetail",userDetail);
       console.log('An error occurred while fetching products', error);
     }
   }
-
   const getUsersStatus = async () => {
     const baseURL = process.env.REACT_APP_SERVER_URI;
     const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
@@ -203,9 +199,7 @@ console.log("userDetail",userDetail);
           'Authorization': `Bearer ${_token}`
         }
       });
-
       const result = await response.json();
-
       console.log(result);
       setUsersStatus(result.users);
     } catch (error) {
@@ -228,7 +222,7 @@ console.log("userDetail",userDetail);
   useEffect(() => {
     //Commented the products
     // //  const url = "products.json";
-    // const url = `http://localhost:3001/products?skip=0&limit=10`;
+    // const url = `${baseURL}/products?skip=0&limit=10`;
     // //   const url = `https://dummyjson.com/products?skip=${skip}&limit=${limit}`;
     // fetch(url, {
     //     headers: {
@@ -308,19 +302,19 @@ console.log("userDetail",userDetail);
         style={spacing.sapUiContentPadding}
       >
 
-          <Card
-           header={
+        <Card
+          header={
             <CardHeader
               titleText="My Profile"
               avatar={<Icon name="employee" />}
             />
           }
-           style={{ maxWidth: "340px", ...spacing.sapUiContentPadding }}>
+          style={{ maxWidth: "340px", ...spacing.sapUiContentPadding }}>
           <div >
             <Usercard user={userDetail} />
           </div>
-          </Card>
-          {settingConfig?.showWeatherCard &&
+        </Card>
+        {settingConfig?.showWeatherCard &&
           <Card
             header={
               <CardHeader
@@ -330,33 +324,26 @@ console.log("userDetail",userDetail);
                 avatar={<Icon name={tableViewIcon} />}
               />
             }
-           
             style={{ maxWidth: "300px", ...spacing.sapUiContentPadding }}
           >
             {/* <WeatherMainPage /> */}
-            <UserLocationContextProvider><WeatherCard/></UserLocationContextProvider>
+            <UserLocationContextProvider><WeatherCard /></UserLocationContextProvider>
           </Card>
         }
         {role === "ADMIN" &&
-  
-            <Card
-              header={
-                <CardHeader
-                  titleText="Send Notifications to Users"
-                  avatar={<Icon name="bell-2" />}
+          <Card
+            header={
+              <CardHeader
+                titleText="Send Notifications to Users"
+                avatar={<Icon name="bell-2" />}
 
-                />
-              }
-              style={{ maxWidth: "500px", ...spacing.sapUiContentPadding }}
-
-            >
-
-             <AdminNotificationSender/>
-            </Card>
-       
+              />
+            }
+            style={{ maxWidth: "500px", ...spacing.sapUiContentPadding }}
+          >
+            <AdminNotificationSender />
+          </Card>
         }
-
-
         {settingConfig?.showStockPriceCard &&
           <Card
             header={
@@ -483,7 +470,7 @@ console.log("userDetail",userDetail);
             </List>
           </Card>
         }
-        {role === "ADMIN" && settingConfig?.showProductCard &&
+        { settingConfig?.showProductCard &&
           <Card
             header={
               <CardHeader
@@ -519,9 +506,7 @@ console.log("userDetail",userDetail);
             visibleRows={8}
           />
         </Card> */}
-     
         {role === "ADMIN" &&
-
           <Card
             header={
               <CardHeader
@@ -569,7 +554,16 @@ console.log("userDetail",userDetail);
                   {
                     Header: "Status",
                     accessor: "status",
-                    width: "100"
+                    width: "100",
+                    Cell : (instance) => {
+                      const { cell, row, data, webComponentsReactProperties } = instance;
+                      let statusText = instance.data[row.index]?.status;
+                      let textColor = "";
+                      if(statusText === "Online") {
+                        textColor = "green";
+                      } 
+                      return (<Text style={{color:textColor}}>{statusText}</Text>)
+                    }
                   },
                   {
                     Header: "LoginTime",
@@ -592,7 +586,6 @@ console.log("userDetail",userDetail);
                       return (
                         <FlexBox style={{ borderRadius: "35px", overflow: "hidden" }}>
                           <img src={instance.data[row.index]?.image} width="40px" height="40px" />
-
                         </FlexBox>
                       );
                     },
@@ -603,7 +596,6 @@ console.log("userDetail",userDetail);
             </div>
           </Card>
         }
-
       </FlexBox>
     </>
   );

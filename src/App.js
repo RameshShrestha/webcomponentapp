@@ -3,13 +3,14 @@ import { HashRouter } from "react-router-dom";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import LoginPage from './LoginComponents/LoginPage';
 import RegisterPage from './LoginComponents/RegisterPage';
-import { useAuth,AuthContext,AuthProvider } from './Data/ContextHandler/AuthContext';
+import { useAuth, AuthContext, AuthProvider } from './Data/ContextHandler/AuthContext';
 import { ThemeProvider } from '@ui5/webcomponents-react';
-import  '@ui5/webcomponents-react/dist/Assets';
+import '@ui5/webcomponents-react/dist/Assets';
 import MyApp from './MyApp';
+import UserLocationContextProvider from './Data/ContextHandler/UserLocationContext';
 
 function App() {
-  const { contextData} = useAuth();
+  const { contextData } = useAuth();
   const { token, user } = contextData;
   const [inputVal, setInputVal] = useState('');
   const handleInput = (e) => {
@@ -29,17 +30,19 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         </Routes> */}
-               
-                        <HashRouter>
-                        <AuthProvider>
-                        <ThemeProvider>
-                          <MyApp />
-                          </ThemeProvider>
-                         </AuthProvider>
-                        </HashRouter>
-                
-              
-     
+
+      <HashRouter>
+        <AuthProvider>
+          <ThemeProvider>
+          <UserLocationContextProvider>
+            <MyApp />
+            </UserLocationContextProvider>
+          </ThemeProvider>
+        </AuthProvider>
+      </HashRouter>
+
+
+
 
 
     </>

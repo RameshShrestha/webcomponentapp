@@ -1,8 +1,8 @@
 import {
-    Link, DynamicPageTitle, Breadcrumbs, BreadcrumbsItem, MessageStrip,
+    Link, DynamicPageTitle, Breadcrumbs, BreadcrumbsItem, 
     ObjectStatus, FormGroup, DynamicPageHeader, ObjectPage, Bar, Button, FlexBox,
-    ObjectPageSection, ObjectPageSubSection, Form, FormItem, Toast,
-    Text, Label, Input, TextArea
+    ObjectPageSection,  Form, FormItem, Toast,
+    Text, Label,
 } from "@ui5/webcomponents-react";
 import { render, createPortal } from 'react-dom';
 import { useEffect, useRef, useState } from "react";
@@ -10,19 +10,19 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import StandardField from "./StandardField";
 import { useAuth } from "../Data/ContextHandler/AuthContext";
-
 import { LocalStorage } from "../Data/LocalStorage";
 const _myLocalStorageUtility = LocalStorage();
+const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
 function UsersDetailPage({ navigation, route }) {
+    const baseURL = process.env.REACT_APP_SERVER_URI;
     const [userData, setUserData] = useState({});
     let UserDataChanged = Object.assign({}, userData);
     const [editMode, setEditMode] = useState(false);
     const { pathname, state } = useLocation();
     const navigate = useNavigate();
     const { contextData} = useAuth();
-    const { token, user, role } = contextData;
+    const {  user, role } = contextData;
     const toast = useRef(null);
-    const baseURL = process.env.REACT_APP_SERVER_URI;
     const showToast = (message) => {
         const modalRoot = document.getElementById('modal-root');
         render(createPortal(<Toast ref={toast} duration={3000} style={{ color: "#ebeb84" }}>{message}</Toast>, modalRoot), document.createElement("div"));
@@ -78,17 +78,17 @@ function UsersDetailPage({ navigation, route }) {
             setEditMode(true);
         }
         if (id !== "new" && id) {
-            const url = baseURL + `/realusers/${id}`;
-            const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
             const _token = loggedInUser?.token || "";
+            const url = `${baseURL}/realusers/${id}`;
             // const url = `https://dummyjson.com/users/${id}`;
             fetch(url, {
                 
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json',
                     'Authorization': `Bearer ${_token}`
-                }, 
-                credentials: 'include'
+                },
+                 credentials: 'include'
             }).then((res) => {
                 return res.json();
             }).then((data) => {
@@ -125,10 +125,9 @@ function UsersDetailPage({ navigation, route }) {
                 <Bar design="FloatingFooter" endContent={<>
                     <Button design="Positive" onClick={async (e) => {
                         console.log(UserDataChanged);
+                        const _token = loggedInUser?.token || "";
                         if (userData._id) {
-                            const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
-                            const _token = loggedInUser?.token || "";
-                            const response = await fetch(baseURL + `/realusers/${userData.username}`, {
+                            const response = await fetch(`${baseURL}/realusers/${userData.username}`, {
                                 method: 'PUT',
                                  credentials: 'include',
                                 body: JSON.stringify(UserDataChanged),
@@ -146,9 +145,7 @@ function UsersDetailPage({ navigation, route }) {
                             }
 
                         } else {
-                            const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
-                            const _token = loggedInUser?.token || "";
-                            const response = await fetch(baseURL + '/users', {
+                            const response = await fetch(`${baseURL}/users`, {
                                 method: 'POST',
                                  credentials: 'include',
                                 body: JSON.stringify(UserDataChanged),
@@ -206,7 +203,7 @@ function UsersDetailPage({ navigation, route }) {
             selectedSectionId="personalDetails"
             showHideHeaderButton
             style={{
-                height: '567px'
+                height: '91vh'
             }}
         >
             <ObjectPageSection

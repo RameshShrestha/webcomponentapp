@@ -1,6 +1,8 @@
+import { Title } from "@ui5/webcomponents-react";
 function HelpPage(){
-    return<div>
-        Help Page
-    </div>
+    return<>
+    
+        <Title>Help Page</Title>
+        </>
 }
 export default HelpPage;

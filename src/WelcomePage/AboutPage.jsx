@@ -1,3 +1,7 @@
+import { Title } from "@ui5/webcomponents-react";
+
 function AboutPage(){
-    return <><div>About Page</div></>
+    return <>
+    <Title>About Page</Title>
+    </>
 }export default AboutPage;

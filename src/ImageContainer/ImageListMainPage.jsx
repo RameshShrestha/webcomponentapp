@@ -76,7 +76,7 @@ function ImageListMainPage() {
             }
         </div> */}
     return <div style={{ background: "#85b3ae" }}>
-        <div id="scrollableDiv" style={{ height: "80vh", overflow: "auto" }} className="sapScrollBar">
+        <div id="scrollableDiv" style={{ height: "83vh", overflow: "auto" }} className="sapScrollBar">
             <h1 style={{ color: "white", background: "limegreen", marginTop: "0px" }}>Images from <a href="https://picsum.photos/v2/list">https://picsum.photos/v2/list</a></h1>
 
             <InfiniteScroll style={{ display: "flex", flexWrap: "wrap", background: 'var(--sapShellColor)', gap:"1rem",margin:"10px" }}

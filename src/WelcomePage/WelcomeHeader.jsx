@@ -34,6 +34,9 @@ export default function WelcomeHeader({ dbConnected }) {
         else if (selectedMenu === "Image Galary") {
             navigate("/images");
         }
+        else if (selectedMenu === "Useful Links") {
+            navigate("/usefullinks");
+        }
     }
     return (
 
@@ -62,48 +65,53 @@ export default function WelcomeHeader({ dbConnected }) {
             <div className={isNavExpanded ? "navigation-menu expanded" : "navigation-menu"}>
                 <ul>
                     <li>
-                        <Button style={{color:"white"}} icon="home" onClick={iconClickEvent} design="Transparent"> Home </Button>
+                        <Button style={{ color: "white" }} icon="home" onClick={iconClickEvent} design="Transparent"> Home </Button>
                         {/* <MyIcon color="white" name="Home" onPress={iconClickEvent} /> */}
                     </li>
                     <li>
 
-                        <Button style={{color:"white"}} icon="message-information" onClick={iconClickEvent} design="Transparent">  About </Button>
+                        <Button style={{ color: "white" }} icon="message-information" onClick={iconClickEvent} design="Transparent">  About </Button>
                         {/* <MyIcon color="white" name="About" onPress={iconClickEvent} /> */}
                     </li>
                     <li>
 
-                        <Button style={{color:"white"}} icon="call" onClick={iconClickEvent} design="Transparent">  Contact </Button>
+                        <Button style={{ color: "white" }} icon="call" onClick={iconClickEvent} design="Transparent">  Contact </Button>
                         {/* <MyIcon color="white" name="Contact" onPress={iconClickEvent} /> */}
                     </li>
                     <li>
                         {/* <Icon name="newspaper" interactive onClick={iconClickEvent}>News</Icon> */}
-                        <Button style={{color:"white"}} icon="newspaper" onClick={iconClickEvent} design="Transparent">  News </Button>
+                        <Button style={{ color: "white" }} icon="newspaper" onClick={iconClickEvent} design="Transparent">  News </Button>
                         {/* <MyIcon color="white" name="News" onPress={iconClickEvent} /> */}
                     </li>
                     <li>
 
-                        <Button style={{color:"white"}} icon="weather-proofing" onClick={iconClickEvent} design="Transparent"> Weather </Button>
+                        <Button style={{ color: "white" }} icon="weather-proofing" onClick={iconClickEvent} design="Transparent"> Weather </Button>
                     </li>
                     <li>
 
-                        <Button style={{color:"white"}} icon="image-viewer" onClick={iconClickEvent} design="Transparent"> Image Galary </Button>
+                        <Button style={{ color: "white" }} icon="image-viewer" onClick={iconClickEvent} design="Transparent"> Image Galary </Button>
                     </li>
+                    <li>
+
+                        <Button style={{ color: "white" }} icon="internet-browser" onClick={iconClickEvent} design="Transparent">Useful Links</Button>
+                    </li>
+
                     <li>
                         {/* <MyIcon color="white" name="Help" onPress={iconClickEvent} /> */}
-                        <Button style={{color:"white"}} icon="sys-help" onClick={iconClickEvent} design="Transparent"> Help </Button>
+                        <Button style={{ color: "white" }} icon="sys-help" onClick={iconClickEvent} design="Transparent"> Help </Button>
                     </li>
-                    {dbConnected && 
-                    <>
-                    <li>
+                    {dbConnected &&
+                        <>
+                            <li>
 
-                        <Button style={{color:"white"}} icon="add-employee" onClick={iconClickEvent} design="Transparent"> Join Now </Button>
-                        {/* <MyIcon color="white" name="Join Now" onPress={iconClickEvent} /> */}
-                    </li>
-                    <li>
-                        <Button style={{color:"white"}} icon="person-placeholder" onClick={iconClickEvent} design="Transparent"> Login </Button>
-                        {/* <MyIcon color="white" name="Login" onPress={iconClickEvent} /> */}
-                    </li>
-                    </>}
+                                <Button style={{ color: "white" }} icon="add-employee" onClick={iconClickEvent} design="Transparent"> Join Now </Button>
+                                {/* <MyIcon color="white" name="Join Now" onPress={iconClickEvent} /> */}
+                            </li>
+                            <li>
+                                <Button style={{ color: "white" }} icon="person-placeholder" onClick={iconClickEvent} design="Transparent"> Login </Button>
+                                {/* <MyIcon color="white" name="Login" onPress={iconClickEvent} /> */}
+                            </li>
+                        </>}
 
                 </ul>
             </div>

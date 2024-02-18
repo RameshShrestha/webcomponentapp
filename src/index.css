@@ -517,7 +517,8 @@ padding: 0px;
 .unprotectedContainer{
   display: flex;
     flex-direction: column;
-    height: 83.9vh;
+    height: calc(100vh - 100px);
     overflow: auto;
+    background: var(--sapBackgroundColor);
 }
 

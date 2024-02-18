@@ -53,8 +53,20 @@ export default function UserLocationContextProvider({ children }) {
                     }
                 });
                 const result = await response.json();
+
                 setweatherToday(result.weathertoday);
-                setWeatherForcast(result.forcast);
+                let timeZone = result.weathertoday.timezone;
+                //delete weather forcast prior to 3 hours of current time
+                let currentTime = new Date().getTime() / 1000; //in seconds
+                let filteredData = result.forcast.list.filter((item)=>{
+                  let localtime = item.dt - timeZone;
+                  let diffence =  localtime - currentTime;
+                    if(diffence > -10800){
+                        return item;
+                    }
+                });
+                console.log(filteredData);
+                setWeatherForcast({list : filteredData});
                 setLocationPermission(true);
                 setLocation({ lat: lat, lng: lng });
                 //   console.log("Weather Data", result);
