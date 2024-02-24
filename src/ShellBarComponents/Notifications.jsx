@@ -1,10 +1,11 @@
 import { Toast, ShellBar, ShellBarItem, ResponsivePopover, Title, List, StandardListItem, CustomListItem, Button } from "@ui5/webcomponents-react";
 import MyNotificationItem from "./MyNotificationItem";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { socket } from '../socket';
 import { render, createPortal } from 'react-dom';
-
-
+import { LocalStorage } from "../Data/LocalStorage";
+const _myLocalStorageUtility = LocalStorage();
+const baseURL = process.env.REACT_APP_SERVER_URI;
 function Notifications() {
   const toast = useRef(null);
 
@@ -14,16 +15,27 @@ function Notifications() {
     toast.current.show();
 
   };
-  const notificationData = [
-    { id: 1, title: "Notification 1", message: "Notification message will be Warning", type: "Warning" },
-    { id: 2, title: "Notification 2", message: "Notification message will be Success", type: "Success" },
-    { id: 3, title: "Notification 3", message: "Notification message will be Error", type: "Error" },
-    { id: 4, title: "Notification 4", message: "Notification message will be Info", type: "Info" },
-    { id: 5, title: "Notification 5", message: "Notification message will be Info", type: "Info" },
-    { id: 6, title: "Notification 6", message: "Notification message will be Warning", type: "Warning" },
-    { id: 7, title: "Notification 7", message: "Notification message will be Success", type: "Success" },
-  ]
-  const [userNotifications, setUserNotificaitions] = useState(notificationData);
+ 
+  const fetchNotifications = async()=>{
+    const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+    const _token = loggedInUser?.token || "";
+    if (_token) {
+      const response = await fetch(baseURL + '/notifications', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${_token}`
+        }
+      });
+      if (response.status < 300) {
+        const result = await response.json();
+     //   console.log(result);
+        setUserNotificaitions(result.notifications);
+      }
+    }
+  }
+  const [userNotifications, setUserNotificaitions] = useState([]);
 
   socket.on("NotificationFromAdmin", (notification) => {
     console.log("new Notification from Admin", notification);
@@ -34,6 +46,9 @@ function Notifications() {
   const removeNotification = (notificationId) => {
     setUserNotificaitions(userNotifications.filter(item => item.id !== notificationId));
   }
+  useEffect(()=>{
+    fetchNotifications();
+  },[])
   return <>
 
     <ResponsivePopover

@@ -41,6 +41,7 @@ code {
   color: white;
   font-size: 25px;
   min-height: 30px;
+  margin-left: 10px;
 }
 
 .cardHeader:hover {
@@ -132,7 +133,7 @@ code {
   align-content: center;
   overflow: hidden auto;
   padding: 30px;
-  height: 65vh;
+  height: 80vh;
 }
 .mainRegisterScreen {
   display: flex;

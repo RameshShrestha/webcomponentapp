@@ -37,6 +37,7 @@ export default function WelcomeHeader({ dbConnected }) {
         else if (selectedMenu === "Useful Links") {
             navigate("/usefullinks");
         }
+        setIsNavExpanded(false);
     }
     return (
 

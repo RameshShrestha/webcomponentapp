@@ -15,7 +15,7 @@ export default function UserContextProvider({ children }) {
   const [usersData, dispatchUser] = useReducer(reducer, initialState);
 
   const addInitialUsers = (initialUsers)=>{
-    console.log(initialUsers);
+   // console.log(initialUsers);
     dispatchUser({
       type :"ADD_INITAL_USERS",
       payload :[...initialUsers]

@@ -81,10 +81,10 @@ function MyLinksContent({ setOpenState ,setOpenMessageBox,setSelectedData}) {
                     columns={
                         <>
                             <TableColumn style={{ width: '3rem' }}><Label>No.</Label></TableColumn>
-                            <TableColumn style={{ width: '20rem' }}><Label>Description</Label></TableColumn>
-                            <TableColumn popinDisplay="Inline" demandPopin minWidth={600} popinText="URL Link"><Label>URL Link</Label></TableColumn>
-                            <TableColumn style={{ width: '20rem' }}><Label>Created At</Label></TableColumn>
-                            <TableColumn demandPopin minWidth={600} popinText="Preview"><Label>Preview</Label></TableColumn>
+                            <TableColumn popinDisplay="Inline" demandPopin minWidth={600} popinText="Description" style={{ width: '20rem' }}><Label>Description</Label></TableColumn>
+                            <TableColumn popinDisplay="Inline" demandPopin minWidth={700} popinText="URL Link"><Label>URL Link</Label></TableColumn>
+                            <TableColumn popinDisplay="Inline" demandPopin minWidth={800} popinText="Created At" style={{ width: '20rem' }}><Label>Created At</Label></TableColumn>
+                            <TableColumn demandPopin minWidth={900} popinText="Preview"><Label>Preview</Label></TableColumn>
                             <TableColumn style={{ width: '3rem' }}></TableColumn>
                         </>}
                     onLoadMore={function _a() { }}

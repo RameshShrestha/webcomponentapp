@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Home from "./Home";
 import Detail from "./Detail";
-import Products from "./Products";
-import EditProducts from "./EditProducts";
+import Products from "./ProductComponents/Products";
+
+import EditProducts from "./ProductComponents/EditProducts";
 import { EditProductContext } from './ContextCreator';
 import ImageList from "./ImageList";
-import NewProduct from "./NewProduct";
+import NewProduct from "./ProductComponents/NewProduct";
 import UsersConainer from "./UsersConainer";
 import UsersDetailPage from "./UserComponents/UsersDetailPage";
 import UserContextProvider from "./Data/ContextHandler/UsersContext";
@@ -27,7 +28,7 @@ import UsefulLinkMainPage from "./UsefulLinks/UsefulLinkMainPage";
 import ImageListMainPage from "./ImageContainer/ImageListMainPage";
 import WeatherMainPage from "./WeatherPage/WeatherMainPage";
 import SettingPage from "./SettingPage";
-import HelpPage from "./HelpPage";
+import HelpPage from "./WelcomePage/HelpPage";
 import CountriesMainPage from "./CountriesCompoents/CountriesMainPage";
 import UnProtectedRoutes from "./LoginComponents/UnProtectedRoutes";
 import { setTheme } from "@ui5/webcomponents-base/dist/config/Theme.js";
@@ -35,6 +36,8 @@ import { ThemeProvider } from '@ui5/webcomponents-react';
 import UserLocationContextProvider from "./Data/ContextHandler/UserLocationContext";
 import UsefulLinksContextProvider from "./Data/ContextHandler/UsefulLinksContext";
 import AllLinksContent from "./UsefulLinks/AllLinksContent";
+import AdminMessageBox from "./AdminComponents/AdminMessageBox";
+import AdminLogs from "./AdminComponents/AdminLogs";
 export default function MyApp() {
   const { contextData } = useAuth();
   const { user, settingConfig } = contextData;
@@ -82,7 +85,8 @@ export default function MyApp() {
           <Route path="/resetPassword" element={<ResetPassword />} />
           <Route path="/usefullinks1" element={<UsefulLinksContextProvider><UsefulLinkMainPage /></UsefulLinksContextProvider>} />
           <Route exact path="/todolist" element={<ToDoListContextProvider><ToDoMainPage user={user} /> </ToDoListContextProvider>} />
-
+          <Route exact path="/adminmessagebox" element={<AdminMessageBox />} />
+          <Route exact path="/adminlogs" element={<AdminLogs />} />
           <Route exact path="/about1" element={<AboutPage />} />
           <Route exact path="/contact1" element={<ContactPage />} />
           <Route exact path="/images1" element={<ImageListMainPage />} />

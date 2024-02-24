@@ -230,7 +230,7 @@ function CountryDetailPage({ country, countryName }) {
 
             </>
         
-        <div id="map" style={{ width: "100%", height: "350px" }}></div>
+        <div id="map" style={{ width: "100%", height: "70vh" }}></div>
         <div id="popup" className="ol-popup">
             <a href="#" id="popup-closer" className="ol-popup-closer"></a>
             <div id="popup-content"></div>

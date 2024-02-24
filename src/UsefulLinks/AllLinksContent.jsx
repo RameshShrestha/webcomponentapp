@@ -68,11 +68,11 @@ function AllLinksContent() {
                 columns={
                     <>
                         <TableColumn style={{ width: '3rem' }}><Label>No.</Label></TableColumn>
-                        <TableColumn style={{ width: '20rem' }}><Label>Description</Label></TableColumn>
+                        <TableColumn  popinDisplay="Inline" demandPopin minWidth={600} popinText="Description" style={{ width: '20rem' }}><Label>Description</Label></TableColumn>
                         <TableColumn popinDisplay="Inline" demandPopin minWidth={600} popinText="URL Link"><Label>URL Link</Label></TableColumn>
-                        <TableColumn style={{ width: '20rem' }}><Label>Created At</Label></TableColumn>
-                        <TableColumn style={{ width: '20rem' }}><Label>Created By</Label></TableColumn>
-                        <TableColumn demandPopin minWidth={600} popinText="Preview"><Label>Preview</Label></TableColumn>
+                        <TableColumn  popinDisplay="Inline" demandPopin minWidth={700} popinText="Created At" style={{ width: '20rem' }}><Label>Created At</Label></TableColumn>
+                        <TableColumn popinDisplay="Inline" demandPopin minWidth={800} popinText="Created By" style={{ width: '20rem' }}><Label>Created By</Label></TableColumn>
+                        <TableColumn demandPopin minWidth={900} popinText="Preview"><Label>Preview</Label></TableColumn>
                     </>}
                 onLoadMore={function _a() { }}
                 onPopinChange={function _a() { }}

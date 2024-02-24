@@ -15,7 +15,7 @@ const { userDetail,settingConfig } = contextData;
             id="shellBar"
             logo={<img src="Logo.PNG" alt="logo" />}
             show-notifications ={settingConfig?.showNotification}
-            notifications-count="99+"
+            notifications-count="7"
             profile={
               <Avatar>
                 <img src={userDetail?.image} alt="logo" />

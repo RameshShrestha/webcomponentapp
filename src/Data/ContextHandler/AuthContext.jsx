@@ -38,10 +38,10 @@ const AuthProvider = ({ children }) => {
   const [userDetail, setUserDetail] = useState(null);
   const navigate = useNavigate();
   const baseURL = process.env.REACT_APP_SERVER_URI;
-  console.log("Executed here AuthContext initial");
+  //console.log("Executed here AuthContext initial");
   // Function to handle user login
   const login = async (data) => {
-    console.log("Login", data);
+   // console.log("Login", data);
     // await requestHandler(
     //   async () => await loginUser(data),
     //   setIsLoading,
@@ -58,7 +58,7 @@ const AuthProvider = ({ children }) => {
 
 
     if (data.username && data.password) {
-      console.log("login", data);
+     // console.log("login", data);
       // const loggedInUser = validDummyUsers.find((dummyUser) => {
       //   if (dummyUser.username === data.username) {
       //     return dummyUser;
@@ -94,7 +94,7 @@ const AuthProvider = ({ children }) => {
         });
 
         const result = await response.json();
-        console.log("returning", result);
+       // console.log("returning", result);
         if (result?.message === "Logged in successfully") {
           setUser(result.user.username);
           setRole(result.user.role);
@@ -125,7 +125,7 @@ const AuthProvider = ({ children }) => {
       });
       if (response.status < 300) {
         const result = await response.json();
-        console.log(result);
+     //   console.log(result);
         setSettingConfig(result[0]);
       } else {
 
@@ -155,14 +155,14 @@ const AuthProvider = ({ children }) => {
         setToken("");
         _myLocalStorageUtility.removeLoggedInUserData();
         setUser(null);
-        // navigate("/welcome");
+         navigate("/welcome");
       }
     }
   }
 
   // Function to handle user registration
   const register = async (data) => {
-    console.log("Register", data);
+   // console.log("Register", data);
     // await requestHandler(
     //   async () => await registerUser(data),
     //   setIsLoading,
@@ -173,7 +173,7 @@ const AuthProvider = ({ children }) => {
     //   alert // Display error alerts on request failure
     // );
     const baseURL = process.env.REACT_APP_SERVER_URI;
-    console.log(baseURL);
+   // console.log(baseURL);
     try {
 
       const response = await fetch(baseURL + '/realusers/createUser', {
@@ -186,7 +186,7 @@ const AuthProvider = ({ children }) => {
       });
 
       const result = await response.json();
-      console.log("returning", result);
+     // console.log("returning", result);
       return result;
 
     } catch (e) {
@@ -200,7 +200,7 @@ const AuthProvider = ({ children }) => {
   };
   // Function to handle user registration
   const resetPassword = async (data) => {
-    console.log("Reset Password", data);
+   // console.log("Reset Password", data);
     // await requestHandler(
     //   async () => await registerUser(data),
     //   setIsLoading,
@@ -215,7 +215,7 @@ const AuthProvider = ({ children }) => {
   const logout = async () => {
 
     const baseURL = process.env.REACT_APP_SERVER_URI;
-    console.log(baseURL);
+   // console.log(baseURL);
     try {
 
       const response = await fetch(baseURL + '/realusers/logout', {
@@ -228,7 +228,7 @@ const AuthProvider = ({ children }) => {
       });
 
       const result = await response.json();
-      console.log("Logout");
+     // console.log("Logout");
       setUser(null);
       setToken("");
       _myLocalStorageUtility.removeLoggedInUserData();
@@ -270,7 +270,7 @@ const AuthProvider = ({ children }) => {
     setIsLoading(false);
     if (!userDetail) {
 
-      console.log("Executed here AuthContext UseEffect");
+    //  console.log("Executed here AuthContext UseEffect");
       loadLoggedInUserDetail('nouser');
       loadUserSettings();
     }

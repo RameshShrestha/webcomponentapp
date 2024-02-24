@@ -15,9 +15,16 @@ function ImageListMainPage() {
         download_url: ""
     });
     const imageURL = "https://picsum.photos/v2/list?";
-   
+    const confirmServer = async()=>{
+        const baseURL = process.env.REACT_APP_SERVER_URI;
+        try {
+            await fetch(`${baseURL}/images`);
+        } catch (e) {
+            console.log(e);
+        }
+    }
     const fetchImages = async () => {
-        fetch(imageURL,)
+  
         try {
             const response = await fetch(`${imageURL}page=1&limit=20`);
             const data = await response.json();
@@ -53,6 +60,7 @@ function ImageListMainPage() {
 
     useEffect(() => {
         fetchImages();
+        confirmServer();
     }, []);
     {/*<div style={{ background: "#85b3ae" }}>
 
@@ -95,8 +103,8 @@ function ImageListMainPage() {
             >
                 {images.length > 0 &&
                     images.map((imageData) => {
-                        return <div style={{ position: "relative" }}>
-                            <div key={imageData.id} onClick={(e) => {
+                        return <div key={imageData.id} style={{ position: "relative" }}>
+                            <div  onClick={(e) => {
                                 console.log(imageData.id);
                                 setDialogImage(imageData);
                                 dialogRef.current.show();

@@ -13,7 +13,6 @@ function UserPopover({ isConnected, setIsConnected }) {
     <ResponsivePopover
       id="userPopOver"
       className="footerPartNoPadding"
-
       hideArrow
       horizontalAlign="Center"
       onAfterClose={function _a() { }}
@@ -141,6 +140,24 @@ function UserPopover({ isConnected, setIsConnected }) {
                   //     const userDummylist = ["ramesh", "test1", "Shrestha", "Rasal", "Test user2", "Test 4", "Test5", "Mills", "last user", "last 2"];
                   //        const currentUser = userDummylist[Math.floor(Math.random() * 10)]
                   socket.connect();
+                
+                  // socket.engine.on("connection_error", (err) => {
+                  //   console.log(err.req);      // the request object
+                  //   console.log(err.code);     // the error code, for example 1
+                  //   console.log(err.message);  // the error message, for example "Session ID unknown"
+                  //   console.log(err.context);  // some additional error context
+                  // });
+
+                  socket.on("connect_error", (err) => {
+                    // the reason of the error, for example "xhr poll error"
+                    console.log(err.message);
+                  
+                    // some additional description, for example the status code of the initial HTTP response
+                    console.log(err.description);
+                  
+                    // some additional context, for example the XMLHttpRequest object
+                    console.log(err.context);
+                  });
                   socket.emit('getOnline', {
                     "name": user,
                     "image": userDetail?.image,
@@ -164,10 +181,10 @@ function UserPopover({ isConnected, setIsConnected }) {
           <GroupHeaderListItem>
             Others
           </GroupHeaderListItem>
-          <StandardListItem key="Usefullinks" icon="information">Useful Links</StandardListItem>
-          <StandardListItem key="Countries" icon="information">Countries</StandardListItem>
-          <StandardListItem key="Weathers" icon="information">Weathers</StandardListItem>
-          <StandardListItem key="Images" icon="information">Images</StandardListItem>
+          <StandardListItem key="Usefullinks" icon="internet-browser">Useful Links</StandardListItem>
+          <StandardListItem key="Countries" icon="map-fill">Countries</StandardListItem>
+          <StandardListItem key="Weathers" icon="cloud">Weathers</StandardListItem>
+          <StandardListItem key="Images" icon="image-viewer">Images</StandardListItem>
 
         </List>
 

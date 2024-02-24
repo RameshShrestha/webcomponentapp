@@ -17,7 +17,7 @@ const UnProtectedRoutes = ({ children }) => {
     const [dbConnected, setDBConnected] = useState(false);
     const getServerStatus = async () => {
         const baseURL = process.env.REACT_APP_SERVER_URI;
-        console.log(baseURL);
+       // console.log(baseURL);
         try {
 
             const response = await fetch(baseURL + '/serverstatus', {
@@ -30,7 +30,7 @@ const UnProtectedRoutes = ({ children }) => {
 
             const result = await response.json();
             setDBConnected(result.dbConnected);
-            console.log(result);
+        //    console.log(result);
         } catch (error) {
             console.log(error);
         }

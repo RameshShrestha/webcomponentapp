@@ -6,18 +6,19 @@ import { UsersContext } from './Data/ContextHandler/UsersContext';
 import { useNavigate } from "react-router-dom";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { render, createPortal } from 'react-dom';
-import { LocalStorage } from './Data/LocalStorage';
+import { LocalStorage } from "./Data/LocalStorage";
 const _myLocalStorageUtility = LocalStorage();
 const baseURL = process.env.REACT_APP_SERVER_URI;
+
 function UserContainer() {
   const { usersData, addInitialUsers } = useContext(UsersContext);
   const [fetching, setFetching] = useState(true);
   const [userSkip, setUserSkip] = useState(0);
   const [userLimit, setUserLimit] = useState(10);
-  const [userTotal, setUserTotal] = useState(10);
+  const [userTotal, setUserTotal] = useState(50);
   const [allDataLoaded, setAllDataLoaded] = useState(true);
   let filterQuery = "";
-  console.log(usersData);
+ // console.log(usersData);
   const controller = new AbortController();
 
   const navigate = useNavigate();
@@ -33,20 +34,20 @@ function UserContainer() {
     if (filterString) {
       url = url + filterString;
     }
-    console.log(signal);
-      const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+   // console.log(signal);
+    const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
     const _token = loggedInUser?.token || "";
     setFetching(true);
     //  credentials: 'include',
     fetch(url, { signal, 
-                headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${_token}`
-        },
-                credentials: 'include' })
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${_token}`
+      },
+      credentials: 'include' })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+       // console.log(data);
         addInitialUsers(data.users);
         setUserTotal(data.total);
         setFetching(false);
@@ -66,23 +67,23 @@ function UserContainer() {
   };
 
   const loadMoreData = (signal) => {
-    console.log("load more data");
+  //  console.log("load more data");
     if (userSkip <= userTotal) {
       // const url = `https://dummyjson.com/users?skip=${userSkip}&limit=${userLimit}`;
-      let url = `${baseURL}/users?skip=${userSkip}&limit=${userLimit}`;
-  const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
-    const _token = loggedInUser?.token || "";
+      let url = `${baseURL}/realusers?skip=${userSkip}&limit=${userLimit}`;
+
       if (filterQuery) {
         url = url + filterQuery;
       }
       setFetching(true);
-      fetch(url, { signal, 
-        
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${_token}`
-        },
-                  credentials: 'include' })
+      const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+      const _token = loggedInUser?.token || "";
+      fetch(url, { signal,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${_token}`
+      },
+         credentials: 'include' })
         .then((res) => res.json())
         .then((data) => {
           if (data.total >= (data.skip + 10)) {
@@ -91,10 +92,10 @@ function UserContainer() {
             // setFetching(false);
             setUserTotal(data.total);
             //  setUserLimit(userLimit + 10);
-            console.log("All data not loaded");
+           // console.log("All data not loaded");
           } else {
             setAllDataLoaded(true);
-            console.log("All data  loaded");
+           // console.log("All data  loaded");
           }
           setFetching(false);
           addInitialUsers([...usersData.users, ...data.users]);
@@ -102,19 +103,16 @@ function UserContainer() {
     }
   };
   const deleteUser = async (userId) => {
-    const url = `${baseURL}/users/${userId}`;
-      const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+    const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
     const _token = loggedInUser?.token || "";
+    const url = `${baseURL}/realusers/${userId}`;
     const response = await fetch(url, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${_token}`
-        },
-        credentials: 'include'
-      }
+        'Authorization': `Bearer ${_token}`
+      },
+      credentials: 'include'
     });
     const result = await response.json();
     if (result.message === 'Removed Successfully') {
@@ -135,7 +133,7 @@ function UserContainer() {
     const signal = controller.signal;
     loadInitialData(signal, false, "");
     return () => {
-      console.log("Cleaning Use Effect after destruction");
+     // console.log("Cleaning Use Effect after destruction");
       controller.abort();
     }
 
@@ -158,7 +156,7 @@ function UserContainer() {
         const signal = controller.signal;
         document.getElementById("scrollableDiv").scrollTop = 0;
 
-        console.log(e);
+       // console.log(e);
         let filterString = "";
         e.detail.filters.map((filter) => {
           let filterName = filter.name.replace("Filter", "");
@@ -167,7 +165,7 @@ function UserContainer() {
             filterString += "&" + filterName + "=" + filter.value;
           }
         });
-        console.log(filterString);
+       // console.log(filterString);
         filterQuery = filterString;
         loadInitialData(signal, true, filterString);
       }}
@@ -227,7 +225,7 @@ function UserContainer() {
 
     <Bar
       endContent={<><Button design="Transparent" icon="add" onClick={() => {
-        navigate(`/users/new`, { state: { id: "new" } });
+        navigate(`/realusers/new`, { state: { id: "new" } });
       }} /></>}
       startContent={<> <Title>Users</Title></>}
     >
@@ -238,11 +236,11 @@ function UserContainer() {
       }
 
     </div> */}
-    <div id="scrollableDiv" style={{ overflow: "auto" }}>
+    <div id="scrollableDiv" style={{ overflow: "auto" ,height:"58vh"}}>
 
 
       <InfiniteScroll style={{ display: "flex", flexWrap: "wrap", background: 'var(--sapShellColor)' }}
-        dataLength={usersData.users.length} //This is important field to render the next data
+        dataLength={userTotal} //This is important field to render the next data
         next={loadMoreData}
         hasMore={!allDataLoaded}
 

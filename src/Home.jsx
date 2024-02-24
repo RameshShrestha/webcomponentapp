@@ -120,20 +120,21 @@ const productTableColumns = [
       );
     },
   },
-  // { //Removing Image column temporary
-  //   Cell: (instance) => {
-  //     const { cell, row, data, webComponentsReactProperties } = instance;
-  //     const isOverlay = webComponentsReactProperties.showOverlay;
-  //     return (
-  //       <FlexBox>
-  //         <img src={instance.data[row.index]?.thumbnail} width="50px" height="50px" />
-  //       </FlexBox>
-  //     );
-  //   },
-  //   Header: "Image",
-  //   accessor: "thumbnail",
-  //   width: "60"
-  // },
+   { 
+     Cell: (instance) => {
+       const { cell, row, data, webComponentsReactProperties } = instance;
+       const isOverlay = webComponentsReactProperties.showOverlay;
+       return (
+        <FlexBox>
+          {/* <img src={instance.data[row.index]?.thumbnail} width="50px" height="50px" /> */}
+          <span>IMG</span>
+        </FlexBox>
+       );
+     },
+     Header: "Image",
+     accessor: "thumbnail",
+     width: "60"
+  },
 ];
 
 export default function Home() {
@@ -145,13 +146,14 @@ export default function Home() {
   const [usersStatus, setUsersStatus] = useState([]);
   const { contextData } = useAuth();
   const { token, user, role, settingConfig, userDetail } = contextData;
-  console.log("userDetail", userDetail);
+  //console.log("userDetail", userDetail);
   // const { location,locationPermission } = useContext(UserLocationContext);
   // console.log("location : ",location, "locationPermission : ",locationPermission);
   const fetchIntialToDolist = async () => {
     const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
     const _token = loggedInUser?.token || "";
     const baseURL = process.env.REACT_APP_SERVER_URI;
+    if(_token){
     try {
       const response = await fetch(baseURL + '/todolist/getList', {
         method: 'GET',
@@ -167,6 +169,7 @@ export default function Home() {
     } catch (error) {
       console.log(error);
     }
+  }
   }
 
   const fetchIntialProducts = async () => {
@@ -200,7 +203,7 @@ export default function Home() {
         }
       });
       const result = await response.json();
-      console.log(result);
+     // console.log(result);
       setUsersStatus(result.users);
     } catch (error) {
       console.log(error);
@@ -260,19 +263,27 @@ export default function Home() {
 
   const navigate = useNavigate();
   const handleProgressHeaderClick = () => {
-    console.log("clicked Progress header");
+ //   console.log("clicked Progress header");
     navigate("/todolist");
   };
+  const handleAdminMessageClick = () => {
+   // console.log("clicked Admin Message header");
+    navigate("/adminmessagebox");
+  }
+  const handleLogsClick = () => {
+    //console.log("clicked Admin Message header");
+    navigate("/adminlogs");
+  }
   const handleWeatherClick = () => {
-    console.log("clicked Weather header");
+    //console.log("clicked Weather header");
     navigate("/weather1");
   };
   const handleProductHeaderClick = () => {
-    console.log("clicked Product header");
+   // console.log("clicked Product header");
     navigate("/products");
   }
   const handleUserHeaderClick = () => {
-    console.log("clicked Users header");
+  //  console.log("clicked Users header");
     navigate("/users");
 
   }
@@ -336,7 +347,6 @@ export default function Home() {
               <CardHeader
                 titleText="Send Notifications to Users"
                 avatar={<Icon name="bell-2" />}
-
               />
             }
             style={{ maxWidth: "500px", ...spacing.sapUiContentPadding }}
@@ -344,7 +354,48 @@ export default function Home() {
             <AdminNotificationSender />
           </Card>
         }
-        {settingConfig?.showStockPriceCard &&
+        {role === "ADMIN" &&
+          <Card
+            header={
+              <CardHeader
+                interactive
+                onClick={handleAdminMessageClick}
+                titleText="User Messages"
+                avatar={<Icon name="bell-2" />}
+
+              />
+            }
+            style={{ maxWidth: "500px", ...spacing.sapUiContentPadding }}
+          >
+            < div style={{ display: "flex", justifyContent: "center" ,height:"250px"}}>
+              <Icon name="email" design="Positive" style={{ height: "100px", width: "100px" }} />
+            </div>
+          </Card>
+        }
+
+        {role === "ADMIN" &&
+          <Card
+            header={
+              <CardHeader
+                interactive
+                onClick={handleLogsClick}
+                titleText="Logs"
+                avatar={<Icon name="activity-items" />}
+
+              />
+            }
+            style={{ maxWidth: "500px", ...spacing.sapUiContentPadding }}
+          >
+            < div style={{ display: "flex", justifyContent: "center" ,height:"250px"}}>
+              <Icon name="activity-items" design="Positive" style={{ height: "100px", width: "100px" }} />
+            </div>
+          </Card>
+
+
+
+        }
+
+        {/* {settingConfig?.showStockPriceCard &&
           <Card
             header={
               <CardHeader
@@ -382,7 +433,7 @@ export default function Home() {
               )}
             </div>
           </Card>
-        }
+        } */}
         {settingConfig?.showMyActivityCard &&
           <Card
             header={
@@ -400,7 +451,7 @@ export default function Home() {
             <List>
               {toDoList?.length > 0 && toDoList.map((item) => {
                 return <StandardListItem
-                  key={Math.random()}
+                  key={item._id}
                   additionalText={item.status}
                   additionalTextState={getStatus(item)}
                 >
@@ -470,7 +521,7 @@ export default function Home() {
             </List>
           </Card>
         }
-        { settingConfig?.showProductCard &&
+        {settingConfig?.showProductCard &&
           <Card
             header={
               <CardHeader
@@ -555,14 +606,14 @@ export default function Home() {
                     Header: "Status",
                     accessor: "status",
                     width: "100",
-                    Cell : (instance) => {
+                    Cell: (instance) => {
                       const { cell, row, data, webComponentsReactProperties } = instance;
                       let statusText = instance.data[row.index]?.status;
                       let textColor = "";
-                      if(statusText === "Online") {
+                      if (statusText === "Online") {
                         textColor = "green";
-                      } 
-                      return (<Text style={{color:textColor}}>{statusText}</Text>)
+                      }
+                      return (<Text style={{ color: textColor }}>{statusText}</Text>)
                     }
                   },
                   {

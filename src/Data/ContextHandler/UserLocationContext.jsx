@@ -18,13 +18,13 @@ export default function UserLocationContextProvider({ children }) {
         if (!navigator.geolocation) {
             console.log('Geolocation API not supported by this browser.');
         } else {
-            console.log('Checking location...');
+          //  console.log('Checking location...');
             navigator.geolocation.getCurrentPosition(success, error);
         }
     }
     function success(position) {
-        console.log('Latitude:', position.coords.latitude);
-        console.log('Longitude:', position.coords.longitude);
+    //    console.log('Latitude:', position.coords.latitude);
+    //    console.log('Longitude:', position.coords.longitude);
 
         if (!weatherToday) {
             fetchWeatherData(position.coords.latitude, position.coords.longitude);
@@ -40,7 +40,7 @@ export default function UserLocationContextProvider({ children }) {
         const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
         const _token = loggedInUser?.token || "";
         if (lat && lng) {
-            console.log("Fetching WeatherData for ", lat, lng);
+          //  console.log("Fetching WeatherData for ", lat, lng);
             const baseURL = process.env.REACT_APP_SERVER_URI;
             try {
 
@@ -65,7 +65,7 @@ export default function UserLocationContextProvider({ children }) {
                         return item;
                     }
                 });
-                console.log(filteredData);
+            //    console.log(filteredData);
                 setWeatherForcast({list : filteredData});
                 setLocationPermission(true);
                 setLocation({ lat: lat, lng: lng });

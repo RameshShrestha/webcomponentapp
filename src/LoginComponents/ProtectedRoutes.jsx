@@ -13,7 +13,7 @@ import { socket } from '../socket';
 import { LocalStorage } from "../Data/LocalStorage";
 const _myLocalStorageUtility = LocalStorage();
 const ProtectedRoutes = ({ children }) => {
-    console.log("Applied Theme : ", getTheme());
+   // console.log("Applied Theme : ", getTheme());
     const [isConnected, setIsConnected] = useState(socket.connected);
     const baseURL = process.env.REACT_APP_SERVER_URI;
     const { contextData } = useAuth();
@@ -21,8 +21,8 @@ const ProtectedRoutes = ({ children }) => {
     const { token, user, userDetail, settingConfig } = contextData;
     //const user = useSelector((state) => state.user);
     let location = useLocation();
-    console.log("location", location);
-    console.log("Executed here Protected router", userDetail);
+   // console.log("location", location);
+   // console.log("Executed here Protected router", userDetail);
     const checkIfUserSessionIsValid = async () => {
         const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
         const _token = loggedInUser?.token || "";
@@ -37,23 +37,23 @@ const ProtectedRoutes = ({ children }) => {
         if (response.status < 300) {
            // setIsConnected(true);
             //return children;
+            //refreshToken
 
         } else {
             // return <Navigate to="/welcome" state={{ from: location }} replace />
-
             navigate("/welcome");
         }
     }
-    if (!user) {
+    if (!userDetail) {
         checkIfUserSessionIsValid();
     }
     if (settingConfig?.theme) {
-        console.log("Applied Theme : ", settingConfig.theme);
+     //   console.log("Applied Theme : ", settingConfig.theme);
         setTheme(settingConfig.theme);
       //  setTheme("sap_horizon_dark");
     } else {
         setTheme("sap_horizon_dark");
-        console.log("Applied Theme is set", "sap_horizon_dark");
+    //    console.log("Applied Theme is set", "sap_horizon_dark");
     }
     useEffect(() => {
         function onConnect() {
@@ -92,7 +92,7 @@ const ProtectedRoutes = ({ children }) => {
     }, [user]);
     return (
         <ThemeProvider>
-            <div className="mainContainer" style={{ height: `${user && isConnected ? "100vh" : "100vh"}`, overflow: "auto", overflowX: "hidden", background: getTheme().indexOf("dark") > -1 ? "var(--sapBackgroundColor)" :"#a8b4d9"} }>
+            <div className="mainContainer sapScrollBar" style={{ height: `${user && isConnected ? "100vh" : "100vh"}`, overflow: "auto", overflowX: "hidden", background: getTheme().indexOf("dark") > -1 ? "var(--sapBackgroundColor)" :"#a8b4d9"} }>
 
                 <MyShellBar />
                 <UserPopover isConnected={isConnected} setIsConnected={setIsConnected} />

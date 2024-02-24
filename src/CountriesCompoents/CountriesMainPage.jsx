@@ -49,11 +49,11 @@ function CountriesMainPage() {
 
         <SplitterLayout
             style={{
-                height: '90vh',
+                height: '92vh',
                 width: '100%'
             }}
         >
-            <SplitterElement minSize={300} size="300px" resizable={false}>
+            <SplitterElement minSize="25dvw" size="25dvw" resizable={false}>
                 <div style={{ width: "100%" }}>
                     <Input
                         showClearIcon={true}

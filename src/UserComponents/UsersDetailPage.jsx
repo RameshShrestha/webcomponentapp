@@ -30,7 +30,7 @@ function UsersDetailPage({ navigation, route }) {
     };
     useEffect(() => {
         let id = "";
-        console.log(state);
+       // console.log(state);
         //   id = pathname.replace("/users/", "");
         if (pathname.indexOf("myprofile") > -1) {
             id = user;
@@ -40,7 +40,7 @@ function UsersDetailPage({ navigation, route }) {
         } else {
             id = user;
         }
-        console.log("Id :", id);
+       // console.log("Id :", id);
         if (id === 'new') {
             setUserData({
                 "id": "", "firstName": "", "lastName": "", "maidenName": "",  "age": 0, "gender": "", "email": "",
@@ -94,13 +94,13 @@ function UsersDetailPage({ navigation, route }) {
             }).then((data) => {
 
                 setUserData(data);
-                console.log(data);
+              //  console.log(data);
             })
         }
     }, []);
     const handleInput = (e) => {
         // dispatch({ field: Object.keys(e.target.dataset)[0], value: e.target.value });
-        console.log(e.target.name);
+       // console.log(e.target.name);
         let pathArray = e.target.name.split(".");
         if (pathArray.length === 1) {
             UserDataChanged[e.target.name] = e.target.value;
@@ -112,7 +112,7 @@ function UsersDetailPage({ navigation, route }) {
             UserDataChanged[pathArray[0]][pathArray[1]][pathArray[2]][pathArray[3]] = e.target.value;
         }
 
-        console.log(e.target.value)
+      //  console.log(e.target.value)
     };
     if (Object.keys(userData).length < 1) {
         return <>Loading...</>
@@ -124,7 +124,7 @@ function UsersDetailPage({ navigation, route }) {
             footer={editMode &&
                 <Bar design="FloatingFooter" endContent={<>
                     <Button design="Positive" onClick={async (e) => {
-                        console.log(UserDataChanged);
+                      //  console.log(UserDataChanged);
                         const _token = loggedInUser?.token || "";
                         if (userData._id) {
                             const response = await fetch(`${baseURL}/realusers/${userData.username}`, {
