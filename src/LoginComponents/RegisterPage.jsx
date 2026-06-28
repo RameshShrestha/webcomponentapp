@@ -11,13 +11,13 @@ const RegisterPage = () => {
     email: "",
     username: "",
     password: "",
-    role :"USER"
+    role: "USER"
   });
-  const [isLoading,setIsLoading]= useState(false);
-  const [message,setMessage]= useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
   // Access the register function from the authentication context
-  const { contextData} = useAuth();
+  const { contextData } = useAuth();
   const { register } = contextData;
 
   // Handle data change for input fields
@@ -33,16 +33,17 @@ const RegisterPage = () => {
 
   // Handle user registration
   const handleRegister = async () => await register(data);
-  const registerClicked = async function(e){
-    if(!Object.values(data).some((val) => !val)){
+  const registerClicked = async function (e) {
+    if (!Object.values(data).some((val) => !val)) {
       setIsLoading(true);
       const result = await handleRegister();
       setIsLoading(false);
       console.log(result);
-      if(result?.message){
+      if (result?.message) {
         setMessage(result?.message);
       }
       setData({
+      
         email: "",
         username: "",
         password: "",
@@ -52,17 +53,30 @@ const RegisterPage = () => {
   return (
     // Register form UI
     <div className="mainRegisterScreen">
-       {/* <h1 className="text-3xl font-bold" style={{color:"white"}}>Ramesh React Application</h1> */}
+      {/* <h1 className="text-3xl font-bold" style={{color:"white"}}>Ramesh React Application</h1> */}
       <div className="loginComponents">
         {/* <div style={{ height: "50px", width: "50px", color: "#4e4646" }}>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z" />
           </svg>
         </div> */}
-        <h1 style={{color:"#4e4646"}}>Register
+        <h1 style={{ color: "#4e4646" }}>Register
         </h1>
 
-        {/* Input fields for username, password, and email */}
+        {/* Input fields for firstname,lastname,username, password, and email */}
+        {/* <input className="loginInput"
+          placeholder="Enter the FirstName..."
+          type="input"
+          value={data.firstname}
+          onChange={(e) => { handleDataChange(e, "firstname") }}
+        />
+        <input className="loginInput"
+          placeholder="Enter the Last Name"
+          type="input"
+          value={data.lastname}
+          onChange={(e) => { handleDataChange(e, "lastname") }}
+        /> */}
+
         <input className="loginInput"
           placeholder="Enter the email..."
           type="email"
@@ -74,6 +88,7 @@ const RegisterPage = () => {
           value={data.username}
           onChange={(e) => { handleDataChange(e, "username") }}
         />
+
         <input className="loginInput"
           placeholder="Enter the password..."
           type="password"
@@ -93,15 +108,15 @@ const RegisterPage = () => {
         >
           Register
         </button>
-        {isLoading && <Loader/>}
-        {message.length>0 && <small>{message}</small>}
+        {isLoading && <Loader />}
+        {message.length > 0 && <small>{message}</small>}
         {/* Login link */}
-        <small style={{color:"#4e4646"}}>
+        <small style={{ color: "#4e4646" }}>
           Already have an account?{" "}
           <span className="loginLink" onClick={() => { navigate("/login"); }}>
             Login
           </span>
-          
+
         </small>
       </div>
     </div>

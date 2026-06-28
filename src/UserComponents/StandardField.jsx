@@ -1,5 +1,5 @@
-import { Input, Link, Text, InputType, TextArea ,Select,Option} from "@ui5/webcomponents-react";
-const StandardField = ({ editMode, value, inputType = InputType.None, onChange, selectOptions, ...rest }) => {
+import { Input, Link, Text, TextArea ,Select,Option} from "@ui5/webcomponents-react";
+const StandardField = ({ editMode, value, inputType = "Text", onChange, selectOptions, ...rest }) => {
   if (editMode) {
     if (inputType === "TextArea") {
       return <TextArea value={value} style={{ width: '100%' }} type={inputType} onChange={onChange}  {...rest} />;
@@ -19,9 +19,9 @@ const StandardField = ({ editMode, value, inputType = InputType.None, onChange, 
 
     return <Input value={value} style={{ width: '100%' }} type={inputType} onChange={onChange} {...rest} />;
   }
-  if (inputType === InputType.URL || inputType === InputType.Email) {
+  if (inputType === "URL" || inputType === "Email") {
     return (
-      <Link href={inputType === InputType.Email ? `mailto:${value}` : value} target="_blank" {...rest}>
+      <Link href={inputType === "Email" ? `mailto:${value}` : value} target="_blank" {...rest}>
         {value}
       </Link>
     );

@@ -1,7 +1,9 @@
-import { MessageBox, MessageBoxActions } from "@ui5/webcomponents-react";
+import { MessageBox} from "@ui5/webcomponents-react";
 import { LocalStorage } from "../Data/LocalStorage";
 import { useUsefulLinkContext } from "../Data/ContextHandler/UsefulLinksContext";
-const baseURL = process.env.REACT_APP_SERVER_URI;
+import {getDataProvider } from "../Data/ContextHandler/constant";
+//const baseURL = process.env.REACT_APP_SERVER_URI;
+const baseURL = getDataProvider();//"MyDataprovider";
 const _myLocalStorageUtility = LocalStorage();
 function MyMessageBox({ open, setOpenMessageBox, selectedData }) {
     const {fetchIntialUserLinks } =useUsefulLinkContext();
@@ -32,7 +34,7 @@ function MyMessageBox({ open, setOpenMessageBox, selectedData }) {
         }
     }
     const handleClose = (event) => {
-        if (event.detail.action === MessageBoxActions.OK) {
+        if (event.detail.action === "OK") {
             // Trigger Delete 
             deleteLink(selectedData);
             console.log("Delete item", selectedData)

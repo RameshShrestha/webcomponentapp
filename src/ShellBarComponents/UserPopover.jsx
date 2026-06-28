@@ -1,5 +1,5 @@
-import { Avatar, ShellBar, ShellBarItem, ResponsivePopover, Title, List, StandardListItem, CustomListItem, Button, Panel, GroupHeaderListItem } from "@ui5/webcomponents-react";
-import { useState } from "react";
+import { ResponsivePopover, Title, List, ListItemStandard, ListItemCustom, Button, ListItemGroup } from "@ui5/webcomponents-react";
+//import { useState } from "react";
 import { socket } from '../socket';
 import OnlineStatusIcon from "../LoginComponents/OnlineStatusIcon";
 import { useNavigate } from "react-router-dom";
@@ -33,6 +33,7 @@ function UserPopover({ isConnected, setIsConnected }) {
       <div style={{ marginTop: "1rem" }}>
 
         <List separators="None"
+          growing="Scroll"
           onItemToggle={(e) => {
             console.log("Toggle Parent");
           }
@@ -48,87 +49,110 @@ function UserPopover({ isConnected, setIsConnected }) {
               console.log("sign out");
 
               await logout();
-              actionPopover.close();
+              actionPopover.open = false;
             }
             else if (selectedItem === "Reset Password") {
               //Sign out trigger
               console.log("Reset Password");
-              actionPopover.close();
+              actionPopover.open = false;
               navigate("/resetPassword");
 
             } else if (selectedItem === "My Profile") {
               //Sign out trigger
               console.log("My Profile");
-              actionPopover.close();
+              actionPopover.open = false;
               navigate("/myprofile");
 
             } else if (selectedItem === "About") {
               //Sign out trigger
               console.log("About");
-              actionPopover.close();
+              actionPopover.open = false;
               navigate("/about1");
 
             } else if (selectedItem === "Contact") {
               //Sign out trigger
               console.log("Contact");
-              actionPopover.close();
+              actionPopover.open = false;
               navigate("/contact1");
 
             } else if (selectedItem === "My Todo Activity") {
               //Sign out trigger
               console.log("Contact");
-              actionPopover.close();
+              actionPopover.open = false;
               navigate("/todolist");
 
             }
             else if (selectedItem === "Weathers") {
               //Sign out trigger
               console.log("Contact");
-              actionPopover.close();
+              actionPopover.open = false;
               navigate("/weather1");
 
             }
             else if (selectedItem === "Images") {
               //Sign out trigger
               console.log("Images");
-              actionPopover.close();
+              actionPopover.open = false;
               navigate("/images1");
 
             }
             else if (selectedItem === "Useful Links") {
               //Sign out trigger
               console.log("Useful Links");
-              actionPopover.close();
+              actionPopover.open = false;
               navigate("/usefullinks1");
 
             }
             else if (selectedItem === "Settings") {
               //Sign out trigger
               console.log("Settings");
-              actionPopover.close();
+              actionPopover.open = false;
               navigate("/settings");
 
             }
             else if (selectedItem === "Help") {
               //Sign out trigger
               console.log("Help");
-              actionPopover.close();
+              actionPopover.open = false;
               navigate("/help1");
 
             }
             else if (selectedItem === "Countries") {
               //Sign out trigger
               console.log("Help");
-              actionPopover.close();
+              actionPopover.open = false;
               navigate("/countries1");
 
             }
+            else if (selectedItem === "News") {
+              //Sign out trigger
+              console.log("Help");
+              actionPopover.open = false;
+              navigate("/news1");
+
+            }
+             else if (selectedItem === "Take Quiz") {
+              //Sign out trigger
+              console.log("Help");
+              actionPopover.open = false;
+              navigate("/quiz");
+
+            }
+             else if (selectedItem === "Manage My Questions") {
+              //Sign out trigger
+              console.log("Help");
+              actionPopover.open = false;
+              navigate("/managequestion");
+
+            }
             
+            
+
 
 
           }}>
 
-          <CustomListItem>
+          <ListItemCustom>
             <div style={{ display: "flex", alignItems: "center", width: "100%" }}>
               <OnlineStatusIcon height={20} width={20} status={`${isConnected ? "Online" : "Offline"}`} showText={true} />
               {/* <StatusMenu></StatusMenu> */}
@@ -140,7 +164,7 @@ function UserPopover({ isConnected, setIsConnected }) {
                   //     const userDummylist = ["ramesh", "test1", "Shrestha", "Rasal", "Test user2", "Test 4", "Test5", "Mills", "last user", "last 2"];
                   //        const currentUser = userDummylist[Math.floor(Math.random() * 10)]
                   socket.connect();
-                
+
                   // socket.engine.on("connection_error", (err) => {
                   //   console.log(err.req);      // the request object
                   //   console.log(err.code);     // the error code, for example 1
@@ -151,13 +175,19 @@ function UserPopover({ isConnected, setIsConnected }) {
                   socket.on("connect_error", (err) => {
                     // the reason of the error, for example "xhr poll error"
                     console.log(err.message);
-                  
+
                     // some additional description, for example the status code of the initial HTTP response
                     console.log(err.description);
-                  
+
                     // some additional context, for example the XMLHttpRequest object
                     console.log(err.context);
                   });
+                  console.log({
+                    "name": user,
+                    "image": userDetail?.image,
+                    "loginTime": new Date().toLocaleTimeString()
+                  });
+                  console.log("Socket emit getOnline");
                   socket.emit('getOnline', {
                     "name": user,
                     "image": userDetail?.image,
@@ -168,23 +198,28 @@ function UserPopover({ isConnected, setIsConnected }) {
               }} >
                 {`${isConnected ? "Go Offline" : "Go Online"}`}
               </Button>
-            </div></CustomListItem>
+            </div></ListItemCustom>
 
-          <StandardListItem key="profile" icon="employee">My Profile</StandardListItem>
-          <StandardListItem key="todolist" icon="employee">My Todo Activity</StandardListItem>
-          <StandardListItem key="settings" icon="settings">Settings</StandardListItem>
-          <StandardListItem key="ResetPw" icon="edit">Reset Password</StandardListItem>
-          <StandardListItem key="About" icon="information">About</StandardListItem>
-          <StandardListItem key="Contact" icon="call">Contact</StandardListItem>
-          <StandardListItem key="help" icon="sys-help">Help</StandardListItem>
-          <StandardListItem key="logout" icon="log">Sign out</StandardListItem>
-          <GroupHeaderListItem>
+          <ListItemStandard key="profile" icon="employee">My Profile</ListItemStandard>
+          <ListItemStandard key="todolist" icon="employee">My Todo Activity</ListItemStandard>
+          <ListItemStandard key="settings" icon="settings">Settings</ListItemStandard>
+          <ListItemStandard key="ResetPw" icon="edit">Reset Password</ListItemStandard>
+          <ListItemStandard key="About" icon="information">About</ListItemStandard>
+          <ListItemStandard key="Contact" icon="call">Contact</ListItemStandard>
+          <ListItemStandard key="help" icon="sys-help">Help</ListItemStandard>
+          <ListItemStandard key="logout" icon="log">Sign out</ListItemStandard>
+          <ListItemGroup>
             Others
-          </GroupHeaderListItem>
-          <StandardListItem key="Usefullinks" icon="internet-browser">Useful Links</StandardListItem>
-          <StandardListItem key="Countries" icon="map-fill">Countries</StandardListItem>
-          <StandardListItem key="Weathers" icon="cloud">Weathers</StandardListItem>
-          <StandardListItem key="Images" icon="image-viewer">Images</StandardListItem>
+          </ListItemGroup>
+          <ListItemStandard key="Usefullinks" icon="internet-browser">Useful Links</ListItemStandard>
+          <ListItemStandard key="news" icon="map-fill">News</ListItemStandard>
+
+          <ListItemStandard key="takequiz" icon="map-fill">Take Quiz</ListItemStandard>
+          <ListItemStandard key="managequestions" icon="map-fill">Manage My Questions</ListItemStandard>
+
+          <ListItemStandard key="Countries" icon="map-fill">Countries</ListItemStandard>
+          <ListItemStandard key="Weathers" icon="cloud">Weathers</ListItemStandard>
+          <ListItemStandard key="Images" icon="image-viewer">Images</ListItemStandard>
 
         </List>
 

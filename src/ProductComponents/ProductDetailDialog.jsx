@@ -1,6 +1,6 @@
-import { Bar, Dialog, Icon, Title, Button, Text, FormItem, RatingIndicator, FormGroup } from "@ui5/webcomponents-react";
+import { Bar, Dialog, Icon, Title, Button, Text, FormItem, RatingIndicator, FormGroup,Label } from "@ui5/webcomponents-react";
 import { Form } from "@ui5/webcomponents-react";
-import { useEffect, useState } from "react";
+//import { useEffect, useState } from "react";
 import SimpleImageSlider from "react-simple-image-slider";
 
 function ProductDetailDialog({ openState, data, setOpenState }) {
@@ -37,40 +37,40 @@ function ProductDetailDialog({ openState, data, setOpenState }) {
 
       >
         <FormGroup>
-          <FormItem label="Id">
+          <FormItem label="Id" labelContent={<Label>Id</Label>}>
             <Text>
               {data.id}
             </Text>
           </FormItem>
-          <FormItem label="Title">
+          <FormItem label="Title" labelContent={<Label>Title</Label>}>
             <Text>
               {data.title}
             </Text>
           </FormItem>
-          <FormItem label="Description">
+          <FormItem label="Description" labelContent={<Label>Description</Label>}>
             <Text>
               {data.description}
             </Text>
           </FormItem>
-          <FormItem label="Stock">
+          <FormItem label="Stock" labelContent={<Label>Stock</Label>}>
             <Text>
               {data.stock}
             </Text>
           </FormItem>
         </FormGroup>
         <FormGroup>
-          <FormItem label="Price">
+          <FormItem label="Price" labelContent={<Label>Price</Label>}>
             <Text>
               {data.price}
             </Text>
           </FormItem>
-          <FormItem label="Discount ">
+          <FormItem label="Discount " labelContent={<Label>Discount</Label>}>
             <Text>
               {data.discountPercentage}
             </Text>
           </FormItem>
 
-          <FormItem label="Brand">
+          <FormItem label="Brand" labelContent={<Label>Brand</Label>}>
             <Text>
               {data.brand}
             </Text>
@@ -78,13 +78,13 @@ function ProductDetailDialog({ openState, data, setOpenState }) {
 
         
 
-          <FormItem label="Category">
+          <FormItem label="Category" labelContent={<Label>Category</Label>}>
 
             <Text>
               {data.category}
             </Text>
           </FormItem>
-          <FormItem label="Rating">
+          <FormItem label="Rating" labelContent={<Label>Rating</Label>}>
             <RatingIndicator style={{ width: '10rem' }} value={data.rating} disabled="true" />
 
           </FormItem>

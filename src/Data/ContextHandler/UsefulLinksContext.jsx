@@ -1,9 +1,10 @@
-import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
-
+import React, { createContext, useContext, useEffect, useReducer } from "react";
+import {getDataProvider } from "./constant";
 import { LocalStorage } from "../LocalStorage";
 const _myLocalStorageUtility = LocalStorage();
-const baseURL = process.env.REACT_APP_SERVER_URI;
-export let UsefulLinksContext = createContext({
+//const baseURL = process.env.REACT_APP_SERVER_URI;
+   const baseURL = getDataProvider();//"MyDataprovider"
+export const UsefulLinksContext = createContext({
     contextData: {
         Links : {
             userLinks: [],
@@ -30,13 +31,13 @@ const UsefulLinksReducer = (Links, action) => {
         case "addInitialLinks": {
             //  console.log(action.payload);
          
-            let newLinks = {...Links};
+            const newLinks = {...Links};
             newLinks.userLinks = [...action.payload]
             newLinks.commonLinks = Links.commonLinks;
             return newLinks;
         }
         case "addInitialCommonLinks": {
-            let newLinks = {...Links};
+            const newLinks = {...Links};
             newLinks.userLinks = Links.userLinks;
             newLinks.commonLinks = [...action.payload]
             return newLinks;
@@ -79,13 +80,16 @@ export default function UsefulLinksContextProvider({ children }) {
         try {
             const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
             const _token = loggedInUser?.token || "";
-            const response = await fetch(baseURL + '/usefullinks/common', {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${_token}`
-                }
+            // const response = await fetch(baseURL + '/usefullinks/common', {
+            //     method: 'GET',
+            //     credentials: 'include',
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         'Authorization': `Bearer ${_token}`
+            //     }
+            // });
+             const response = await fetch(baseURL + '/usefullinks/common', {
+                method: 'GET'
             });
             const result = await response.json();
             dispatchLinks({

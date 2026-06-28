@@ -1,5 +1,5 @@
-import { Avatar, ShellBar, ShellBarItem,  ResponsivePopover, Title, List, StandardListItem,  CustomListItem, Button } from "@ui5/webcomponents-react";
-import { useState } from "react";
+import { Avatar, ShellBar } from "@ui5/webcomponents-react";
+//import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../Data/ContextHandler/AuthContext";
 
@@ -13,7 +13,7 @@ const { userDetail,settingConfig } = contextData;
     return<>
     <ShellBar
             id="shellBar"
-            logo={<img src="Logo.PNG" alt="logo" />}
+            logo={<img src="./Logo.PNG" alt="logo" />}
             show-notifications ={settingConfig?.showNotification}
             notifications-count="7"
             profile={
@@ -23,6 +23,13 @@ const { userDetail,settingConfig } = contextData;
             }
             primaryTitle="Ramesh Learning Hub"
             onLogoClick={handleLogoClick}
+            onNotificationsClick={function Xs(oEvent){
+
+              const userPopover = document.getElementById("userPopOver");
+             // userPopover.opener
+
+            }}
+            onProfileClick={function Xs(){}}
             style={{ background: "#a9b0ca" }}
           >
           </ShellBar>

@@ -1,21 +1,21 @@
-import { Button, Icon, Input, Label, Link, MessageBox, Option, Select, Tab, TabContainer, Table, TableCell, TableColumn, TableRow, Text, TextArea, Title, Toolbar, ToolbarSpacer } from "@ui5/webcomponents-react";
+import { Button, Icon, Input, Label, Link, TableSelectionSingle,TableGrowing,TableHeaderCell, TableHeaderRow, Table, TableCell,  TableRow, Text } from "@ui5/webcomponents-react";
 import { useEffect, useState } from "react";
-
+// import { TableColumn } from '@ui5/webcomponents-react-compat';
 import { LocalStorage } from "../Data/LocalStorage";
-import AddLinkDialog from "./AddLinkDialog";
-import MyMessageBox from "./MyMessageBox";
+// import AddLinkDialog from "./AddLinkDialog";
+// import MyMessageBox from "./MyMessageBox";
 import { useUsefulLinkContext } from "../Data/ContextHandler/UsefulLinksContext";
 const _myLocalStorageUtility = LocalStorage();
 const baseURL = process.env.REACT_APP_SERVER_URI;
 function MyLinksContent({ setOpenState ,setOpenMessageBox,setSelectedData}) {
     const {Links,fetchIntialUserLinks } =useUsefulLinkContext();
 
-    let linkData = Links.userLinks;
+    const linkData = Links.userLinks;
     
    // const [linkData, setLinkData] = useState(Links.userLinks || []);
     const [filterText, setFilterText] = useState("");
 
-    let filteredLinks = linkData?.filter((item) => {
+    const filteredLinks = linkData?.filter((item) => {
         if (filterText) {
             if (item.description.toLowerCase().indexOf(filterText.toLowerCase()) > -1) {
                 return item;
@@ -52,14 +52,14 @@ function MyLinksContent({ setOpenState ,setOpenMessageBox,setSelectedData}) {
         <div >
 
 
-            <Toolbar
+            {/* <Toolbar
                 design="Auto"
                 onClick={function _a() { }}
                 onOverflowChange={function _a() { }}
                 toolbarStyle="Standard"
-            >
+            > */}
 
-                <ToolbarSpacer />
+                <div>
                 <Input placeholder="Search" value={filterText} icon={<Icon name="search" />}
                     onInput={(e) => {
                         setFilterText(e.target.value);
@@ -69,24 +69,24 @@ function MyLinksContent({ setOpenState ,setOpenMessageBox,setSelectedData}) {
                         setOpenState(true);
                     }}>Add</Button>
                 <Button design="Transparent" icon="refresh" onClick={fetchIntialUserLinks}>Refresh</Button>
+                </div>
 
-
-            </Toolbar>
+            {/* </Toolbar> */}
             <div className="sapScrollBar" style={{ height: '72vh', overflow: 'auto' }}>
 
                 <Table
                     stickyColumnHeader
-                    mode="SingleSelect"
-                    growing="Scroll"
-                    columns={
-                        <>
-                            <TableColumn style={{ width: '3rem' }}><Label>No.</Label></TableColumn>
-                            <TableColumn popinDisplay="Inline" demandPopin minWidth={600} popinText="Description" style={{ width: '20rem' }}><Label>Description</Label></TableColumn>
-                            <TableColumn popinDisplay="Inline" demandPopin minWidth={700} popinText="URL Link"><Label>URL Link</Label></TableColumn>
-                            <TableColumn popinDisplay="Inline" demandPopin minWidth={800} popinText="Created At" style={{ width: '20rem' }}><Label>Created At</Label></TableColumn>
-                            <TableColumn demandPopin minWidth={900} popinText="Preview"><Label>Preview</Label></TableColumn>
-                            <TableColumn style={{ width: '3rem' }}></TableColumn>
-                        </>}
+                   features={<><TableSelectionSingle /><TableGrowing mode="Scroll" onLoadMore={function Xs(){}}/></>}
+              headerRow={
+                    <TableHeaderRow sticky>
+                        <TableHeaderCell>No.</TableHeaderCell>
+                        <TableHeaderCell>Description</TableHeaderCell>
+                        <TableHeaderCell>URL Link</TableHeaderCell>
+                        <TableHeaderCell>Created At</TableHeaderCell>
+                      
+                        <TableHeaderCell>Preview</TableHeaderCell>
+                        <TableHeaderCell></TableHeaderCell>
+                    </TableHeaderRow>}
                     onLoadMore={function _a() { }}
                     onPopinChange={function _a() { }}
                     onRowClick={function _a() { }}

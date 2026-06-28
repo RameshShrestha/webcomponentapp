@@ -1,0 +1,332 @@
+/* Add Question Container */
+.add-question-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Header Section */
+.add-question-header {
+  margin-bottom: 30px;
+}
+
+.header-content {
+  text-align: center;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+  margin: 0 0 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.title-icon {
+  font-size: 2.5rem;
+  color: #667eea;
+}
+
+.page-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  margin: 0;
+}
+
+/* Validation Summary */
+.validation-summary {
+  margin-bottom: 20px;
+}
+
+.validation-summary ul {
+  margin: 10px 0 0 0;
+  padding-left: 20px;
+}
+
+.validation-summary li {
+  margin: 5px 0;
+}
+
+/* Form Card */
+.form-card {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  margin-bottom: 25px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.form-card ui5-form {
+  width: 100%;
+}
+
+/* Answers Card */
+.answers-card {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  margin-bottom: 25px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.answers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.correct-count {
+  font-size: 0.9rem;
+  color: #667eea;
+  font-weight: normal;
+  background: rgba(102, 126, 234, 0.1);
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.error-strip {
+  margin-bottom: 15px;
+}
+
+/* Answers Table */
+.answers-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.header-text {
+  font-weight: 600;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.answer-row {
+  transition: background-color 0.2s ease;
+}
+
+.answer-row:hover {
+  background-color: #f8f9ff;
+}
+
+.row-number {
+  font-weight: 600;
+  color: #667eea;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: rgba(102, 126, 234, 0.1);
+  border-radius: 50%;
+}
+
+.delete-option-btn:hover {
+  color: #f44336;
+}
+
+/* Action Bar */
+.action-bar {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  margin: 0 -20px -20px -20px;
+  padding: 15px 20px;
+  border-radius: 0 0 15px 15px;
+}
+
+/* Form Items Styling */
+ui5-label[required]::after {
+  content: ' *';
+  color: #f44336;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .form-card,
+  .answers-card {
+    padding: 25px;
+  }
+}
+
+@media (max-width: 768px) {
+  .add-question-container {
+    padding: 15px;
+  }
+
+  .page-title {
+    font-size: 2rem;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .title-icon {
+    font-size: 2rem;
+  }
+
+  .page-subtitle {
+    font-size: 1rem;
+  }
+
+  .form-card,
+  .answers-card {
+    padding: 20px;
+  }
+
+  .answers-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .section-title {
+    font-size: 1.3rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  /* Make table scrollable on mobile */
+  .answers-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .title-icon {
+    font-size: 1.8rem;
+  }
+
+  .page-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .form-card,
+  .answers-card {
+    padding: 15px;
+  }
+
+  .section-title {
+    font-size: 1.2rem;
+  }
+
+  .action-bar {
+    padding: 12px 15px;
+  }
+}
+
+/* Animation */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-card,
+.answers-card {
+  animation: slideIn 0.5s ease-out;
+}
+
+.form-card {
+  animation-delay: 0.1s;
+}
+
+.answers-card {
+  animation-delay: 0.2s;
+}
+
+/* Focus States */
+ui5-textarea:focus,
+ui5-select:focus,
+ui5-input:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Disabled State */
+ui5-button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Success State */
+.success-message {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Loading State */
+.saving-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.saving-spinner {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #e0e0e0;
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Made with Bob */

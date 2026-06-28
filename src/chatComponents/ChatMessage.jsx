@@ -1,17 +1,33 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { OnlineUsersContext } from '../Data/ContextHandler/OnlineUsersContext';
-function ChatMessage({user,oldMessages}){
-    const {receiveChatMessage,currentUserDetail} =useContext(OnlineUsersContext);
-    return<>
-    {oldMessages && oldMessages.map((message)=>{
-        return  <div  key={new Date(message.createdAt).getTime()} className="chatMessage" >
-                    <div className={`${message.sender === currentUserDetail.name? 'userMessage': 'senderMessage' }`}>
-                        <div className="chatMessageText">{message.content}</div>
-                      
+import styles from "./ChatComponents.module.css";
+
+function ChatMessage({ user, oldMessages }) {
+    const { currentUserDetail } = useContext(OnlineUsersContext);
+    
+    return (
+        <>
+            {oldMessages && oldMessages.map((message) => {
+                const isCurrentUser = message.sender === currentUserDetail.name;
+                
+                return (
+                    <div key={new Date(message.createdAt).getTime()} className={styles.chatMessage}>
+                        <div className={isCurrentUser ? styles.userMessage : styles.senderMessage}>
+                            <div className={styles.chatMessageText}>
+                                {message.content}
+                            </div>
+                            <div className={styles.messageTime}>
+                                {new Date(message.createdAt).toLocaleTimeString([], {
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                })}
+                            </div>
+                        </div>
                     </div>
-                    <div className={`${message.sender === currentUserDetail.name ? 'userMessage': 'senderMessage' }`} style={{fontSize:"0.7rem"}}> {new Date(message.createdAt).toLocaleTimeString()}</div>
-                </div>
-    })}
-    </>
+                );
+            })}
+        </>
+    );
 }
+
 export default ChatMessage;

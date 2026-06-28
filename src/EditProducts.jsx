@@ -6,17 +6,19 @@ import { EditProductContext } from "./ContextCreator";
 import ImageList from "./ImageList";
 import { useNavigate } from "react-router-dom";
 import { LocalStorage } from "./Data/LocalStorage";
+import {getDataProvider } from "../Data/ContextHandler/constant";
 const _myLocalStorageUtility = LocalStorage();
 
-const baseURL = process.env.REACT_APP_SERVER_URI;
+//const baseURL = process.env.REACT_APP_SERVER_URI;
+const baseURL = getDataProvider();//"MyDataprovider";
 function EditProducts() {
   
     const navigate = useNavigate();
     const toast = useRef(null);
     const showToast = (message) => {
-        const modalRoot = document.getElementById('modal-root');
+        const modalRoot = document.getElementById('root');
         render(createPortal(<Toast ref={toast} duration={3000} style={{ color: "#ebeb84" }}>{message}</Toast>, modalRoot), document.createElement("div"));
-        toast.current.show();
+        toast.current.open = true;
     };
     const { editRows } = useContext(EditProductContext);
     // console.log(EditProductContext);
@@ -28,7 +30,8 @@ function EditProducts() {
     }
     const saveModifiedData = async () => {
         console.log("Saving the changes");
-        const baseURL = process.env.REACT_APP_SERVER_URI;
+       // const baseURL = process.env.REACT_APP_SERVER_URI;
+        const baseURL = getDataProvider();//"MyDataprovider";
         let modifiedIdList = "";
         for (let i = 0; i < editData.length; i++) {
             modifiedIdList = modifiedIdList + editData[i].id + ",";
@@ -82,7 +85,7 @@ function EditProducts() {
     }
     const updateImage = (e, dataId, newImageData) => {
         //  console.log(e,dataId,newImageData);
-        let updatedData = editData.filter((row) => { return row.id === dataId });
+        const updatedData = editData.filter((row) => { return row.id === dataId });
         updatedData[0].images = newImageData;
 
         const finalData = editData.map((obj) => {

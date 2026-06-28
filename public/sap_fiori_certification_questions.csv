@@ -1,0 +1,101 @@
+category,questionType,questionText,correctAnswersCount,answer1,answer2,answer3,answer4,correct1,correct2,correct3,correct4
+SAP Fiori,SingleSelect,What is SAP Fiori?,1,A user experience design language,A database system,A programming language,An operating system,true,false,false,false
+SAP Fiori,SingleSelect,Which technology is SAP Fiori based on?,1,HTML5,Java,C++,Python,true,false,false,false
+SAP Fiori,MultiSelect,What are the main design principles of SAP Fiori?,3,Role-based,Responsive,Simple,Complex,true,true,true,false
+SAP Fiori,SingleSelect,What is the SAP Fiori Launchpad?,1,A central entry point for SAP Fiori apps,A development tool,A database,A server,true,false,false,false
+SAP Fiori,SingleSelect,Which framework is primarily used for SAP Fiori development?,1,SAPUI5,Angular,React,Vue.js,true,false,false,false
+SAP Fiori,MultiSelect,What are the types of SAP Fiori apps?,3,Transactional,Analytical,Fact Sheet,Reporting,true,true,true,false
+SAP Fiori,SingleSelect,What does OData stand for in SAP Fiori context?,1,Open Data Protocol,Object Data Access,Online Data Transfer,Operational Data Analysis,true,false,false,false
+SAP Fiori,SingleSelect,Which SAP product provides the backend for SAP Fiori apps?,1,SAP Gateway,SAP HANA Studio,SAP Business Objects,SAP Crystal Reports,true,false,false,false
+SAP Fiori,MultiSelect,What are the deployment options for SAP Fiori?,2,On-Premise,Cloud,Desktop only,Mobile only,true,true,false,false
+SAP Fiori,SingleSelect,What is the purpose of SAP Fiori Elements?,1,To accelerate app development with templates,To design databases,To manage servers,To create reports,true,false,false,false
+SAP Fiori,SingleSelect,Which design pattern does SAP Fiori follow?,1,Model-View-Controller (MVC),Singleton,Factory,Observer,true,false,false,false
+SAP Fiori,MultiSelect,What are the key features of SAP Fiori UX?,3,Consistent,Responsive,Adaptive,Static,true,true,true,false
+SAP Fiori,SingleSelect,What is SAP Fiori Client?,1,A mobile app container,A web browser,A database client,A development IDE,true,false,false,false
+SAP Fiori,SingleSelect,Which tool is used to create custom SAP Fiori apps?,1,SAP Web IDE,Microsoft Visual Studio,Eclipse,NetBeans,true,false,false,false
+SAP Fiori,MultiSelect,What are the components of SAP Fiori architecture?,3,Frontend,Backend,Gateway,Compiler,true,true,true,false
+SAP Fiori,SingleSelect,What is the role of SAP UI5 in Fiori?,1,Frontend framework for building apps,Backend processing,Database management,Server configuration,true,false,false,false
+SAP Fiori,SingleSelect,Which protocol does SAP Gateway use for communication?,1,OData,HTTP only,FTP,SMTP,true,false,false,false
+SAP Fiori,MultiSelect,What are the benefits of SAP Fiori?,3,Improved user experience,Increased productivity,Reduced training time,Higher hardware costs,true,true,true,false
+SAP Fiori,SingleSelect,What is a Fiori Tile?,1,A visual representation of an app on the launchpad,A database table,A server component,A programming construct,true,false,false,false
+SAP Fiori,SingleSelect,Which SAP solution is required for Fiori apps to run?,1,SAP NetWeaver,SAP Business One,SAP Concur,SAP Ariba,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app types based on usage?,3,Transactional apps,Analytical apps,Fact sheet apps,Batch processing apps,true,true,true,false
+SAP Fiori,SingleSelect,What is the purpose of SAP Fiori Launchpad Designer?,1,To configure and customize the launchpad,To write code,To manage databases,To monitor servers,true,false,false,false
+SAP Fiori,SingleSelect,Which technology enables offline capabilities in Fiori apps?,1,Service Workers,Cookies,Sessions,Cache only,true,false,false,false
+SAP Fiori,MultiSelect,What are the layers in SAP Fiori architecture?,3,Presentation layer,Application layer,Database layer,Network layer,true,true,true,false
+SAP Fiori,SingleSelect,What is SAP Fiori My Inbox?,1,A unified inbox for workflow tasks,An email client,A file manager,A calendar app,true,false,false,false
+SAP Fiori,SingleSelect,Which format is used for data exchange in Fiori apps?,1,JSON,XML only,CSV,Binary,true,false,false,false
+SAP Fiori,MultiSelect,What are the key aspects of Fiori design guidelines?,3,Simplicity,Consistency,Efficiency,Complexity,true,true,true,false
+SAP Fiori,SingleSelect,What is the role of SAP Cloud Platform in Fiori?,1,Hosting and extending Fiori apps,Database management,Hardware provisioning,Network routing,true,false,false,false
+SAP Fiori,SingleSelect,Which tool is used for Fiori app testing?,1,SAP Fiori Test Automation,JUnit only,Selenium only,Postman only,true,false,false,false
+SAP Fiori,MultiSelect,What are the types of Fiori Launchpad content?,3,Apps,Groups,Catalogs,Servers,true,true,true,false
+SAP Fiori,SingleSelect,What is SAP Fiori for iOS?,1,Native iOS apps with Fiori design,A web browser,An operating system,A database,true,false,false,false
+SAP Fiori,SingleSelect,Which component handles authentication in Fiori apps?,1,SAP Gateway,SAP HANA,SAP BW,SAP CRM,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app development approaches?,2,Freestyle,Template-based,Manual coding only,No-code only,true,true,false,false
+SAP Fiori,SingleSelect,What is the purpose of Fiori Launchpad Spaces?,1,To organize apps in a flexible layout,To store files,To manage users,To configure servers,true,false,false,false
+SAP Fiori,SingleSelect,Which technology enables real-time updates in Fiori apps?,1,WebSockets,FTP,Email,SMS,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori design principles for mobile?,3,Touch-optimized,Responsive,Adaptive,Desktop-only,true,true,true,false
+SAP Fiori,SingleSelect,What is SAP Fiori Mentor app?,1,A reference app showcasing Fiori controls,A training platform,A database tool,A server monitor,true,false,false,false
+SAP Fiori,SingleSelect,Which SAP module integrates with Fiori for analytics?,1,SAP BW,SAP MM,SAP SD,SAP PP,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app extension points?,2,Controller extensions,View extensions,Database extensions,Hardware extensions,true,true,false,false
+SAP Fiori,SingleSelect,What is the role of SAP Fiori Launchpad Content Manager?,1,To manage app catalogs and groups,To write code,To design databases,To configure networks,true,false,false,false
+SAP Fiori,SingleSelect,Which protocol is used for secure communication in Fiori?,1,HTTPS,HTTP,FTP,Telnet,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app performance optimization techniques?,3,Lazy loading,Data pagination,Caching,Loading all data at once,true,true,true,false
+SAP Fiori,SingleSelect,What is SAP Fiori Elements List Report?,1,A template for displaying list data,A database report,A server log,A network diagram,true,false,false,false
+SAP Fiori,SingleSelect,Which tool is used for Fiori app translation?,1,SAP Translation Hub,Google Translate,Microsoft Translator,Manual translation only,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori Launchpad personalization options?,3,Theme selection,Tile arrangement,Group management,Server configuration,true,true,true,false
+SAP Fiori,SingleSelect,What is the purpose of SAP Fiori Launchpad Plugins?,1,To extend launchpad functionality,To create databases,To manage servers,To write reports,true,false,false,false
+SAP Fiori,SingleSelect,Which technology enables push notifications in Fiori apps?,1,SAP Mobile Services,Email,SMS,Fax,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app security features?,3,Authentication,Authorization,Encryption,Open access,true,true,true,false
+SAP Fiori,SingleSelect,What is SAP Fiori Launchpad Theme Designer?,1,A tool to customize launchpad themes,A code editor,A database designer,A network tool,true,false,false,false
+SAP Fiori,SingleSelect,Which SAP technology provides in-memory computing for Fiori?,1,SAP HANA,SAP ECC,SAP CRM,SAP SRM,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app lifecycle phases?,3,Design,Development,Deployment,Deletion only,true,true,true,false
+SAP Fiori,SingleSelect,What is the purpose of SAP Fiori Launchpad Spaces and Pages?,1,To provide flexible content organization,To store files,To manage databases,To configure hardware,true,false,false,false
+SAP Fiori,SingleSelect,Which format is used for Fiori app metadata?,1,XML,JSON only,CSV,Binary,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app navigation patterns?,3,Master-Detail,Drill-down,Tab-based,Random navigation,true,true,true,false
+SAP Fiori,SingleSelect,What is SAP Fiori Launchpad Content Federation?,1,Integrating content from multiple systems,File sharing,Email distribution,Network routing,true,false,false,false
+SAP Fiori,SingleSelect,Which tool is used for Fiori app performance monitoring?,1,SAP Solution Manager,Task Manager,Resource Monitor,Network Analyzer,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori design tokens?,3,Colors,Fonts,Spacing,Random values,true,true,true,false
+SAP Fiori,SingleSelect,What is the role of SAP Gateway in Fiori architecture?,1,Exposing backend services as OData,Database management,User interface design,Hardware provisioning,true,false,false,false
+SAP Fiori,SingleSelect,Which technology enables offline data sync in Fiori apps?,1,SAP Mobile Services,Email,FTP,Manual sync only,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app testing types?,3,Unit testing,Integration testing,UI testing,No testing,true,true,true,false
+SAP Fiori,SingleSelect,What is SAP Fiori Launchpad Configurator?,1,A tool to configure launchpad settings,A code compiler,A database tool,A network utility,true,false,false,false
+SAP Fiori,SingleSelect,Which SAP product provides workflow capabilities for Fiori?,1,SAP Workflow,SAP HANA,SAP BW,SAP CRM,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app deployment targets?,3,On-Premise systems,SAP Cloud Platform,Mobile devices,Desktop only,true,true,true,false
+SAP Fiori,SingleSelect,What is the purpose of SAP Fiori Launchpad Tiles?,1,To provide quick access to apps,To store data,To manage users,To configure servers,true,false,false,false
+SAP Fiori,SingleSelect,Which technology enables real-time collaboration in Fiori apps?,1,WebRTC,Email,FTP,SMS,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app accessibility features?,3,Screen reader support,Keyboard navigation,High contrast mode,Mouse-only navigation,true,true,true,false
+SAP Fiori,SingleSelect,What is SAP Fiori Launchpad Content Provider?,1,A service that delivers launchpad content,A database,A server,A network device,true,false,false,false
+SAP Fiori,SingleSelect,Which tool is used for Fiori app debugging?,1,Browser Developer Tools,Notepad,Calculator,Paint,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app state management approaches?,2,URL parameters,Local storage,Global variables only,No state management,true,true,false,false
+SAP Fiori,SingleSelect,What is the role of SAP UI5 Controls in Fiori apps?,1,Providing reusable UI components,Database access,Server management,Network routing,true,false,false,false
+SAP Fiori,SingleSelect,Which SAP technology provides search capabilities for Fiori?,1,SAP Enterprise Search,Google Search,Bing Search,Manual search only,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app data binding modes?,2,One-way binding,Two-way binding,No binding,Random binding,true,true,false,false
+SAP Fiori,SingleSelect,What is SAP Fiori Launchpad Shell?,1,The container for launchpad content,A command line interface,A database shell,A network shell,true,false,false,false
+SAP Fiori,SingleSelect,Which technology enables barcode scanning in Fiori apps?,1,Device camera API,Keyboard input,Mouse clicks,Voice commands,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app error handling strategies?,3,Try-catch blocks,Error messages,Logging,Ignoring errors,true,true,true,false
+SAP Fiori,SingleSelect,What is the purpose of SAP Fiori Launchpad Renderer?,1,To render the launchpad UI,To compile code,To manage databases,To configure networks,true,false,false,false
+SAP Fiori,SingleSelect,Which SAP module provides HR functionality for Fiori?,1,SAP SuccessFactors,SAP MM,SAP SD,SAP PP,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app caching strategies?,3,Browser cache,Application cache,Service worker cache,No caching,true,true,true,false
+SAP Fiori,SingleSelect,What is SAP Fiori Launchpad Personalization Service?,1,A service for storing user preferences,A database,A server,A network service,true,false,false,false
+SAP Fiori,SingleSelect,Which technology enables geolocation in Fiori apps?,1,HTML5 Geolocation API,Manual input,IP address lookup,GPS device only,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app internationalization features?,3,Multi-language support,Date formatting,Number formatting,English only,true,true,true,false
+SAP Fiori,SingleSelect,What is the role of SAP Fiori Launchpad Navigation Service?,1,To handle app navigation,To store data,To manage users,To configure servers,true,false,false,false
+SAP Fiori,SingleSelect,Which tool is used for Fiori app version control?,1,Git,Notepad,Calculator,Paint,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app responsive design breakpoints?,3,Phone,Tablet,Desktop,Watch,true,true,true,false
+SAP Fiori,SingleSelect,What is SAP Fiori Launchpad Cross-App Navigation?,1,Navigation between different Fiori apps,File transfer,Email sending,Network routing,true,false,false,false
+SAP Fiori,SingleSelect,Which SAP technology provides machine learning for Fiori?,1,SAP Leonardo,SAP HANA,SAP BW,SAP CRM,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app performance metrics?,3,Load time,Response time,Resource usage,Random metrics,true,true,true,false
+SAP Fiori,SingleSelect,What is the purpose of SAP Fiori Launchpad Intent-Based Navigation?,1,To navigate using semantic objects and actions,To browse files,To send emails,To configure networks,true,false,false,false
+SAP Fiori,SingleSelect,Which technology enables voice commands in Fiori apps?,1,Web Speech API,Keyboard input,Mouse clicks,Touch gestures,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app security best practices?,3,Input validation,Secure communication,Access control,Open access,true,true,true,false
+SAP Fiori,SingleSelect,What is SAP Fiori Launchpad Tile Actions?,1,Quick actions available on tiles,Database operations,Server commands,Network operations,true,false,false,false
+SAP Fiori,SingleSelect,Which SAP product provides IoT integration for Fiori?,1,SAP IoT,SAP HANA,SAP BW,SAP CRM,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app documentation types?,3,Technical documentation,User documentation,API documentation,No documentation,true,true,true,false
+SAP Fiori,SingleSelect,What is the role of SAP Fiori Launchpad App Descriptor?,1,To define app metadata and configuration,To store data,To manage users,To configure servers,true,false,false,false
+SAP Fiori,SingleSelect,Which technology enables augmented reality in Fiori apps?,1,WebXR API,Email,FTP,SMS,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app maintenance activities?,3,Bug fixes,Feature updates,Performance optimization,No maintenance,true,true,true,false
+SAP Fiori,SingleSelect,What is SAP Fiori Launchpad Dynamic Tiles?,1,Tiles that display real-time data,Static images,Text files,Database tables,true,false,false,false
+SAP Fiori,SingleSelect,Which SAP technology provides blockchain integration for Fiori?,1,SAP Cloud Platform Blockchain,SAP HANA,SAP BW,SAP CRM,true,false,false,false
+SAP Fiori,MultiSelect,What are the Fiori app quality assurance practices?,3,Code reviews,Testing,Documentation,No quality checks,true,true,true,false
+SAP Fiori,SingleSelect,What is the purpose of SAP Fiori Launchpad App Variants?,1,To create customized versions of apps,To delete apps,To rename files,To configure networks,true,false,false,false

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="/Logo.PNG" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="description" content="Ramesh Learning Hub - Web application built with React and Vite" />
+  <link rel="apple-touch-icon" href="/logo192.png" />
+  <title>Ramesh Learning Hub</title>
+
+  <script data-ui5-config type="application/json">
+    {
+      "compactSize": true,
+      "theme": "sap_horizon_dark"
+    }
+  </script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"
+    integrity="sha512-Xm9qbB6Pu06k3PUwPj785dyTl6oHxgsv9nHp7ej7nCpAqGZT3OZpsELuCYX05DdonFpTlBpXMOxjavIAIUwr0w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  
+  <style>
+    * {
+      --sapTile_TitleTextColor: limegreen;
+      --sapShellColor: #a9b0ca;
+      --sapContent_RatedColor: yellow;
+      --sapContent_IconColor: white;
+    }
+  </style>
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root" class="ui5-content-density-compact"></div>
+  <div id="modal-root"></div>
+  
+  <!-- Vite entry point -->
+  <script type="module" src="/src/index.jsx"></script>
+</body>
+
+</html>

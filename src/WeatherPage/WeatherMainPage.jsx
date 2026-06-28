@@ -6,8 +6,8 @@ function WeatherMainPage() {
 
     //console.log("location : ",location, "locationPermission : ",locationPermission, weatherToday);
     // const [weatherData, setWeatherData] = useState(forcastData.list);
-    let todayWeather = weatherToday;
-    let weatherData = weatherForcast?.list;
+    const todayWeather = weatherToday;
+    const weatherData = weatherForcast?.list;
     // const [todayWeather, setTodayWeather] = useState(weatherToday);
     // console.log(todayWeather);
 
@@ -28,7 +28,7 @@ function WeatherMainPage() {
 
     // console.log(weatherData);
     return <>
-        <div style={{ background: "#2b3f68", margin: "20px", color: "white",width:"90vw" }}>
+        <div style={{ background: "#2b3f68", color: "white" }}>
             <div >
                 {todayWeather && <>
                     <div style={{ marginLeft: " 10px", fontSize: "20px", fontWeight: "bold" }}>{todayWeather.name},{todayWeather.sys.country}</div>
@@ -82,9 +82,9 @@ function WeatherMainPage() {
                     {
                         accessor: 'dt_txt',
                         formatter: function _a(dateText) {
-                            let dateValue = new Date(dateText);
-                            let dayString = dateValue.toLocaleDateString('en-En', { weekday: 'short' });
-                            let timeString = dateValue.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+                            const dateValue = new Date(dateText);
+                            const dayString = dateValue.toLocaleDateString('en-En', { weekday: 'short' });
+                            const timeString = dateValue.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
                             return dayString + " , " + timeString
                         },
                     }

@@ -1,14 +1,17 @@
-import { FlexibleColumnLayout, StandardListItem, List, Text, FCLLayout, Toolbar, Title, ToolbarSpacer, Button, ButtonDesign, ToolbarDesign, TextArea, Input } from '@ui5/webcomponents-react';
+import { FlexibleColumnLayout, ListItemStandard, List, Text, Title, Button, Input } from '@ui5/webcomponents-react';
 import { useEffect, useState } from 'react';
 import { LocalStorage } from '../Data/LocalStorage';
+import {getDataProvider } from "../Data/ContextHandler/constant";
 const _myLocalStorageUtility = LocalStorage();
-const baseURL = process.env.REACT_APP_SERVER_URI;
+
+const baseURL =getDataProvider();//"MyDataprovider" ;
+//const baseURL2 = process.env.REACT_APP_SERVER_URI;
 function AdminMessageBox() {
   const [messages, setMessages] = useState([]);
   const [selectedMail, setSelectedMail] = useState({
     "name": "", "address": "", "mailid": "", "message": "", "createdAt": new Date()
   });
-  const [layout, setLayout] = useState(FCLLayout.OneColumn);
+  const [layout, setLayout] = useState("OneColumn");
   const fetchMessages = async () => {
     const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
     const _token = loggedInUser?.token || "";
@@ -46,7 +49,7 @@ function AdminMessageBox() {
       });
       const result = await response.json();
       if (result.message === "Deleted Successfully") {
-        setLayout(FCLLayout.OneColumn);
+        setLayout("OneColumn");
         fetchMessages();
       }
     //  console.log("returning", result.message);
@@ -77,12 +80,12 @@ function AdminMessageBox() {
     }
   }
   const onStartColumnClick = e => {
-    let selectedMailDetail = messages.find(item => item._id === e.detail.item.dataset.id);
+    const selectedMailDetail = messages.find(item => item._id === e.detail.item.dataset.id);
     if (selectedMailDetail.status === "New") {
       sendMarkRead(selectedMailDetail._id);
     }
     setSelectedMail(selectedMailDetail);
-    setLayout(FCLLayout.TwoColumnsMidExpanded);
+    setLayout("TwoColumnsMidExpanded");
   };
   useEffect(() => {
     fetchMessages();
@@ -98,10 +101,10 @@ function AdminMessageBox() {
         <List  onItemClick={onStartColumnClick} style={{height:"86vh"}}>
        
           {messages && messages.map((item) => {
-            return (<StandardListItem key={item._id} data-id={item._id} additionalText={item.status}
+            return (<ListItemStandard key={item._id} data-id={item._id} additionalText={item.status}
               icon={item.status === 'New' ? "email" : "email-read"}
               additionalTextState='Success'
-              description={'Sent On : ' + new Date(item.createdAt).toLocaleString()} >From : {item.name}</StandardListItem>)
+              description={'Sent On : ' + new Date(item.createdAt).toLocaleString()} >From : {item.name}</ListItemStandard>)
           })}
 
         </List>
@@ -109,13 +112,13 @@ function AdminMessageBox() {
       }
       midColumn={
         <div style={{ display: "flex", flexDirection: "column", height: "91dvh" }}>
-          <Toolbar design={ToolbarDesign.Solid} style={{height:"3rem"}}>
+          <div>
             <Title> From : {selectedMail.name}</Title>
-            <ToolbarSpacer />
-            <Button icon="decline" design={ButtonDesign.Transparent} onClick={() => {
-              setLayout(FCLLayout.OneColumn);
+           
+            <Button icon="decline" design={"Transparent"} onClick={() => {
+              setLayout("OneColumn");
             }} />
-          </Toolbar>
+          </div>
           <div className="sapScrollBar" style={{ marginBottom: "auto", overflow:"scroll",overflowX:"hidden" }}>
             <div style={{ display: "flex", justifyContent: "space-between", marginLeft: "1rem", marginRight: "1rem" }}>
               <Text>Mail Id : {selectedMail.mailid}</Text>
@@ -129,13 +132,12 @@ function AdminMessageBox() {
             </Text>
             <address style={{ color: "var(--sapContent_IconColor)", marginLeft: "1rem" }}>Address : {selectedMail.address}</address>
           </div>
-          <Toolbar design={ToolbarDesign.Solid}>
-            <ToolbarSpacer />
-            <Button design={ButtonDesign.Transparent} onClick={(e) => {
+         <div>
+            <Button design={"Transparent"} onClick={(e) => {
             //  console.log(selectedMail._id)
               deleteMessage(selectedMail._id);
             }} >Delete</Button>
-          </Toolbar>
+          </div>
         </div>
 
       }

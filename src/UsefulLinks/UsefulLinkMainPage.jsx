@@ -1,11 +1,13 @@
 import {  Tab, TabContainer } from "@ui5/webcomponents-react";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { LocalStorage } from "../Data/LocalStorage";
 import MyLinksContent from "./MyLinksContent";
 import AllLinksContent from "./AllLinksContent";
 import AddLinkDialog from "./AddLinkDialog";
 import MyMessageBox from "./MyMessageBox";
-const baseURL = process.env.REACT_APP_SERVER_URI;
+//import {getDataProvider } from "../Data/ContextHandler/constant";
+//const baseURL = process.env.REACT_APP_SERVER_URI;
+//const baseURL = getDataProvider();//"MyDataprovider";
 const _myLocalStorageUtility = LocalStorage();
 function UsefulLinkMainPage() {
     const [openState, setOpenState] = useState(false);
@@ -16,7 +18,7 @@ function UsefulLinkMainPage() {
         <TabContainer
             contentBackgroundDesign="Solid"
             headerBackgroundDesign="Solid"
-            onTabSelect={function _a() { }}
+            onTabSelect={function Xs(){}}
             tabLayout="Standard"
         >
             <Tab

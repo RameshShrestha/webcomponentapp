@@ -7,9 +7,10 @@ import { useNavigate } from "react-router-dom";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { render, createPortal } from 'react-dom';
 import { LocalStorage } from "./Data/LocalStorage";
+import {getDataProvider } from "./Data/ContextHandler/constant";
 const _myLocalStorageUtility = LocalStorage();
-const baseURL = process.env.REACT_APP_SERVER_URI;
-
+//const baseURL = process.env.REACT_APP_SERVER_URI;
+const baseURL = getDataProvider();// "MyDataprovider";
 function UserContainer() {
   const { usersData, addInitialUsers } = useContext(UsersContext);
   const [fetching, setFetching] = useState(true);
@@ -17,6 +18,8 @@ function UserContainer() {
   const [userLimit, setUserLimit] = useState(10);
   const [userTotal, setUserTotal] = useState(50);
   const [allDataLoaded, setAllDataLoaded] = useState(true);
+  const [filters, setFilters] = useState({"firstName":"",lastName:"",UserId:"",Age:""});
+ 
   let filterQuery = "";
  // console.log(usersData);
   const controller = new AbortController();
@@ -24,9 +27,10 @@ function UserContainer() {
   const navigate = useNavigate();
   const toast = useRef(null);
   const showToast = (message) => {
-    const modalRoot = document.getElementById('modal-root');
+    const modalRoot = document.getElementById('root');
+   // const root = createRoot(document.getElementById("root"));
     render(createPortal(<Toast ref={toast} duration={3000} style={{ color: "#ebeb84" }}>{message}</Toast>, modalRoot), document.createElement("div"));
-    toast.current.show();
+    toast.current.open = true;
   };
   const loadInitialData = (signal, bFromGo, filterString) => {
     //    const url = `https://dummyjson.com/users?skip=${userSkip}&limit=${userLimit}`;
@@ -65,7 +69,25 @@ function UserContainer() {
       })
 
   };
-
+ const onChangeFilter = (oEvent)=>{
+  //console.log(oEvent);
+  const filterName = oEvent.currentTarget.name;
+  const newFilter = {"firstName":"",lastName:"",UserId:"",Age:""};
+ 
+  if(filterName.indexOf("firstName") > -1){
+      newFilter.firstName = oEvent.currentTarget.value;
+  }
+  if(filterName.indexOf("lastName") > -1){
+      newFilter.lastName = oEvent.currentTarget.value;
+  }
+  if(filterName.indexOf("UserId") > -1){
+      newFilter.UserId = oEvent.currentTarget.value;
+  }
+  if(filterName.indexOf("Age") > -1){
+    newFilter.Age = oEvent.currentTarget.value;
+}
+setFilters(newFilter);
+ };
   const loadMoreData = (signal) => {
   //  console.log("load more data");
     if (userSkip <= userTotal) {
@@ -103,6 +125,7 @@ function UserContainer() {
     }
   };
   const deleteUser = async (userId) => {
+    const signal = controller.signal;
     const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
     const _token = loggedInUser?.token || "";
     const url = `${baseURL}/realusers/${userId}`;
@@ -116,7 +139,7 @@ function UserContainer() {
     });
     const result = await response.json();
     if (result.message === 'Removed Successfully') {
-      //  showToast(result.message);
+        showToast(result.message);
       // navigate("/products");
       const usersCopy = [...usersData.users];
       // usersCopy.findIndex()
@@ -126,6 +149,8 @@ function UserContainer() {
       }
       addInitialUsers([...usersCopy]);
       showToast("User " + userId + " : " + result.message);
+      _myLocalStorageUtility.removeServerStatus();
+      loadInitialData(signal, true, filterQuery);
     }
   }
 
@@ -158,13 +183,19 @@ function UserContainer() {
 
        // console.log(e);
         let filterString = "";
-        e.detail.filters.map((filter) => {
-          let filterName = filter.name.replace("Filter", "");
+        // e.detail.filters.map((filter) => {
+        //   let filterName = filter.name.replace("Filter", "");
 
-          if (filter.value) {
-            filterString += "&" + filterName + "=" + filter.value;
-          }
-        });
+        //   if (filter.value) {
+        //     filterString += "&" + filterName + "=" + filter.value;
+        //   }
+        // });
+        Object.keys(filters).map((filterName) => {
+          // console.log(filterName, filters[filterName]);
+           if(filters[filterName]){
+               filterString += "&" + filterName + "=" + filters[filterName];
+           }
+          });
        // console.log(filterString);
         filterQuery = filterString;
         loadInitialData(signal, true, filterString);
@@ -177,21 +208,21 @@ function UserContainer() {
         label="First Name"
       >
 
-        <Input name="firstNameFilter" placeholder="First Name" />
+        <Input name="firstNameFilter" placeholder="First Name" value={filters.firstName} onChange={onChangeFilter}/>
       </FilterGroupItem>
       <FilterGroupItem label="Last Name">
 
-        <Input name="lastNameFilter" placeholder="Last Name" />
+        <Input name="lastNameFilter" placeholder="Last Name" value={filters.lastName} onChange={onChangeFilter}/>
       </FilterGroupItem>
       <FilterGroupItem
         active
         label="User Id"
       >
-        <Input name="userIdFilter" placeholder="User Id" />
+        <Input name="userIdFilter" placeholder="User Id" value={filters.UserId} onChange={onChangeFilter}/>
       </FilterGroupItem>
       <FilterGroupItem label="Age">
 
-        <Input name="ageFilter" placeholder="Age" />
+        <Input name="ageFilter" placeholder="Age" value={filters.Age} onChange={onChangeFilter}/>
       </FilterGroupItem>
 
       {/* <FilterGroupItem
@@ -225,7 +256,7 @@ function UserContainer() {
 
     <Bar
       endContent={<><Button design="Transparent" icon="add" onClick={() => {
-        navigate(`/realusers/new`, { state: { id: "new" } });
+        navigate(`/users/new`, { state: { id: "new" } });
       }} /></>}
       startContent={<> <Title>Users</Title></>}
     >

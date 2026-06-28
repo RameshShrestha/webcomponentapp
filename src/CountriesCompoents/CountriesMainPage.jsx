@@ -1,6 +1,7 @@
-import { Title, List, StandardListItem, CustomListItem, Button, ListGrowingMode, SplitterLayout, SplitterElement, Input, Icon } from "@ui5/webcomponents-react";
+import { List, ListItemStandard,  SplitterLayout, SplitterElement, Input, Icon } from "@ui5/webcomponents-react";
 import { useEffect, useState } from "react";
 import CountryDetailPage from "./CountryDetailPage";
+import {getDataProvider } from "../Data/ContextHandler/constant";
 function CountriesMainPage() {
     const [countries, setCountries] = useState([]);
     const [countriesOriginal, setCountriesOriginal] = useState([]);
@@ -8,7 +9,8 @@ function CountriesMainPage() {
     const [selectedCountryName, setSelectedCountryName] = useState("");
 
     const fetchCountries = async () => {
-        const baseURL = process.env.REACT_APP_SERVER_URI;
+        const baseURL = getDataProvider();//"MyDataprovider";
+      //  const baseURL = process.env.REACT_APP_SERVER_URI;
         try {
             const response = await fetch(baseURL + '/countries', {
                 method: 'GET',
@@ -67,7 +69,7 @@ function CountriesMainPage() {
                     <List style={{ height: "84vh" }}
                         onItemClick={(e) => {
                             console.log(e.detail.item.innerHTML);
-                            let countryDetail = countriesOriginal.filter(item => item.Country === e.detail.item.innerHTML);
+                            const countryDetail = countriesOriginal.filter(item => item.Country === e.detail.item.innerHTML);
 
                             if (countryDetail.length === 1) {
                                 setSelectedCountry(countryDetail[0]);
@@ -79,7 +81,7 @@ function CountriesMainPage() {
                         }}
                     >
                         {countries?.length > 0 && countries.map((country) => {
-                            return <StandardListItem
+                            return <ListItemStandard
                                 className="CountryList"
                                 key={country.CountryCode2}
                                 additionalText={country.CountryCode3}
@@ -87,7 +89,7 @@ function CountriesMainPage() {
                                 image={country.flag}
                             >
                                 {country.Country}
-                            </StandardListItem>
+                            </ListItemStandard>
                         })}
                     </List>
                 </div>

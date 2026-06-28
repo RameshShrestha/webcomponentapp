@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { useAuth } from './Data/ContextHandler/AuthContext';
 import { render, createPortal } from 'react-dom';
 import { LocalStorage } from "./Data/LocalStorage";
+import {getDataProvider } from "./Data/ContextHandler/constant";
 const _myLocalStorageUtility = LocalStorage();
 const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
 function SettingPage() {
@@ -11,10 +12,12 @@ function SettingPage() {
     const { settingConfig, setSettingConfig } = contextData;
     const toast = useRef(null);
     const showToast = (message) => {
-        const modalRoot = document.getElementById('modal-root');
+        const modalRoot = document.getElementById('root');
         render(createPortal(<Toast ref={toast} duration={3000} style={{ color: "#ebeb84" }}>{message}</Toast>, modalRoot), document.createElement("div"));
-        toast.current.show();
+        toast.current.open = true;
     };
+      // const baseURL = process.env.REACT_APP_SERVER_URI;
+    const baseURL = getDataProvider();//"MyDataprovider";
     const loadUserSettings = async()=>{
         const _token = loggedInUser?.token || "";
         const response = await fetch(baseURL + '/settings', {
@@ -50,7 +53,7 @@ function SettingPage() {
     const [settingData, setSettingData] = useState(settingConfig);
     const [settingDataOriginal, setSettingDataOriginal] = useState(settingConfig);
     const [editMode, setEditMode] = useState(false);
-    const baseURL = process.env.REACT_APP_SERVER_URI;
+ 
     const triggerSaveData = async () => {
         const _token = loggedInUser?.token || "";
         const response = await fetch(baseURL + '/settings', {
@@ -125,18 +128,21 @@ function SettingPage() {
                         e.preventDefault();
                     }}
                 >
-                    <FormGroup titleText="General">
-                        <FormItem label="Default Language">
+                    <FormGroup headerText="General">
+                  
+                      
+                        <FormItem labelContent={<Label>Default Language</Label>}>
                             <StandardField editMode={editMode} value={settingData.defaultLanguage}
                                 inputType="Select" selectOptions={["En", "De"]}
                                 onChange={onChangeValue} name="defaultLanguage" />
                         </FormItem>
-                        <FormItem label="Theme">
+                        <FormItem labelContent={<Label>Theme</Label>}>
                             <StandardField editMode={editMode} value={settingData.theme}
                                 inputType="Select" selectOptions={["" ,"sap_horizon","sap_horizon_dark", "sap_fiori_3", "sap_fiori_3_dark", "sap_belize"]}
                                 onChange={onChangeValue} name="theme" />
                         </FormItem>
-                        <FormItem label="Show Notifications">
+                        <FormItem labelContent={<Label>Show Notifications</Label>}>
+                       
                             <CheckBox
                                 disabled={!editMode}
                                 onChange={onChangeValue} name="showNotification"
@@ -144,15 +150,17 @@ function SettingPage() {
                             />
                         </FormItem>
                     </FormGroup>
-                    <FormGroup titleText="Home Page">
-                        <FormItem label="Show Weather Card">
+                    <FormGroup headerText="Home Page">
+                      
+                        <FormItem labelContent={<Label>Show Weather Card</Label>}>
                             <CheckBox
                                 disabled={!editMode}
                                 onChange={onChangeValue} name="showWeatherCard"
                                 checked={settingData.showWeatherCard}
                             />
                         </FormItem>
-                        <FormItem label="Show Product Card">
+                       
+                        <FormItem labelContent={<Label>Show Product Card</Label>}>
                             <CheckBox
                                 disabled={!editMode}
                                 onChange={onChangeValue}
@@ -160,7 +168,8 @@ function SettingPage() {
                                 checked={settingData.showProductCard}
                             />
                         </FormItem>
-                        <FormItem label="Show MyActivity Card">
+                      
+                        <FormItem labelContent={<Label>Show MyActivity Card</Label>}>
                             <CheckBox
                                 disabled={!editMode}
                                 onChange={onChangeValue}
@@ -168,7 +177,8 @@ function SettingPage() {
                                 checked={settingData.showMyActivityCard}
                             />
                         </FormItem>
-                        <FormItem label="Show Stock Price Card">
+                     
+                        <FormItem labelContent={<Label>Show Stock Price Card</Label>}>
                             <CheckBox
                                 disabled={!editMode}
                                 onChange={onChangeValue}

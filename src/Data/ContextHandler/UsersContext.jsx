@@ -2,7 +2,7 @@ import React, { createContext, useReducer } from "react";
 import reducer, { initialState } from "./reducer";
 
 
-export let UsersContext = createContext({
+export const UsersContext = createContext({
   usersData :[],
   addUser :()=>{},
   removeUser : ()=>{},

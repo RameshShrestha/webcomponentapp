@@ -23,7 +23,7 @@ function Usercard ({user,deleteUser}){
                     deleteUser(user._id);
                 }}></Button>} 
             </div>
-        <div style={{display :"flex", minHeight:"25vh",background : 'var(--sapObjectHeader_Background)'}}>
+        <div style={{display :"flex", minHeight:"25vh",marginTop:"5px",background : 'var(--sapObjectHeader_Background)'}}>
         <div style={{width :"28%"}}><img className="userPic" src={user.image} height="85px" width="85px"/></div>    
         <div style={{width :"72%",margin:"10px"}}>
             <div><Label> Company: </Label> <Text style={{fontSize :"14px"}}>{user.company?.name}</Text></div>

@@ -1,7 +1,7 @@
 import { Icon, Button } from "@ui5/webcomponents-react";
 
 function MyNotificationItem({ data, removeNotification }) {
-    let colorName = "";
+    let colorName = "#913d26";
     let iconName = "information";
     switch (data?.type) {
         case "Success":

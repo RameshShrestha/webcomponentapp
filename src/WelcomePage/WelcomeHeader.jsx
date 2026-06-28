@@ -37,6 +37,10 @@ export default function WelcomeHeader({ dbConnected }) {
         else if (selectedMenu === "Useful Links") {
             navigate("/usefullinks");
         }
+        else if (selectedMenu === "Products") {
+            navigate("/products1");
+        }
+        
         setIsNavExpanded(false);
     }
     return (
@@ -88,14 +92,20 @@ export default function WelcomeHeader({ dbConnected }) {
 
                         <Button style={{ color: "white" }} icon="weather-proofing" onClick={iconClickEvent} design="Transparent"> Weather </Button>
                     </li>
-                    <li>
+                    {/* <li>
 
                         <Button style={{ color: "white" }} icon="image-viewer" onClick={iconClickEvent} design="Transparent"> Image Galary </Button>
-                    </li>
+                    </li> */}
                     <li>
 
                         <Button style={{ color: "white" }} icon="internet-browser" onClick={iconClickEvent} design="Transparent">Useful Links</Button>
                     </li>
+
+                    {/* <li>
+
+                    <Button style={{ color: "white" }} icon="product" onClick={iconClickEvent} design="Transparent">Products</Button>
+                    </li> */}
+                    
 
                     <li>
                         {/* <MyIcon color="white" name="Help" onPress={iconClickEvent} /> */}

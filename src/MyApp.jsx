@@ -38,6 +38,14 @@ import UsefulLinksContextProvider from "./Data/ContextHandler/UsefulLinksContext
 import AllLinksContent from "./UsefulLinks/AllLinksContent";
 import AdminMessageBox from "./AdminComponents/AdminMessageBox";
 import AdminLogs from "./AdminComponents/AdminLogs";
+import Callbackpage from "./LoginComponents/Callbackpage";
+import ArticleCardContainer from "./RapidAPI/News/ArticleCardContainer";
+import AddQuestions from "./QuizComponents/AddQuestions";
+import EditViewQuestion from "./QuizComponents/EditViewQuestion";
+import ManageQuestions from "./QuizComponents/ManageQuestions";
+import BulkUploadQuestions from "./QuizComponents/BulkUploadQuestions";
+
+import Quiz from "./QuizComponents/Quiz";
 export default function MyApp() {
   const { contextData } = useAuth();
   const { user, settingConfig } = contextData;
@@ -46,8 +54,21 @@ export default function MyApp() {
   // let onlineStatus = "Online";
   //console.log(socket);
   const { logout } = useAuth();
-
-  //  const EditProductContext = React.createContext();
+  useEffect(() => {
+    function onConnect() {
+      setIsConnected(true);
+    }
+    function onDisconnect() {
+      setIsConnected(false);
+    }
+    socket.on('connect', onConnect);
+    socket.on('disconnect', onDisconnect);
+    return () => {
+      socket.off('connect', onConnect);
+      socket.off('disconnect', onDisconnect);
+    };
+  }, [user]);
+ // const EditProductContext = React.createContext();
   const [editRows, setEditRows] = useState([]);
 
   setTheme("sap_horizon_dark");
@@ -64,40 +85,53 @@ export default function MyApp() {
           <Route exact path="/contact" element={<ContactPage />} />
           <Route exact path="/images" element={<ImageListMainPage />} />
           <Route exact path="/weather" element={<UserLocationContextProvider><WeatherMainPage /></UserLocationContextProvider>} />
-          <Route exact path="/news" element={<NewsPage />} />
+          <Route exact path="/news" element={<ArticleCardContainer />} />
           <Route exact path="/countries" element={<CountriesMainPage />} />
           <Route exact path="/help" element={<HelpPage />} />
-          <Route path="/usefullinks" element={<UsefulLinksContextProvider><AllLinksContent/></UsefulLinksContextProvider>} />
-          {/* <Route exact path="/loader" element={<Loader />} /> */}
+           <Route path="/usefullinks" element={<UsefulLinksContextProvider><AllLinksContent/></UsefulLinksContextProvider>} /> 
+           <Route exact path="/addproduct" element={<NewProduct />} /> 
+           <Route exact path="/products1" element={<Products setEditRows={setEditRows} />} /> 
+           <Route exact path="/editproducts" element={<EditProductContext.Provider value={{ editRows }}><EditProducts /> </EditProductContext.Provider>} /> 
+           <Route exact path="/loader" element={<Loader />} /> 
+           <Route exact path="/authcallback" element={<Callbackpage/>} />
+
         </Route>
        
         <Route element={<ProtectedRoutes />}>
           <Route exact path="/home" element={<UserLocationContextProvider><Home /> </UserLocationContextProvider>} />
           <Route exact path="/detail" element={<Detail />} />
-          <Route exact path="/products" element={<Products setEditRows={setEditRows} />} />
+          <Route exact path="/products" element={<Products setEditRows={setEditRows} />} /> 
           <Route exact path="/settings" element={<SettingPage />} />
-          <Route exact path="/editproducts" element={<EditProductContext.Provider value={{ editRows }}><EditProducts /> </EditProductContext.Provider>} />
+          <Route exact path="/editproducts" element={<EditProductContext.Provider value={{ editRows }}><EditProducts /> </EditProductContext.Provider>} /> 
           <Route exact path="/imagelist" element={<ImageList />} />
-          <Route exact path="/addproduct" element={<NewProduct />} />
+           <Route exact path="/addproduct" element={<NewProduct />} /> 
           <Route exact path="/users" element={<UserContextProvider><UsersConainer /> </UserContextProvider>} />
           <Route exact path="/users/:id" element={<UsersDetailPage />} />
           <Route exact path="/myprofile" element={<UsersDetailPage />} />
           <Route path="/resetPassword" element={<ResetPassword />} />
-          <Route path="/usefullinks1" element={<UsefulLinksContextProvider><UsefulLinkMainPage /></UsefulLinksContextProvider>} />
-          <Route exact path="/todolist" element={<ToDoListContextProvider><ToDoMainPage user={user} /> </ToDoListContextProvider>} />
+           <Route path="/usefullinks1" element={<UsefulLinksContextProvider><UsefulLinkMainPage /></UsefulLinksContextProvider>} /> 
+           <Route exact path="/todolist" element={<ToDoListContextProvider><ToDoMainPage user={user} /> </ToDoListContextProvider>} /> 
           <Route exact path="/adminmessagebox" element={<AdminMessageBox />} />
-          <Route exact path="/adminlogs" element={<AdminLogs />} />
+           <Route exact path="/adminlogs" element={<AdminLogs />} /> 
           <Route exact path="/about1" element={<AboutPage />} />
           <Route exact path="/contact1" element={<ContactPage />} />
           <Route exact path="/images1" element={<ImageListMainPage />} />
           <Route exact path="/weather1" element={<UserLocationContextProvider><WeatherMainPage /></UserLocationContextProvider>} />
-          <Route exact path="/news1" element={<NewsPage />} />
+          <Route exact path="/news1" element={<ArticleCardContainer />} />
           <Route exact path="/countries1" element={<CountriesMainPage />} />
           <Route exact path="/help1" element={<HelpPage />} />
+          <Route exact path="/addquestion" element={<AddQuestions />} />
+          <Route exact path="/displayquestion/:id" element={<EditViewQuestion />} />
+          <Route exact path="/managequestion" element={<ManageQuestions />} />
+          <Route exact path="/quiz" element={<Quiz />} />
+          <Route exact path="/bulkupload" element={<BulkUploadQuestions />} /> 
 
-          {/* <Route path="/" element={<Navigate replace to="/home" />} /> */}
+          
+
+          <Route path="/" element={<Navigate replace to="/home" />} /> 
 
         </Route>
+        
         <Route path="*" element={<Navigate replace to="/welcome" />} />
       </Routes>
     </div>

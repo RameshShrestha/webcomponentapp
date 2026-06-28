@@ -1,0 +1,100 @@
+category,questionType,questionText,correctAnswersCount,answer1,answer2,answer3,answer4,correct1,correct2,correct3,correct4
+SAP CAP,SingleSelect,What does CAP stand for in SAP?,1,Cloud Application Programming Model,Cloud Application Platform,Computer Application Program,Central Application Processing,true,false,false,false
+SAP CAP,MultiSelect,Which programming languages are supported by SAP CAP?,2,Node.js,Java,Python,C++,true,true,false,false
+SAP CAP,SingleSelect,What is CDS in SAP CAP?,1,Core Data Services,Cloud Data Storage,Central Database System,Custom Data Structure,true,false,false,false
+SAP CAP,SingleSelect,Which protocol does SAP CAP use for service exposure?,1,OData,REST only,SOAP,GraphQL only,true,false,false,false
+SAP CAP,MultiSelect,What are the main components of SAP CAP?,3,CDS models,Service definitions,Event handlers,Hardware drivers,true,true,true,false
+SAP CAP,SingleSelect,What is the purpose of @sap/cds package?,1,Core CAP framework for Node.js,Database driver,UI framework,Testing tool,true,false,false,false
+SAP CAP,SingleSelect,Which database is primarily used with SAP CAP?,1,SAP HANA,MySQL,PostgreSQL,MongoDB,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP service types?,3,Application services,Remote services,Database services,Network services,true,true,true,false
+SAP CAP,SingleSelect,What is the file extension for CDS models?,1,.cds,.cap,.model,.service,true,false,false,false
+SAP CAP,SingleSelect,Which command initializes a new CAP project?,1,cds init,cap create,npm init cap,cds new,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP deployment targets?,3,Cloud Foundry,Kyma,Local,Desktop only,true,true,true,false
+SAP CAP,SingleSelect,What is the purpose of srv folder in CAP projects?,1,Contains service definitions,Stores images,Holds configuration,Manages users,true,false,false,false
+SAP CAP,SingleSelect,Which annotation is used for defining associations in CDS?,1,Association,Relation,Link,Reference,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP data types?,3,String,Integer,Boolean,Hardware,true,true,true,false
+SAP CAP,SingleSelect,What is the purpose of db folder in CAP projects?,1,Contains data models,Stores logs,Holds images,Manages users,true,false,false,false
+SAP CAP,SingleSelect,Which command runs a CAP application locally?,1,cds watch,cds run,npm start,cap serve,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP authentication methods?,3,Basic authentication,OAuth,JWT,No authentication,true,true,true,false
+SAP CAP,SingleSelect,What is @readonly annotation used for in CAP?,1,To make entities read-only,To hide data,To encrypt data,To delete data,true,false,false,false
+SAP CAP,SingleSelect,Which tool is used for CAP development?,1,SAP Business Application Studio,Visual Studio,Eclipse,NetBeans,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP event types?,3,CREATE,READ,UPDATE,COMPILE,true,true,true,false
+SAP CAP,SingleSelect,What is the purpose of package.json in CAP projects?,1,Defines project dependencies and scripts,Stores data,Manages users,Configures database,true,false,false,false
+SAP CAP,SingleSelect,Which annotation is used for input validation in CAP?,1,@assert,@validate,@check,@verify,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP service handler types?,2,Before handlers,After handlers,During handlers,Never handlers,true,true,false,false
+SAP CAP,SingleSelect,What is the purpose of mta.yaml file?,1,Multi-Target Application descriptor,Database configuration,User management,Network settings,true,false,false,false
+SAP CAP,SingleSelect,Which command deploys a CAP application?,1,cf push,cds deploy,npm deploy,cap upload,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP authorization concepts?,3,Roles,Privileges,Restrictions,Open access,true,true,true,false
+SAP CAP,SingleSelect,What is @cds.persistence.skip annotation used for?,1,To skip database persistence,To delete records,To hide fields,To encrypt data,true,false,false,false
+SAP CAP,SingleSelect,Which CAP feature enables draft handling?,1,@odata.draft.enabled,@draft.mode,@enable.draft,@draft.active,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP testing frameworks?,2,Jest,Mocha,JUnit,TestNG,true,true,false,false
+SAP CAP,SingleSelect,What is the purpose of .cdsrc.json file?,1,CAP project configuration,Database schema,User credentials,Network settings,true,false,false,false
+SAP CAP,SingleSelect,Which annotation defines a composition in CDS?,1,Composition,Association,Aggregation,Collection,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP data modeling concepts?,3,Entities,Types,Aspects,Hardware,true,true,true,false
+SAP CAP,SingleSelect,What is @mandatory annotation used for?,1,To make fields required,To hide fields,To encrypt fields,To delete fields,true,false,false,false
+SAP CAP,SingleSelect,Which CAP feature enables localization?,1,i18n support,Translation service,Language pack,Locale manager,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP service annotations?,3,@readonly,@insertonly,@requires,@hardware,true,true,true,false
+SAP CAP,SingleSelect,What is the purpose of using keyword in CDS?,1,To import definitions from other files,To declare variables,To define functions,To create loops,true,false,false,false
+SAP CAP,SingleSelect,Which command generates database artifacts?,1,cds deploy,cds build,cds generate,cds create,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP query capabilities?,3,Filtering,Sorting,Pagination,Random selection,true,true,true,false
+SAP CAP,SingleSelect,What is @Core.Computed annotation used for?,1,To mark calculated fields,To hide fields,To encrypt fields,To delete fields,true,false,false,false
+SAP CAP,SingleSelect,Which CAP feature enables multi-tenancy?,1,@sap/cds-mtx,@sap/multi-tenant,@sap/tenant-manager,@sap/mtx-service,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP error handling mechanisms?,3,Try-catch blocks,Error messages,Logging,Ignoring errors,true,true,true,false
+SAP CAP,SingleSelect,What is the purpose of aspect in CDS?,1,To define reusable model fragments,To create tables,To manage users,To configure network,true,false,false,false
+SAP CAP,SingleSelect,Which annotation enables field-level authorization?,1,@restrict,@authorize,@secure,@protect,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP transaction management features?,2,Automatic rollback,Commit handling,Manual commit only,No transactions,true,true,false,false
+SAP CAP,SingleSelect,What is @cds.autoexpose annotation used for?,1,To automatically expose entities,To hide entities,To delete entities,To encrypt entities,true,false,false,false
+SAP CAP,SingleSelect,Which CAP feature enables messaging?,1,SAP Event Mesh integration,Email service,SMS service,Fax service,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP performance optimization techniques?,3,Lazy loading,Caching,Indexing,Loading all data,true,true,true,false
+SAP CAP,SingleSelect,What is the purpose of extend keyword in CDS?,1,To extend existing definitions,To delete definitions,To hide definitions,To encrypt definitions,true,false,false,false
+SAP CAP,SingleSelect,Which annotation defines default values in CAP?,1,@default,@value,@initial,@preset,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP logging levels?,3,Error,Warning,Info,Random,true,true,true,false
+SAP CAP,SingleSelect,What is @cds.on.insert annotation used for?,1,To define insert event handlers,To delete records,To update records,To read records,true,false,false,false
+SAP CAP,SingleSelect,Which CAP feature enables file upload?,1,Stream handling,File manager,Upload service,Storage manager,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP service implementation patterns?,2,Custom handlers,Generic handlers,No handlers,Random handlers,true,true,false,false
+SAP CAP,SingleSelect,What is the purpose of annotate keyword in CDS?,1,To add annotations to existing definitions,To delete definitions,To hide definitions,To encrypt definitions,true,false,false,false
+SAP CAP,SingleSelect,Which annotation enables soft delete in CAP?,1,@cds.soft.delete,@delete.soft,@soft.remove,@gentle.delete,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP data validation types?,3,Type validation,Range validation,Pattern validation,No validation,true,true,true,false
+SAP CAP,SingleSelect,What is @cds.persistence.table annotation used for?,1,To specify database table name,To delete tables,To hide tables,To encrypt tables,true,false,false,false
+SAP CAP,SingleSelect,Which CAP feature enables batch operations?,1,$batch endpoint,Batch service,Multi-operation,Group processing,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP security best practices?,3,Input validation,Authentication,Authorization,Open access,true,true,true,false
+SAP CAP,SingleSelect,What is the purpose of namespace in CDS?,1,To organize model definitions,To store data,To manage users,To configure network,true,false,false,false
+SAP CAP,SingleSelect,Which annotation enables temporal data in CAP?,1,@cds.valid.from,@temporal.data,@time.series,@date.range,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP integration options?,3,REST APIs,OData services,Event-driven,No integration,true,true,true,false
+SAP CAP,SingleSelect,What is @cds.search annotation used for?,1,To enable full-text search,To hide data,To delete data,To encrypt data,true,false,false,false
+SAP CAP,SingleSelect,Which CAP feature enables change tracking?,1,@cds.on.update,Change log,Audit trail,History table,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP documentation types?,3,API documentation,Model documentation,Service documentation,No documentation,true,true,true,false
+SAP CAP,SingleSelect,What is the purpose of view in CDS?,1,To define database views,To display UI,To manage users,To configure network,true,false,false,false
+SAP CAP,SingleSelect,Which annotation defines value help in CAP?,1,@Common.ValueList,@ValueHelp,@Lookup,@Reference,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP migration strategies?,2,Blue-green deployment,Rolling updates,Big bang,No migration,true,true,false,false
+SAP CAP,SingleSelect,What is @cds.external annotation used for?,1,To mark external services,To delete services,To hide services,To encrypt services,true,false,false,false
+SAP CAP,SingleSelect,Which CAP feature enables API management?,1,SAP API Management integration,Manual API control,No API management,Random API handling,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP monitoring capabilities?,3,Application logs,Performance metrics,Error tracking,No monitoring,true,true,true,false
+SAP CAP,SingleSelect,What is the purpose of action in CDS?,1,To define custom operations,To delete data,To hide data,To encrypt data,true,false,false,false
+SAP CAP,SingleSelect,Which annotation enables currency handling in CAP?,1,@Semantics.currencyCode,@Currency,@Money,@Financial,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP versioning strategies?,2,Semantic versioning,API versioning,No versioning,Random versioning,true,true,false,false
+SAP CAP,SingleSelect,What is @cds.persistence.exists annotation used for?,1,To check entity existence,To create entities,To delete entities,To update entities,true,false,false,false
+SAP CAP,SingleSelect,Which CAP feature enables workflow integration?,1,SAP Workflow service,Manual workflow,No workflow,Random workflow,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP code quality tools?,3,ESLint,Prettier,SonarQube,No tools,true,true,true,false
+SAP CAP,SingleSelect,What is the purpose of function in CDS?,1,To define reusable functions,To store data,To manage users,To configure network,true,false,false,false
+SAP CAP,SingleSelect,Which annotation enables unit of measure in CAP?,1,@Semantics.unitOfMeasure,@Unit,@Measure,@Quantity,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP backup strategies?,2,Database backups,Application backups,No backups,Random backups,true,true,false,false
+SAP CAP,SingleSelect,What is @cds.persistence.journal annotation used for?,1,To enable change journaling,To delete records,To hide records,To encrypt records,true,false,false,false
+SAP CAP,SingleSelect,Which CAP feature enables machine learning?,1,SAP AI services integration,Manual ML,No ML,Random ML,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP scalability features?,3,Horizontal scaling,Vertical scaling,Auto-scaling,No scaling,true,true,true,false
+SAP CAP,SingleSelect,What is the purpose of projection in CDS?,1,To create views with selected fields,To delete fields,To hide fields,To encrypt fields,true,false,false,false
+SAP CAP,SingleSelect,Which annotation enables semantic key in CAP?,1,@Common.SemanticKey,@Key,@Primary,@Identifier,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP disaster recovery options?,2,Backup and restore,Failover,No recovery,Random recovery,true,true,false,false
+SAP CAP,SingleSelect,What is @cds.persistence.upsert annotation used for?,1,To enable upsert operations,To delete records,To read records,To hide records,true,false,false,false
+SAP CAP,SingleSelect,Which CAP feature enables blockchain integration?,1,SAP Cloud Platform Blockchain,Manual blockchain,No blockchain,Random blockchain,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP compliance features?,3,Data privacy,Audit logging,Access control,No compliance,true,true,true,false
+SAP CAP,SingleSelect,What is the purpose of service in CDS?,1,To define OData services,To store data,To manage users,To configure network,true,false,false,false
+SAP CAP,SingleSelect,Which annotation enables label in CAP?,1,@title,@label,@name,@caption,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP cost optimization strategies?,3,Resource optimization,Caching,Efficient queries,Unlimited resources,true,true,true,false
+SAP CAP,SingleSelect,What is @cds.persistence.cascade annotation used for?,1,To enable cascade operations,To delete records,To hide records,To encrypt records,true,false,false,false
+SAP CAP,SingleSelect,Which CAP feature enables IoT integration?,1,SAP IoT services,Manual IoT,No IoT,Random IoT,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP maintenance best practices?,3,Regular updates,Code reviews,Documentation,No maintenance,true,true,true,false
+SAP CAP,SingleSelect,What is the purpose of type in CDS?,1,To define custom data types,To store data,To manage users,To configure network,true,false,false,false
+SAP CAP,SingleSelect,Which annotation enables description in CAP?,1,@description,@info,@details,@notes,true,false,false,false
+SAP CAP,MultiSelect,What are the CAP future trends?,3,AI integration,Serverless,Edge computing,No trends,true,true,true,false
+SAP CAP,SingleSelect,What is @cds.persistence.skip.if annotation used for?,1,To conditionally skip persistence,To delete records,To hide records,To encrypt records,true,false,false,false

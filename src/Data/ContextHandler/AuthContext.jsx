@@ -5,13 +5,14 @@ import Loader from "../../LoginComponents/Loader";
 //import { UserInterface } from "../interfaces/user";
 //import { LocalStorage, requestHandler } from "../utils";
 import { LocalStorage } from "../LocalStorage";
+import {getDataProvider } from "./constant";
 const _myLocalStorageUtility = LocalStorage();
 // Create a context to manage authentication-related data and functions
-const validDummyUsers = [{ username: "Ramesh", "password": "Ramesh" },
-{ username: "Shrestha", "password": "Shrestha" },
-{ username: "Guest", "password": "Guest" },
-{ username: "User1", "password": "User1" },
-{ username: "User2", "password": "User2" }];
+// const validDummyUsers = [{ username: "Ramesh", "password": "Ramesh" },
+// { username: "Shrestha", "password": "Shrestha" },
+// { username: "Guest", "password": "Guest" },
+// { username: "User1", "password": "User1" },
+// { username: "User2", "password": "User2" }];
 
 const AuthContext = createContext({
   contextData: {
@@ -37,7 +38,8 @@ const AuthProvider = ({ children }) => {
   const [token, setToken] = useState("");
   const [userDetail, setUserDetail] = useState(null);
   const navigate = useNavigate();
-  const baseURL = process.env.REACT_APP_SERVER_URI;
+  //const baseURL = process.env.REACT_APP_SERVER_URI;
+  const baseURL = getDataProvider();//"MyDataprovider";
   //console.log("Executed here AuthContext initial");
   // Function to handle user login
   const login = async (data) => {
@@ -81,7 +83,8 @@ const AuthProvider = ({ children }) => {
       // } else {
       //   console.log("User Does not exist");
       // }
-      const baseURL = process.env.REACT_APP_SERVER_URI;
+     // const baseURL = process.env.REACT_APP_SERVER_URI;
+     // const baseURL = "MyDataprovider";
       try {
 
         const response = await fetch(baseURL + '/realusers/login', {
@@ -111,6 +114,29 @@ const AuthProvider = ({ children }) => {
       }
     }
   };
+  const githubLogin = async (code)=>{
+   // const baseURL = "MyDataprovider";
+    console.log("provided Code :" ,code);
+      try {
+        const response = await fetch(baseURL + '/auth/github/callback/'+code, {
+          method: 'GET'
+        });
+        const result = await response.json();
+        if (result?.message === "Logged in successfully") {
+          setUser(result.user.username);
+          setRole(result.user.role);
+          setToken(result.accessToken);
+          _myLocalStorageUtility.setLoggedInUserData(result.user.username, result.accessToken, result.user.role);
+          loadUserSettings();
+          loadLoggedInUserDetail(result.user.username);
+          //navigate("/home");
+        }
+        return result;
+      } catch (e) {
+        console.log(e);
+      }
+     
+  }
   const loadUserSettings = async () => {
     const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
     const _token = loggedInUser?.token || "";
@@ -172,10 +198,10 @@ const AuthProvider = ({ children }) => {
     //   },
     //   alert // Display error alerts on request failure
     // );
-    const baseURL = process.env.REACT_APP_SERVER_URI;
+   // const baseURL = process.env.REACT_APP_SERVER_URI;
+    //const baseURL = "MyDataprovider";
    // console.log(baseURL);
     try {
-
       const response = await fetch(baseURL + '/realusers/createUser', {
         method: 'POST',
         body: JSON.stringify(data),
@@ -187,6 +213,17 @@ const AuthProvider = ({ children }) => {
 
       const result = await response.json();
      // console.log("returning", result);
+     if(result?.message.indexOf("Registered Successfully") > -1){
+      //refresh user list on server
+      await fetch(baseURL + '/newusercreated', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+     }
       return result;
 
     } catch (e) {
@@ -214,7 +251,8 @@ const AuthProvider = ({ children }) => {
   // Function to handle user logout
   const logout = async () => {
 
-    const baseURL = process.env.REACT_APP_SERVER_URI;
+   // const baseURL = process.env.REACT_APP_SERVER_URI;
+   // const baseURL = "MyDataprovider";
    // console.log(baseURL);
     try {
 
@@ -278,7 +316,7 @@ const AuthProvider = ({ children }) => {
 
   // Provide authentication-related data and functions through the context
   return (
-    <AuthContext.Provider value={{ contextData: { user, role, login, settingConfig, setSettingConfig, register, logout, token, resetPassword, userDetail } }}>
+    <AuthContext.Provider value={{ contextData: { user, role, login,githubLogin, settingConfig, setSettingConfig, register, logout, token, resetPassword, userDetail } }}>
       {isLoading ? <Loader /> : children}
       {/* Display a loader while loading */}
     </AuthContext.Provider>

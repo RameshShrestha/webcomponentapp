@@ -24,7 +24,7 @@ const LoginPage = () => {
   });
   // Accessing the login function from the AuthContext
   const { contextData } = useAuth();
-const { login }= contextData;
+const { login,githubLogin }= contextData;
   // Function to update state when input data changes
   const handleDataChange = (e, name) => {
     setData({
@@ -91,6 +91,17 @@ const { login }= contextData;
         >
           Login
         </button>
+        
+        
+        <button className="loginButton"
+          onClick={function(){
+            window.open("https://github.com/login/oauth/authorize?client_id=Iv23liZsvmp28QExsBAD&scope=user","_self");
+          }}
+        >
+          <img src="./githubmarkwhite.png" alt="githublogo" style={{height:"22px",marginRight:"5px"}}/>
+          GitHub Login
+        </button>
+       
         {isLoading && <Loader/>}
         {message.length>0 && <small>{message}</small>}
 

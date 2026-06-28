@@ -1,9 +1,11 @@
-import { Bar, Dialog, Icon, Title, Button, FormItem, Input, TextArea, Select, Option } from "@ui5/webcomponents-react";
+import { Bar, Dialog,  Button, FormItem, Input, TextArea, Select, Option } from "@ui5/webcomponents-react";
 import { Form } from "@ui5/webcomponents-react";
 import { LocalStorage } from "../Data/LocalStorage";
 import { useState } from "react";
 import { useUsefulLinkContext } from "../Data/ContextHandler/UsefulLinksContext";
-const baseURL = process.env.REACT_APP_SERVER_URI;
+import {getDataProvider } from "../Data/ContextHandler/constant";
+//const baseURL = process.env.REACT_APP_SERVER_URI;
+const baseURL = getDataProvider();//"MyDataprovider";
 const _myLocalStorageUtility = LocalStorage();
 
 function AddLinkDialog({ openState, setOpenState }) {
@@ -23,7 +25,7 @@ function AddLinkDialog({ openState, setOpenState }) {
                         'Authorization': `Bearer ${_token}`
                     }
                 });
-                const result = await response.json();
+                await response.json();
                 setNewLink({ type: "", url: "", description: "" });
                 setOpenState(false);
                 fetchIntialUserLinks();

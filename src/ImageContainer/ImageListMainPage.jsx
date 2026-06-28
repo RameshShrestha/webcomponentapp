@@ -1,4 +1,4 @@
-import { Bar, Button, Dialog, Icon, Title } from "@ui5/webcomponents-react";
+import {  Dialog, Icon } from "@ui5/webcomponents-react";
 import { useEffect, useRef, useState } from "react";
 import InfiniteScroll from 'react-infinite-scroll-component';
 function ImageListMainPage() {
@@ -16,7 +16,7 @@ function ImageListMainPage() {
     });
     const imageURL = "https://picsum.photos/v2/list?";
     const confirmServer = async()=>{
-        const baseURL = process.env.REACT_APP_SERVER_URI;
+        const baseURL = "MyDataprovider"; //process.env.REACT_APP_SERVER_URI;
         try {
             await fetch(`${baseURL}/images`);
         } catch (e) {
@@ -40,7 +40,7 @@ function ImageListMainPage() {
         if(imagePage * imageLimit < imageTotal){
        // const url = `https://dummyjson.com/users?skip=${userSkip}&limit=${userLimit}`;
        // const imageURL = "https://picsum.photos/v2/list?page=1&limit=10";
-        let url = `${imageURL}page=${imagePage}&limit=${imageLimit}`;
+        const url = `${imageURL}page=${imagePage}&limit=${imageLimit}`;
         fetch(url)
           .then((res) => res.json())
           .then((data) => {
@@ -107,10 +107,10 @@ function ImageListMainPage() {
                             <div  onClick={(e) => {
                                 console.log(imageData.id);
                                 setDialogImage(imageData);
-                                dialogRef.current.show();
+                                dialogRef.current.open=true;
 
                             }}>
-                                <img src={imageData.download_url + ".webp"} alt="Image" height={"250px"} width={"250px"} />
+                                <img src={imageData.download_url + ".webp"} alt="testimage" height={"250px"} width={"250px"} />
                             </div>
                             <div style={{ position: "absolute", bottom: "8px", left: "16px", color: "white",background:"#00000070" }}> By : {imageData.author}</div>
                         </div>
@@ -121,7 +121,7 @@ function ImageListMainPage() {
             <div style={{ position: "relative" }}>
                 <div style={{ position: "absolute", top: "8px", right: "16px", color: "white" ,background:"#00000070"}}
                     onClick={(e) => {
-                        dialogRef.current.close();
+                        dialogRef.current.open = false;
                     }}><Icon name="decline" /></div>
                 <div> <img style={{ maxHeight: "93vh" }} src={dialogImage.download_url} alt="Image" height={"100%"} width={"100%"} /> </div>
                 <div style={{ position: "absolute", bottom: "8px", left: "16px", color: "white",background:"#00000070"}}> By : {dialogImage.author}</div>

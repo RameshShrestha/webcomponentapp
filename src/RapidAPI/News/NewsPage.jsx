@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Title, Link } from "@ui5/webcomponents-react";
+import {getDataProvider } from "../../Data/ContextHandler/constant";
 const NewsPage = function () {
   const [NewsData, setNewsData] = useState({ news: [] });
   const fetchNews = async () => {
-    const baseURL = process.env.REACT_APP_SERVER_URI;
+ //   const baseURL = process.env.REACT_APP_SERVER_URI;
+     const baseURL =getDataProvider();// "MyDataprovider"
     try {
-      const response = await fetch(baseURL + '/news', {
+      const response = await fetch(baseURL + '/newsapi', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'

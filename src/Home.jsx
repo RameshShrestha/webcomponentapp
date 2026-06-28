@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import "@ui5/webcomponents-icons/dist/AllIcons.js";
 import {
   AnalyticalTable,
@@ -9,14 +9,12 @@ import {
   FlexBoxWrap,
   Icon,
   List,
-  StandardListItem,
+  ListItemStandard,
   Text,
-  ValueState,
 } from "@ui5/webcomponents-react";
-import { spacing } from "@ui5/webcomponents-react-base";
-import { BarChart, DonutChart, LineChart } from "@ui5/webcomponents-react-charts";
-import lineChartIcon from "@ui5/webcomponents-icons/dist/line-chart.js";
-import barChartIcon from "@ui5/webcomponents-icons/dist/horizontal-bar-chart.js";
+import {  DonutChart } from "@ui5/webcomponents-react-charts";
+// import lineChartIcon from "@ui5/webcomponents-icons/dist/line-chart.js";
+// import barChartIcon from "@ui5/webcomponents-icons/dist/horizontal-bar-chart.js";
 import listIcon from "@ui5/webcomponents-icons/dist/list.js";
 import tableViewIcon from "@ui5/webcomponents-icons/dist/table-view.js";
 import { useNavigate } from "react-router-dom";
@@ -26,68 +24,9 @@ import AdminNotificationSender from "./AdminComponents/AdminNotificationSender";
 import { LocalStorage } from "./Data/LocalStorage";
 import WeatherCard from "./WeatherPage/WeatherCard";
 import UserLocationContextProvider from "./Data/ContextHandler/UserLocationContext";
+import {getDataProvider } from "./Data/ContextHandler/constant";
 //import { UserLocationContext } from "./Data/ContextHandler/UserLocationContext";
 const _myLocalStorageUtility = LocalStorage();
-const dataset = [
-  {
-    month: "January",
-    data: 65,
-  },
-  {
-    month: "February",
-    data: 59,
-  },
-  {
-    month: "March",
-    data: 80,
-  },
-  {
-    month: "April",
-    data: 81,
-  },
-  {
-    month: "May",
-    data: 56,
-  },
-  {
-    month: "June",
-    data: 55,
-  },
-  {
-    month: "July",
-    data: 40,
-  },
-];
-
-// const tableData = new Array(500).fill(null).map((_, index) => {
-//   return {
-//     name: `name${index}`,
-//     age: Math.floor(Math.random() * 100),
-//     friend: {
-//       name: `friend.Name${index}`,
-//       age: Math.floor(Math.random() * 100),
-//     },
-//   };
-// });
-
-// const tableColumns = [
-//   {
-//     Header: "Name",
-//     accessor: "name", // String-based value accessors!
-//   },
-//   {
-//     Header: "Age",
-//     accessor: "age",
-//   },
-//   {
-//     Header: "Friend Name",
-//     accessor: "friend.name",
-//   },
-//   {
-//     Header: "Friend Age",
-//     accessor: "friend.age",
-//   },
-// ];
 
 const productTableColumns = [
   {
@@ -105,13 +44,8 @@ const productTableColumns = [
     accessor: "description",
     width: "240",
     Cell: (instance) => {
-      const { cell, row, data, webComponentsReactProperties } = instance;
-      // console.log("row", row);
-      //  console.log(data[row.index]);
-      //console.log(data[row]);
-      // disable buttons if overlay is active to prevent focus
-      // const isOverlay = webComponentsReactProperties.showOverlay;
-      // console.log('This is your row data', row.original);
+      const {  row} = instance;
+      
       return (
         <FlexBox>
           <Text className="wrappText">{instance.data[row.index]?.description}</Text>
@@ -122,8 +56,8 @@ const productTableColumns = [
   },
    { 
      Cell: (instance) => {
-       const { cell, row, data, webComponentsReactProperties } = instance;
-       const isOverlay = webComponentsReactProperties.showOverlay;
+       const {  webComponentsReactProperties } = instance;
+      // const isOverlay = webComponentsReactProperties.showOverlay;
        return (
         <FlexBox>
           {/* <img src={instance.data[row.index]?.thumbnail} width="50px" height="50px" /> */}
@@ -145,14 +79,13 @@ export default function Home() {
   const [toDoList, setToDoList] = useState([]);
   const [usersStatus, setUsersStatus] = useState([]);
   const { contextData } = useAuth();
-  const { token, user, role, settingConfig, userDetail } = contextData;
-  //console.log("userDetail", userDetail);
-  // const { location,locationPermission } = useContext(UserLocationContext);
-  // console.log("location : ",location, "locationPermission : ",locationPermission);
+  const { role, settingConfig, userDetail } = contextData;
+  
   const fetchIntialToDolist = async () => {
     const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
     const _token = loggedInUser?.token || "";
-    const baseURL = process.env.REACT_APP_SERVER_URI;
+   // const baseURL = process.env.REACT_APP_SERVER_URI;
+   const baseURL = getDataProvider();//"MyDataprovider";
     if(_token){
     try {
       const response = await fetch(baseURL + '/todolist/getList', {
@@ -173,7 +106,8 @@ export default function Home() {
   }
 
   const fetchIntialProducts = async () => {
-    const baseURL = process.env.REACT_APP_SERVER_URI;
+   // const baseURL = process.env.REACT_APP_SERVER_URI;
+    const baseURL = getDataProvider();//"MyDataprovider";
     try {
       const response = await fetch(baseURL + '/products?skip=0&limit=10', {
         method: 'GET',
@@ -190,9 +124,23 @@ export default function Home() {
     }
   }
   const getUsersStatus = async () => {
-    const baseURL = process.env.REACT_APP_SERVER_URI;
+   // const baseURL = process.env.REACT_APP_SERVER_URI;
+    const baseURL = getDataProvider();//"MyDataprovider";
     const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
     const _token = loggedInUser?.token || "";
+//trying to fetch locally first
+    const localserverStatusData = _myLocalStorageUtility.getServerStatus();
+    if(localserverStatusData){
+        const currentTime = new Date().getTime();
+        const differnceInMinute = (currentTime -localserverStatusData.time)/60000;
+        if(differnceInMinute < 5 ){
+          setUsersStatus(localserverStatusData.data.users);
+           // setDBConnected(localserverStatusData.ServerStatus);
+            return;
+        }
+    }
+
+
     try {
       const response = await fetch(baseURL + '/serverstatus', {
         method: 'GET',
@@ -205,6 +153,7 @@ export default function Home() {
       const result = await response.json();
      // console.log(result);
       setUsersStatus(result.users);
+      _myLocalStorageUtility.setServerStatus(result);
     } catch (error) {
       console.log(error);
     }
@@ -216,7 +165,7 @@ export default function Home() {
       onlineUsers = usersStatus.filter(item => item.status.toLowerCase() === 'online').length;
       offlineUsers = usersStatus.filter(item => item.status.toLowerCase() === 'offline').length;
     }
-    let returnValue = [{ status: 'Online', users: onlineUsers },
+    const returnValue = [{ status: 'Online', users: onlineUsers },
     { status: 'Offline', users: offlineUsers }
     ]
     return returnValue
@@ -289,28 +238,27 @@ export default function Home() {
   }
   const getStatus = (item) => {
     if (item.status === "Done") {
-      return ValueState.Success;
+      return "Success";
     } else if (item.status === "New") {
 
-      return ValueState.Error;
+      return "Error";
     } else {
       if (new Date(item.targetCompletionDate) < new Date()) {
-        return ValueState.Warning;
+        return "Warning";
       }
-      return ValueState.Information;
+      return "Information";
     }
 
   }
-  const contentTitle =
-    toggleCharts === "lineChart" ? "Line Chart" : "Bar Chart";
-  const switchToChart =
-    toggleCharts === "lineChart" ? "Bar Chart" : "Line Chart";
+  // const contentTitle =
+  //   toggleCharts === "lineChart" ? "Line Chart" : "Bar Chart";
+  // const switchToChart =
+  //   toggleCharts === "lineChart" ? "Bar Chart" : "Line Chart";
   return (
     <>
       <FlexBox
         justifyContent={FlexBoxJustifyContent.Center}
         wrap={FlexBoxWrap.Wrap}
-        style={spacing.sapUiContentPadding}
       >
 
         <Card
@@ -320,7 +268,7 @@ export default function Home() {
               avatar={<Icon name="employee" />}
             />
           }
-          style={{ maxWidth: "340px", ...spacing.sapUiContentPadding }}>
+          style={{ width: "340px", maxWidth: "340px", margin :'1rem', maxHeight:'400px' }}>
           <div >
             <Usercard user={userDetail} />
           </div>
@@ -335,7 +283,7 @@ export default function Home() {
                 avatar={<Icon name={tableViewIcon} />}
               />
             }
-            style={{ maxWidth: "300px", ...spacing.sapUiContentPadding }}
+            style={{ width: "300px", maxWidth: "300px", margin :'1rem', maxHeight:'400px' }}
           >
             {/* <WeatherMainPage /> */}
             <UserLocationContextProvider><WeatherCard /></UserLocationContextProvider>
@@ -349,7 +297,7 @@ export default function Home() {
                 avatar={<Icon name="bell-2" />}
               />
             }
-            style={{ maxWidth: "500px", ...spacing.sapUiContentPadding }}
+            style={{ width: "500px", maxWidth: "500px", margin :'1rem', maxHeight:'400px' }}
           >
             <AdminNotificationSender />
           </Card>
@@ -365,7 +313,7 @@ export default function Home() {
 
               />
             }
-            style={{ maxWidth: "500px", ...spacing.sapUiContentPadding }}
+            style={{ width: "500px", maxWidth: "500px", margin :'1rem', maxHeight:'400px' }}
           >
             < div style={{ display: "flex", justifyContent: "center" ,height:"250px"}}>
               <Icon name="email" design="Positive" style={{ height: "100px", width: "100px" }} />
@@ -384,7 +332,7 @@ export default function Home() {
 
               />
             }
-            style={{ maxWidth: "500px", ...spacing.sapUiContentPadding }}
+            style={{ width: "500px", maxWidth: "500px", margin :'1rem', maxHeight:'400px' }}
           >
             < div style={{ display: "flex", justifyContent: "center" ,height:"250px"}}>
               <Icon name="activity-items" design="Positive" style={{ height: "100px", width: "100px" }} />
@@ -395,45 +343,7 @@ export default function Home() {
 
         }
 
-        {/* {settingConfig?.showStockPriceCard &&
-          <Card
-            header={
-              <CardHeader
-                titleText="Stock Prices"
-                subtitleText={`Click here to switch to ${switchToChart}`}
-                interactive
-                onClick={handleHeaderClick}
-                avatar={
-                  <Icon
-                    name={
-                      toggleCharts === "lineChart" ? lineChartIcon : barChartIcon
-                    }
-                  />
-                }
-              />
-            }
-            style={{ width: "300px", ...spacing.sapUiContentPadding }}
-          >
-            <Text style={spacing.sapUiContentPadding}>{contentTitle}</Text>
-            <div style={{ display: "flex" }}>
-              {toggleCharts === "lineChart" ? (
-                <LineChart
-                  dimensions={[{ accessor: "month" }]}
-                  measures={[{ accessor: "data", label: "Stock Price" }]}
-                  dataset={dataset}
-                  loading={loading}
-                />
-              ) : (
-                <BarChart
-                  dimensions={[{ accessor: "month" }]}
-                  measures={[{ accessor: "data", label: "Stock Price" }]}
-                  dataset={dataset}
-                  loading={loading}
-                />
-              )}
-            </div>
-          </Card>
-        } */}
+       
         {settingConfig?.showMyActivityCard &&
           <Card
             header={
@@ -446,78 +356,19 @@ export default function Home() {
                 onClick={handleProgressHeaderClick}
               />
             }
-            style={{ width: "300px", ...spacing.sapUiContentPadding }}
+            style={{ width: "300px", margin :'1rem', maxHeight:'400px' }}
           >
-            <List>
+            <List  growing="Scroll">
               {toDoList?.length > 0 && toDoList.map((item) => {
-                return <StandardListItem
+                return <ListItemStandard
                   key={item._id}
                   additionalText={item.status}
                   additionalTextState={getStatus(item)}
                 >
                   {item.title}
-                </StandardListItem>
+                </ListItemStandard>
               })}
-              {/* <StandardListItem
-              additionalText="finished"
-              additionalTextState={ValueState.Success}
-            >
-              Activity 1
-            </StandardListItem>
-            <StandardListItem
-              additionalText="failed"
-              additionalTextState={ValueState.Error}
-            >
-              Activity 2
-            </StandardListItem>
-            <CustomListItem>
-              <FlexBox
-                direction={FlexBoxDirection.Column}
-                style={{ width: "100%", ...spacing.sapUiContentPadding }}
-              >
-                <FlexBox justifyContent={FlexBoxJustifyContent.SpaceBetween}>
-                  <Text
-                    style={{ fontSize: ThemingParameters.sapFontLargeSize }}
-                  >
-                    Activity 3
-                  </Text>
-                  <Text
-                    style={{ color: ThemingParameters.sapCriticalTextColor }}
-                  >
-                    in progress
-                  </Text>
-                </FlexBox>
-                <ProgressIndicator
-                  value={89}
-                  valueState={ValueState.Success}
-                  style={{ ...spacing.sapUiTinyMarginTop }}
-                />
-              </FlexBox>
-            </CustomListItem>
-            <CustomListItem>
-              <FlexBox
-                direction={FlexBoxDirection.Column}
-                style={{ width: "100%", ...spacing.sapUiContentPadding }}
-              >
-                <FlexBox justifyContent={FlexBoxJustifyContent.SpaceBetween}>
-                  <Text
-                    style={{ fontSize: ThemingParameters.sapFontLargeSize }}
-                  >
-                    Activity 4
-                  </Text>
-                  <Text
-                    style={{ color: ThemingParameters.sapCriticalTextColor }}
-                  >
-                    in progress
-                  </Text>
-                </FlexBox>
-                <ProgressIndicator
-                  value={5}
-                  valueState={ValueState.Error}
-                  style={{ ...spacing.sapUiTinyMarginTop }}
-                />
-              </FlexBox>
-            </CustomListItem> */}
+             
             </List>
           </Card>
         }
@@ -531,7 +382,7 @@ export default function Home() {
                 onClick={handleProductHeaderClick}
               />
             }
-            style={{ maxWidth: "500px", ...spacing.sapUiContentPadding }}
+            style={{ width: "500px", maxWidth: "500px", margin :'1rem', maxHeight:'400px' }}
 
           >
 
@@ -542,21 +393,7 @@ export default function Home() {
               rowHeight={60}
             />
           </Card>}
-        {/* <Card
-          header={
-            <CardHeader
-              titleText="AnalyticalTable"
-              avatar={<Icon name={tableViewIcon} />}
-            />
-          }
-          style={{ maxWidth: "600px", ...spacing.sapUiContentPadding }}
-        >
-          <AnalyticalTable
-            data={tableData}
-            columns={tableColumns}
-            visibleRows={8}
-          />
-        </Card> */}
+     
         {role === "ADMIN" &&
           <Card
             header={
@@ -567,7 +404,7 @@ export default function Home() {
                 onClick={handleUserHeaderClick}
               />
             }
-            style={{ maxWidth: "600px", ...spacing.sapUiContentPadding }}
+            style={{ width: "600px", maxWidth: "600px", margin :'1rem', maxHeight:'400px' }}
           >
             <div style={{ display: "flex", flexDirection: "column", padding: "20px" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -608,7 +445,7 @@ export default function Home() {
                     width: "100",
                     Cell: (instance) => {
                       const { cell, row, data, webComponentsReactProperties } = instance;
-                      let statusText = instance.data[row.index]?.status;
+                      const statusText = instance.data[row.index]?.status;
                       let textColor = "";
                       if (statusText === "Online") {
                         textColor = "green";
@@ -647,6 +484,48 @@ export default function Home() {
             </div>
           </Card>
         }
+       <Card
+  header={<CardHeader  avatar={<Icon name="chain-link" />}  titleText="Quick Links"/>}
+  style={{
+    width: '300px', maxHeight:'400px',margin:'1rem'
+  }}
+>
+  <List onItemClick={function Xs(e){
+    const selectedItem = e.detail.item.text;
+    if (selectedItem === "About") {
+      navigate("/about1");
+    }
+    else if (selectedItem === "Contact") {
+      navigate("/contact1");
+    }
+    else if (selectedItem === "Images") {
+      navigate("/images1");
+    }
+    else if (selectedItem === "Useful Links") {
+      navigate("/usefullinks1");
+    }
+    else if (selectedItem === "Countries") {
+      navigate("/countries1");
+    }
+      else if (selectedItem === "News") {
+      navigate("/news1");
+    }
+    else if (selectedItem === "Manage My Questions") {
+      navigate("/managequestion");
+    }
+    else if (selectedItem === "Take Quiz") {
+      navigate("/quiz");
+    }
+
+  }}>
+    <ListItemStandard text="News" />
+    <ListItemStandard text="Images" />
+    <ListItemStandard text="Useful Links" />
+    <ListItemStandard text="Countries" />
+    <ListItemStandard text="Manage My Questions" />
+     <ListItemStandard text="Take Quiz" />
+  </List>
+</Card>
       </FlexBox>
     </>
   );

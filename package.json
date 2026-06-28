@@ -1,37 +1,65 @@
 {
   "name": "webcomponentapp",
-  "version": "0.1.0",
+  "version": "1.1.1",
   "private": true,
-  "nodemonConfig": {
-    "ignore": ["*.json", "public/javascripts/*.js"]
-  },
+  "type": "module",
   "dependencies": {
-    "@ui5/webcomponents": "~1.20.0",
-    "@ui5/webcomponents-fiori": "~1.20.0",
-    "@ui5/webcomponents-icons": "~1.20.0",
-    "@ui5/webcomponents-react": "^1.23.2",
-    "@ui5/webcomponents-react-base": "^1.23.0",
-    "@ui5/webcomponents-react-charts": "^1.23.0",
+    "@ui5/webcomponents": "^2.10.0",
+    "@ui5/webcomponents-compat": "^2.10.0",
+    "@ui5/webcomponents-fiori": "^2.10.0",
+    "@ui5/webcomponents-icons": "^2.10.0",
+    "@ui5/webcomponents-react": "^2.10.0",
+    "@ui5/webcomponents-react-base": "^2.10.0",
+    "@ui5/webcomponents-react-charts": "^2.10.0",
+    "@ui5/webcomponents-react-compat": "^2.10.0",
     "ol": "^8.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-infinite-scroll-component": "^6.1.0",
     "react-router-dom": "^6.21.0",
-    "react-scripts": "5.0.1",
     "react-simple-image-slider": "^2.4.1",
     "socket.io-client": "^4.7.3"
   },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@vitejs/plugin-react": "^4.7.0",
+    "bestzip": "^2.2.0",
+    "copyfiles": "^2.4.1",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.6",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.7.0",
+    "prettier": "^3.9.1",
+    "vite": "^5.4.21"
+  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "cypress run --component --browser chrome",
-    "eject": "react-scripts eject",
-    "test:open": "cypress open --component --browser chrome"
+    "dev": "vite",
+    "build": "vite build && npm run zip",
+    "preview": "vite preview",
+    "zip": "cd build && npx bestzip ../myreactmodule-content.zip *",
+    "lint": "eslint src --ext .js,.jsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint src --ext .js,.jsx --fix",
+    "format": "prettier --write \"src/**/*.{js,jsx,json,css,md}\"",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,json,css,md}\""
+  },
+  "watch": {
+    "build": {
+      "patterns": [
+        "src"
+      ],
+      "extensions": "js,jsx"
+    }
   },
   "eslintConfig": {
     "extends": [
-      "react-app"
+      "react-app",
+      "react-app/jest"
     ]
+  },
+  "sap.ui": {
+    "technology": "react.js"
   },
   "browserslist": {
     "production": [
@@ -44,9 +72,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@ui5/webcomponents-cypress-commands": "^1.23.2",
-    "cypress": "^12.17.4"
   }
 }

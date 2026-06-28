@@ -2,11 +2,12 @@ import React from 'react'
 import { Navigate, useLocation } from "react-router-dom"
 import { useAuth } from '../Data/ContextHandler/AuthContext';
 const ProtectedRoutes = ({ children }) => {
-    const baseURL = process.env.REACT_APP_SERVER_URI;
+  //  const baseURL = process.env.REACT_APP_SERVER_URI;
+    const baseURL = "MyDataprovider";
     const { contextData } = useAuth();
     const { token, user, userDetail } = contextData;
     //const user = useSelector((state) => state.user);
-    let location = useLocation();
+    const location = useLocation();
     console.log("location", location);
     console.log("Executed here Protected router", userDetail);
     const checkIfUserSessionIsValid = async () => {

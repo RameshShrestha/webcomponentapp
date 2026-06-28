@@ -1,4 +1,4 @@
-import { Table, TableRow, TableCell, Label, TableColumn, Button, TableGrowingMode, Panel, Toolbar, Title, ToolbarSpacer, Icon, Toast, FilterBar, FilterItem, FilterGroupItem, Input } from '@ui5/webcomponents-react';
+import { Table, TableRow, TableCell, Label, TableColumn, Button, TableGrowing, Panel, Toolbar, Title, ToolbarSpacer, Icon, Toast, FilterBar, FilterItem, FilterGroupItem, Input } from '@ui5/webcomponents-react';
 import { useEffect, useRef, useState } from 'react';
 import { RatingIndicator } from '@ui5/webcomponents-react';
 import navigationRightArrow from "@ui5/webcomponents-icons/dist/navigation-right-arrow";
@@ -16,13 +16,17 @@ function Products({ setEditRows }) {
     const [dialogData, setDialogData] = useState({});
     const [maxRecord, setMaxRecord] = useState(100);
     const [filterQuery,setFilterQuery] = useState("");
+    const [filters, setFilters] = useState({"Id":"",Title:"",Description:"",Rating:""});
     //  var maxRecord = 100;
     const navigate = useNavigate();
     const toast = useRef(null);
     const showToast = (message) => {
         toast.current.innerHTML = message;
-        toast.current.show();
+        toast.current.open =true;
     };
+    const onChangeFilter = (oEvent)=>{
+        console.log(oEvent);
+       };
     const fetchData = async(filterString, goClicked)=>{
        
         let url = `${baseURL}/products?skip=${skip}&limit=${limit}`;
@@ -106,13 +110,20 @@ function Products({ setEditRows }) {
   
         //   console.log(e);
            let filterString = "";
-           e.detail.filters.map((filter) => {
-             let filterName = filter.name.replace("Filter", "");
-  
-             if (filter.value) {
-               filterString += "&" + filterName + "=" + filter.value;
-             }
+           Object.keys(filters).map((filterName) => {
+            console.log(filterName, filters[filterName]);
+            if(filters[filterName]){
+                filterString += "&" + filterName + "=" + filters[filterName];
+            }
            });
+        
+        //    e.detail.filters.map((filter) => {
+        //      let filterName = filter.name.replace("Filter", "");
+  
+        //      if (filter.value) {
+        //        filterString += "&" + filterName + "=" + filter.value;
+        //      }
+        //    });
            console.log(filterString);
            setFilterQuery(filterString);
            setSkip(0)
@@ -130,21 +141,21 @@ function Products({ setEditRows }) {
           label="Id"
         >
   
-          <Input name="idFilter" placeholder="Id" />
+          <Input name="idFilter" placeholder="Id" value="{filters.Id}" onChange="onChangeFilter"/>
         </FilterGroupItem>
         <FilterGroupItem label="Title">
   
-          <Input name="titleFilter" placeholder="Title" />
+          <Input name="titleFilter" placeholder="Title" value="{filters.Title}" onChange="onChangeFilter"/>
         </FilterGroupItem>
         <FilterGroupItem
           active
           label="Description"
         >
-          <Input name="descriptionFilter" placeholder="Description" />
+          <Input name="descriptionFilter" placeholder="Description"  value="{filters.Description}" onChange="onChangeFilter"/>
         </FilterGroupItem>
         <FilterGroupItem label="Rating">
   
-          <Input name="ratingFilter" placeholder="Rating" />
+          <Input name="ratingFilter" placeholder="Rating" value="{filters.Rating}" onChange="onChangeFilter"/>
         </FilterGroupItem>
       </FilterBar>
 
@@ -222,8 +233,8 @@ function Products({ setEditRows }) {
                     mode="MultiSelect"
                     stickyColumnHeader="true"
                     onLoadMore={onLoadMore}
-                    growing={TableGrowingMode.Scroll}
-                    //  growing={TableGrowingMode.Button}
+                    growing={TableGrowing.Scroll}
+                    //  growing={TableGrowing.Button}
                     growingButtonText='More'
 
                     no-data-text="No Data"

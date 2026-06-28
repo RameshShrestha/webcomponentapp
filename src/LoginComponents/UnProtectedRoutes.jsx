@@ -6,17 +6,30 @@ import React, { useEffect, useState } from "react";
 import WelcomeHeader from "../WelcomePage/WelcomeHeader";
 import WelcomeFooter from "../WelcomePage/WelcomeFooter";
 import { LocalStorage } from "../Data/LocalStorage";
-import  '@ui5/webcomponents-react/dist/Assets';
+import {getDataProvider } from "../Data/ContextHandler/constant";
+
 const _myLocalStorageUtility = LocalStorage();
 const UnProtectedRoutes = ({ children }) => {
-    const baseURL = process.env.REACT_APP_SERVER_URI;
+    //const baseURL = process.env.REACT_APP_SERVER_URI;
+    const baseURL = getDataProvider();// "MyDataprovider";
     const { contextData } = useAuth();
     const { token, user, userDetail } = contextData;
     //const user = useSelector((state) => state.user);
-    let location = useLocation();
+    const location = useLocation();
     const [dbConnected, setDBConnected] = useState(false);
     const getServerStatus = async () => {
-        const baseURL = process.env.REACT_APP_SERVER_URI;
+
+        const localserverStatusData = _myLocalStorageUtility.getServerStatus();
+        if(localserverStatusData){
+            const currentTime = new Date().getTime();
+            const differnceInMinute = (currentTime -localserverStatusData.time)/60000;
+            if(differnceInMinute < 5 ){
+                setDBConnected(localserverStatusData.data.dbConnected);
+                return;
+            }
+        }
+        console.log("Current Data Provider: ", getDataProvider());
+        const baseURL = getDataProvider();//"MyDataprovider";//process.env.REACT_APP_SERVER_URI;
        // console.log(baseURL);
         try {
 
@@ -30,6 +43,7 @@ const UnProtectedRoutes = ({ children }) => {
 
             const result = await response.json();
             setDBConnected(result.dbConnected);
+            _myLocalStorageUtility.setServerStatus(result);
         //    console.log(result);
         } catch (error) {
             console.log(error);

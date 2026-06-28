@@ -1,6 +1,6 @@
-import { Bar, Form, Label, Input, TextArea, Icon, Title, Button, Text, FormItem, RatingIndicator, FormGroup, Page, Toast } from "@ui5/webcomponents-react";
+import { Bar, Form, Label, Input, TextArea,  Button, Text, FormItem, RatingIndicator, FormGroup, Page, Toast } from "@ui5/webcomponents-react";
 import React, { useContext, useRef, useState } from "react";
-import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";
+import "@ui5/webcomponents/dist/features/InputSuggestions";
 import { render, createPortal } from 'react-dom';
 import { EditProductContext } from "../ContextCreator";
 import ImageList from "../ImageList";
@@ -8,15 +8,15 @@ import { useNavigate } from "react-router-dom";
 import { LocalStorage } from "../Data/LocalStorage";
 const _myLocalStorageUtility = LocalStorage();
 
-const baseURL = process.env.REACT_APP_SERVER_URI;
+//const baseURL = process.env.REACT_APP_SERVER_URI;
 function EditProducts() {
   
     const navigate = useNavigate();
     const toast = useRef(null);
     const showToast = (message) => {
-        const modalRoot = document.getElementById('modal-root');
+        const modalRoot = document.getElementById('root');
         render(createPortal(<Toast ref={toast} duration={3000} style={{ color: "#ebeb84" }}>{message}</Toast>, modalRoot), document.createElement("div"));
-        toast.current.show();
+        toast.current.open = true;
     };
     const { editRows } = useContext(EditProductContext);
     // console.log(EditProductContext);
@@ -82,7 +82,7 @@ function EditProducts() {
     }
     const updateImage = (e, dataId, newImageData) => {
         //  console.log(e,dataId,newImageData);
-        let updatedData = editData.filter((row) => { return row.id === dataId });
+        const updatedData = editData.filter((row) => { return row.id === dataId });
         updatedData[0].images = newImageData;
 
         const finalData = editData.map((obj) => {
@@ -157,47 +157,47 @@ function EditProducts() {
                         }}
                     >
                         <FormGroup>
-                            <FormItem label="Id">
+                            <FormItem  labelContent={<Label>Id</Label>}>
                                 <Text>{data.id}</Text>
                             </FormItem>
-                            <FormItem label="Title">
+                            <FormItem  labelContent={<Label>Title</Label>}>
                                 <Input value={data.title} name="title" onChange={(e) => { updateFormData(e, data); }} />
                             </FormItem>
-                            <FormItem label="Description">
+                            <FormItem  labelContent={<Label>Description</Label>}>
                                 <TextArea value={data.description} name="description"
                                     onChange={(e) => { updateFormData(e, data); }}>
                                 </TextArea>
                             </FormItem>
-                            <FormItem label="Stock">
+                            <FormItem  labelContent={<Label>Stock</Label>}>
                                 <Input value={data.stock} name="stock"
                                     onChange={(e) => { updateFormData(e, data); }} />
                             </FormItem>
                         </FormGroup>
                         <FormGroup>
-                            <FormItem label="Price">
+                            <FormItem  labelContent={<Label>Price</Label>}>
                                 <Input value={data.price} name="price"
                                     onChange={(e) => { updateFormData(e, data); }} />
                             </FormItem>
-                            <FormItem label="Discount ">
+                            <FormItem  labelContent={<Label>Discount</Label>}>
                                 <Input value={data.discountPercentage} name="discountPercentage"
                                     onChange={(e) => { updateFormData(e, data); }} />
                             </FormItem>
-                            <FormItem label="Brand">
+                            <FormItem labelContent={<Label>Brand</Label>}>
                                 <Input value={data.brand} name="brand"
                                     onChange={(e) => { updateFormData(e, data); }} />
                             </FormItem>
-                            <FormItem label="Category">
+                            <FormItem  labelContent={<Label>Category</Label>}>
                                 <Input value={data.category} name="category"
                                     onChange={(e) => { updateFormData(e, data); }} />
                             </FormItem>
-                            <FormItem label="Rating">
+                            <FormItem  labelContent={<Label>Rating</Label>}>
                                 <RatingIndicator style={{ width: '10rem' }} name="rating"
                                     value={data.rating} onChange={(e) => { data.rating = e.target.value; }} />
                             </FormItem>
 
                         </FormGroup>
-                        <FormGroup titleText="Images" >
-                            <FormItem label="Thumbnail">
+                        <FormGroup  headerText="Images" >
+                            <FormItem  labelContent={<Label>Thumbnail</Label>}>
                                 <div key={"Thumnail" + data.id} style={{ display: "inherit" }}>
                                     <Input style={{ width: '40rem' }} name="thumbnail"
                                         value={data.thumbnail} onChange={(e) => { updateFormData(e, data); }} />

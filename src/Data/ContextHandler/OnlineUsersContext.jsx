@@ -2,11 +2,11 @@ import React, { createContext, useReducer, useState } from "react";
 import onlineUserReducer, { initialState } from "./onlineUserReducer";
 import { socket } from '../../socket';
 import { ADD_USER ,REMOVE_USER} from "./constant";
-export let OnlineUsersContext = createContext({
+export const OnlineUsersContext = createContext({
   onlineUsersData :[],
   activeChatsList : [],
   allChatMessages :[],
-  currentUserDetail: {},
+  currentUserDetail: { id:'', name: 'Guest', status: "Online", loginTime: new Date(), image: './dummyUser.PNG', chatNotification: 0 },
   addUser :()=>{},
   removeUser : ()=>{},
   updateUser :()=>{},
@@ -22,39 +22,40 @@ socket.on("userlist",(data)=>{
   addInitialUsers(data.users);
 })
 socket.on("message",(data)=>{
-  //console.log(data);
- // updateUser(data);
+  console.log(data);
+  updateUser(data);
 })
 socket.on("useronline",(data)=>{
-  //console.log(data);
+  console.log(data);
   updateUser(data);
 })
 socket.on("useroffline",(data)=>{
- // console.log("Offline");
+  console.log("Offline");
   updateUser(data);
 })
 socket.on("loggedInUserDetail",(data)=>{
+  console.log("Current User Details received");
   setCurrentUserDetail(data);
 })
 socket.on("newUserJoined",(newUser)=>{
- // console.log("New User is online",newUser);
+  console.log("New User is online",newUser);
 
   //console.log("New User added trigger");
   //Check if user already exists
-//   let user = onlineUsersData.users.filter((user)=> user.id === newUser.id);
-//   if(!user ){
-//   addUser(newUser);
-// }
+  const user = onlineUsersData.users.filter((user)=> user.id === newUser.id);
+  if(!user ){
+  addUser(newUser);
+ }
     updateUser(newUser);
 })
-// socket.on("newChatMessageRecieved",(newMessage)=>{
-//   console.log(newMessage);
-//   setAllChatMessages([...allChatMessages,newMessage]);
-// })
-// socket.on("receiveChatMessage",(chatData)=>{
-//   console.log(chatData);
-//   setAllChatMessages(chatData);
-// })
+ socket.on("newChatMessageRecieved",(newMessage)=>{
+   console.log(newMessage);
+   setAllChatMessages([...allChatMessages,newMessage]);
+ })
+ socket.on("receiveChatMessage",(chatData)=>{
+  // console.log(chatData);
+   setAllChatMessages(chatData);
+ })
 
   const [onlineUsersData, dispatchUser] = useReducer(onlineUserReducer, initialState);
   const [currentUserDetail,setCurrentUserDetail] = useState(null);

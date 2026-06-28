@@ -1,3 +1,6 @@
-import React from "react";
-export const EditProductContext = React.createContext();
-//export const EditImageListContext = React.createContext();
+import { createContext } from 'react';
+
+// Context for managing edit product state
+export const EditProductContext = createContext();
+
+// Made with Bob

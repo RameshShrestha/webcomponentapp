@@ -15,17 +15,19 @@ const _myLocalStorageUtility = LocalStorage();
 const ProtectedRoutes = ({ children }) => {
    // console.log("Applied Theme : ", getTheme());
     const [isConnected, setIsConnected] = useState(socket.connected);
-    const baseURL = process.env.REACT_APP_SERVER_URI;
+   // const baseURL = process.env.REACT_APP_SERVER_URI;
+    const baseURL = "Dataprovider";
     const { contextData } = useAuth();
     const navigate = useNavigate();
     const { token, user, userDetail, settingConfig } = contextData;
     //const user = useSelector((state) => state.user);
-    let location = useLocation();
+    const location = useLocation();
    // console.log("location", location);
    // console.log("Executed here Protected router", userDetail);
     const checkIfUserSessionIsValid = async () => {
         const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
         const _token = loggedInUser?.token || "";
+        if(loggedInUser){
         const response = await fetch(baseURL + '/realusers/nouser', {
             method: 'GET',
             credentials: 'include',
@@ -43,10 +45,13 @@ const ProtectedRoutes = ({ children }) => {
             // return <Navigate to="/welcome" state={{ from: location }} replace />
             navigate("/welcome");
         }
+        }else{
+            navigate("/welcome"); 
+        }
     }
-    if (!userDetail) {
-        checkIfUserSessionIsValid();
-    }
+     if (!userDetail) {
+         checkIfUserSessionIsValid();
+     }
     if (settingConfig?.theme) {
      //   console.log("Applied Theme : ", settingConfig.theme);
         setTheme(settingConfig.theme);
@@ -75,13 +80,16 @@ const ProtectedRoutes = ({ children }) => {
             shellbar.addEventListener(
                 "ui5-profile-click",
                 function (event) {
-                    actionPopover.showAt(event.detail.targetRef);
+                    actionPopover.opener = event.detail.targetRef;
+                    actionPopover.open = true;
                 }
             );
             shellbar.addEventListener(
                 "ui5-notifications-click",
                 function (event) {
-                    notificationPopover.showAt(event.detail.targetRef);
+                   // notificationPopover.showAt(event.detail.targetRef);
+                    notificationPopover.opener = event.detail.targetRef;
+                    notificationPopover.open = true;
                 }
             );
         }

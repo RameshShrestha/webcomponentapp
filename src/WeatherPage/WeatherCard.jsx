@@ -5,7 +5,7 @@ import { UserLocationContext } from "../Data/ContextHandler/UserLocationContext"
 function WeatherCard() {
     //   const [todayWeather, setTodayWeather] = useState(weatherDataBengaluru);
     const { weatherToday } = useContext(UserLocationContext);
-    let todayWeather = weatherToday;
+    const todayWeather = weatherToday;
   //  console.log( todayWeather);
     // let weatherData = weatherForcast?.list;
     return <>

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, ShellBar, ShellBarItem, ResponsivePopover, Title, List, StandardListItem, CustomListItem, Button } from "@ui5/webcomponents-react";
+import { Avatar, ShellBar, ShellBarItem, ResponsivePopover, Title, List, ListItemStandard, ListItemCustom, Button } from "@ui5/webcomponents-react";
 import addIcon from "@ui5/webcomponents-icons/dist/add.js";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import Home from "./Home";
 import Detail from "./Detail";
 import { setTheme } from "@ui5/webcomponents-base/dist/config/Theme.js";
-import '@ui5/webcomponents-react/dist/Assets';
+//import '@ui5/webcomponents-react/dist/Assets';
 import { ThemeProvider } from '@ui5/webcomponents-react';
 import Products from "./Products";
 import EditProducts from "./EditProducts";
@@ -87,11 +87,11 @@ export default function MyApp() {
   }, [user]);
   //  const EditProductContext = React.createContext();
   const [editRows, setEditRows] = useState([]);
-  if(settingConfig?.theme){
-    setTheme(settingConfig.theme);
-  }else{
-    setTheme("sap_horizon_dark");
-  }
+  // if(settingConfig?.theme){
+  //   setTheme(settingConfig.theme);
+  // }else{
+  //   setTheme("sap_horizon_dark");
+  // }
 
  // setTheme("sap_belize");
   // setTheme("sap_horizon");

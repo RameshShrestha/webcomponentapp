@@ -1,0 +1,538 @@
+/* ToDoMainPage Styles */
+.todoContainer {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 91vh;
+    padding: 20px;
+    box-sizing: border-box;
+    animation: fadeIn 0.5s ease-in;
+}
+
+.todoHeader {
+    margin: 0 0 30px 0;
+    padding: 20px;
+    color: white;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 600;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    animation: slideDown 0.6s ease-out;
+}
+
+.formCard {
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto 30px auto;
+    border-radius: 16px;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    animation: slideUp 0.6s ease-out;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.formCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.formTitle {
+    margin-bottom: 20px;
+    color: #e5e6ea;
+    font-size: clamp(1.2rem, 3vw, 1.5rem);
+}
+
+.todoListContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 10px;
+}
+
+.emptyState {
+    text-align: center;
+    padding: 60px 20px;
+    color: white;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    max-width: 600px;
+    margin: 0 auto;
+    backdrop-filter: blur(10px);
+    animation: fadeIn 0.8s ease-in;
+}
+
+.emptyStateIcon {
+    font-size: clamp(2rem, 6vw, 3rem);
+    margin-bottom: 20px;
+    animation: bounce 2s infinite;
+}
+
+/* TodoActivity Styles */
+.todoCard {
+    display: flex;
+    flex-direction: column;
+    max-width: 1000px;
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: slideUp 0.4s ease-out;
+}
+
+.todoCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.todoHeader {
+    color: white;
+    font-weight: 600;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.todoTitle {
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    margin: 0;
+    flex: 1;
+    min-width: 200px;
+    word-break: break-word;
+}
+
+.iconContainer {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.actionIcon {
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.actionIcon:hover {
+    transform: scale(1.2);
+    opacity: 0.8;
+}
+
+.contentContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.mainContent {
+    flex: 1 1 60%;
+    min-width: 300px;
+    padding: 20px;
+    background: #f8f9fa;
+    color: #333;
+}
+
+.sidebar {
+    flex: 1 1 40%;
+    min-width: 250px;
+    padding: 20px;
+    background: #ffffff;
+    border-left: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.contentText {
+    margin: 0 0 16px 0;
+    line-height: 1.6;
+    font-size: clamp(0.85rem, 2vw, 0.95rem);
+    min-height: 60px;
+    word-wrap: break-word;
+}
+
+.progressContainer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.progressLabel {
+    font-size: clamp(0.8rem, 2vw, 0.9rem);
+    font-weight: 600;
+    color: #667eea;
+    min-width: 80px;
+}
+
+.infoItem {
+    font-size: clamp(0.75rem, 2vw, 0.85rem);
+    color: #6b7280;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.infoLabel {
+    font-weight: 600;
+    color: #374151;
+    font-size: clamp(0.8rem, 2vw, 0.9rem);
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.buttonGroup button {
+    flex: 1;
+    min-width: 100px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .todoContainer {
+        padding: 10px;
+    }
+
+    .todoHeader {
+        font-size: 1.5rem;
+        padding: 15px 10px;
+        margin-bottom: 20px;
+    }
+
+    .formCard {
+        padding: 16px;
+        margin: 0 5px 20px 5px;
+        border-radius: 12px;
+    }
+
+    .formTitle {
+        font-size: 1.2rem;
+        text-align: center;
+    }
+
+    .todoCard {
+        margin: 0 5px;
+        width: calc(100% - 10px);
+    }
+
+    .contentContainer {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        border-left: none;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .mainContent,
+    .sidebar {
+        min-width: 100%;
+        width: 100%;
+        padding: 15px;
+        box-sizing: border-box;
+    }
+
+    .todoTitle {
+        font-size: 1rem;
+        min-width: 150px;
+    }
+
+    .iconContainer {
+        justify-content: flex-end;
+        gap: 8px;
+    }
+
+    .progressContainer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .progressLabel {
+        width: 100%;
+        text-align: left;
+    }
+
+    .infoItem {
+        padding: 8px 0;
+    }
+
+    .emptyState {
+        padding: 40px 15px;
+        margin: 0 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .todoContainer {
+        padding: 8px;
+    }
+
+    .todoHeader {
+        font-size: 1.3rem;
+        padding: 12px 8px;
+        margin-bottom: 15px;
+    }
+
+    .formCard {
+        padding: 12px;
+        margin: 0 3px 15px 3px;
+        border-radius: 10px;
+    }
+
+    .formTitle {
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+    }
+
+    .todoCard {
+        border-radius: 10px;
+        margin: 0 3px;
+        width: calc(100% - 6px);
+    }
+
+    .todoHeader {
+        padding: 10px 12px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .todoTitle {
+        font-size: 0.95rem;
+        width: 100%;
+        min-width: unset;
+    }
+
+    .iconContainer {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: nowrap;
+    }
+
+    .mainContent,
+    .sidebar {
+        padding: 12px;
+    }
+
+    .contentText {
+        font-size: 0.85rem;
+        min-height: 50px;
+    }
+
+    .progressContainer {
+        gap: 6px;
+    }
+
+    .progressLabel {
+        font-size: 0.85rem;
+    }
+
+    .infoItem {
+        font-size: 0.8rem;
+        padding: 6px 0;
+    }
+
+    .infoLabel {
+        font-size: 0.85rem;
+    }
+
+    .buttonGroup {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .buttonGroup button {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .emptyState {
+        padding: 30px 12px;
+        font-size: 1rem;
+    }
+
+    .emptyStateIcon {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+    }
+
+    .todoListContainer {
+        gap: 15px;
+        padding: 0 3px;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 360px) {
+    .todoContainer {
+        padding: 5px;
+    }
+
+    .todoHeader {
+        font-size: 1.2rem;
+        padding: 10px 5px;
+    }
+
+    .formCard {
+        padding: 10px;
+        margin: 0 2px 12px 2px;
+    }
+
+    .todoCard {
+        margin: 0 2px;
+        width: calc(100% - 4px);
+    }
+
+    .todoTitle {
+        font-size: 0.9rem;
+    }
+
+    .mainContent,
+    .sidebar {
+        padding: 10px;
+    }
+
+    .contentText {
+        font-size: 0.8rem;
+    }
+
+    .actionIcon {
+        font-size: 1rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .todoContainer {
+        background: white;
+        min-height: auto;
+    }
+
+    .actionIcon,
+    .buttonGroup {
+        display: none;
+    }
+
+    .todoCard {
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .formCard {
+        background: rgba(30, 30, 30, 0.95);
+        color: #e5e7eb;
+    }
+
+    .mainContent {
+        background: #1f2937;
+        color: #e5e7eb;
+    }
+
+    .sidebar {
+        background: #111827;
+        color: #e5e7eb;
+    }
+
+    .infoItem {
+        color: #9ca3af;
+    }
+
+    .infoLabel {
+        color: #d1d5db;
+    }
+}
+
+/* Accessibility */
+.todoCard:focus-within {
+    outline: 2px solid #667eea;
+    outline-offset: 2px;
+}
+
+.actionIcon:focus {
+    outline: 2px solid white;
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Loading State */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Status Colors */
+.statusNew {
+    background: #0070f3;
+}
+
+.statusInProgress {
+    background: #f5a623;
+}
+
+.statusDone {
+    background: #10b981;
+}
+
+/* Made with Bob */

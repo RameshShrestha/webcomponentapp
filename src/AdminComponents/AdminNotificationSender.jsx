@@ -1,14 +1,14 @@
 import { useRef, useState } from "react";
 import { socket } from '../socket';
-import { TextArea, Input, Select, Option, Text, Button,Toast } from "@ui5/webcomponents-react";
+import { TextArea, Input, Select, Option,  Button,Toast } from "@ui5/webcomponents-react";
 import { render, createPortal } from 'react-dom';
 function AdminNotificationSender() {
 
     const toast = useRef(null);
     const showToast = (message) => {
-        const modalRoot = document.getElementById('modal-root');
+        const modalRoot = document.getElementById('root');
         render(createPortal(<Toast ref={toast} duration={3000} style={{ color: "#ebeb84" }}>{message}</Toast>, modalRoot), document.createElement("div"));
-        toast.current.show();
+        toast.current.open = true;
     };
     const [adminNotification, setAdminNotification] = useState({ title: "", type: "None", message: "" });
     const sendNotificationMessage = (message) => {

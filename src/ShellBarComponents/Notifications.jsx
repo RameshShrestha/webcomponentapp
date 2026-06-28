@@ -1,18 +1,20 @@
-import { Toast, ShellBar, ShellBarItem, ResponsivePopover, Title, List, StandardListItem, CustomListItem, Button } from "@ui5/webcomponents-react";
+import { Toast,  ResponsivePopover } from "@ui5/webcomponents-react";
 import MyNotificationItem from "./MyNotificationItem";
 import { useEffect, useRef, useState } from "react";
 import { socket } from '../socket';
 import { render, createPortal } from 'react-dom';
 import { LocalStorage } from "../Data/LocalStorage";
+import {getDataProvider } from "../Data/ContextHandler/constant";
 const _myLocalStorageUtility = LocalStorage();
-const baseURL = process.env.REACT_APP_SERVER_URI;
+//const baseURL = process.env.REACT_APP_SERVER_URI;
+const baseURL = getDataProvider();//"MyDataprovider";
 function Notifications() {
   const toast = useRef(null);
 
   const showToast = (message) => {
-    const modalRoot = document.getElementById('modal-root');
+    const modalRoot = document.getElementById('root');
     render(createPortal(<Toast ref={toast} duration={3000} style={{ color: "#ebeb84" }}>{message}</Toast>, modalRoot), document.createElement("div"));
-    toast.current.show();
+    toast.current.open = true;
 
   };
  

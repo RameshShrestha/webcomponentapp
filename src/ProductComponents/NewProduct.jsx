@@ -1,21 +1,23 @@
 import { Bar, Form, Label, Input, TextArea, Button, Text, FormItem, RatingIndicator, FormGroup, Page, Toast } from "@ui5/webcomponents-react";
 import React, { useRef, useState } from "react";
-import "@ui5/webcomponents/dist/features/InputElementsFormSupport.js";
+import "@ui5/webcomponents/dist/features/InputSuggestions";
 //import { EditProductContext } from "./ContextCreator";
 import ImageList from "../ImageList";
 import { useNavigate } from "react-router-dom";
 import { render, createPortal } from 'react-dom';
 import ReactDOM from "react";
 import { LocalStorage } from "../Data/LocalStorage";
-const baseURL = process.env.REACT_APP_SERVER_URI;
+import {getDataProvider } from "../Data/ContextHandler/constant";
+//const baseURL = process.env.REACT_APP_SERVER_URI;
+const baseURL = getDataProvider();//"MyDataprovider";
 const _myLocalStorageUtility = LocalStorage();
 function NewProduct() {
     const navigate = useNavigate();
     const toast = useRef(null);
     const showToast = (message) => {
-        const modalRoot = document.getElementById('modal-root');
+        const modalRoot = document.getElementById('root');
         render(createPortal(<Toast ref={toast} duration={3000} style={{ color: "#ebeb84" }}>{message}</Toast>, modalRoot), document.createElement("div"));
-        toast.current.show();
+        toast.current.open = true;
     };
     const [data, setData] = useState({
         "id": "new",
@@ -41,7 +43,7 @@ function NewProduct() {
     }
     const AddImage = (e) => {
         //  const modifieddata = data;
-        let modifieddata = Object.assign({}, data);
+        const modifieddata = Object.assign({}, data);
         modifieddata.images.push({ url: "" });
 
         console.log("image to be added", modifieddata)
@@ -50,7 +52,7 @@ function NewProduct() {
     }
     const updateImage = (e, dataId, newImageData) => {
         //  const newData = data;
-        let newData = Object.assign({}, data);
+        const newData = Object.assign({}, data);
         console.log(e, dataId, newImageData);
 
         const updatedImages = newData.images.map((image) => {
@@ -65,7 +67,7 @@ function NewProduct() {
     }
     const removeImage = (e, dataId, imageToRemove) => {
         console.log(dataId, imageToRemove);
-        let newData = Object.assign({}, data);
+        const newData = Object.assign({}, data);
         newData.images = newData.images.filter((image) => {
             return image.url !== imageToRemove
         });
@@ -128,40 +130,40 @@ function NewProduct() {
 
                 >
                     <FormGroup>
-                        <FormItem label="Id">
+                        <FormItem  labelContent={<Label>Id</Label>}>
                             <Text>{data.id}</Text>
                         </FormItem>
-                        <FormItem label="Title">
+                        <FormItem  labelContent={<Label>Title</Label>}>
                             <Input value={data.title} name="title" onChange={(e) => { updateFormData(e); }} />
                         </FormItem>
-                        <FormItem label="Description">
+                        <FormItem  labelContent={<Label>Description</Label>}>
                             <TextArea value={data.description} name="description"
                                 onChange={(e) => { updateFormData(e); }}>
                             </TextArea>
                         </FormItem>
-                        <FormItem label="Stock">
+                        <FormItem  labelContent={<Label>Stock</Label>}>
                             <Input value={data.stock} name="stock"
                                 onChange={(e) => { updateFormData(e); }} />
                         </FormItem>
                     </FormGroup>
                     <FormGroup>
-                        <FormItem label="Price">
+                        <FormItem  labelContent={<Label>Price</Label>}>
                             <Input value={data.price} name="price"
                                 onChange={(e) => { updateFormData(e); }} />
                         </FormItem>
-                        <FormItem label="Discount ">
+                        <FormItem  labelContent={<Label>Discount</Label>}>
                             <Input value={data.discountPercentage} name="discountPercentage"
                                 onChange={(e) => { updateFormData(e); }} />
                         </FormItem>
-                        <FormItem label="Brand">
+                        <FormItem  labelContent={<Label>Brand</Label>}>
                             <Input value={data.brand} name="brand"
                                 onChange={(e) => { updateFormData(e); }} />
                         </FormItem>
-                        <FormItem label="Category">
+                        <FormItem labelContent={<Label>Category</Label>}>
                             <Input value={data.category} name="category"
                                 onChange={(e) => { updateFormData(e); }} />
                         </FormItem>
-                        <FormItem label="Rating">
+                        <FormItem  labelContent={<Label>Rating</Label>}>
                             <RatingIndicator style={{ width: '10rem' }} name="rating"
                                 value={data.rating} onChange={(e) => {
                                     data.rating = e.target.value;
@@ -169,8 +171,8 @@ function NewProduct() {
                         </FormItem>
 
                     </FormGroup>
-                    <FormGroup titleText="Images" >
-                        <FormItem label="Thumbnail">
+                    <FormGroup headerText="Images" >
+                        <FormItem  labelContent={<Label>Thumbnail</Label>}>
                             <div key={"Thumnail" + data.id} style={{ display: "inherit" }}>
                                 <Input style={{ width: '40rem' }} name="thumbnail"
                                     value={data.thumbnail}

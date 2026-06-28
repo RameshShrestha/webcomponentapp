@@ -6,16 +6,18 @@ import ImageList from "./ImageList";
 import { useNavigate } from "react-router-dom";
 import { render, createPortal } from 'react-dom';
 import ReactDOM from "react";
+import {getDataProvider } from "../Data/ContextHandler/constant";
 import { LocalStorage } from "./Data/LocalStorage";
-const baseURL = process.env.REACT_APP_SERVER_URI;
+//const baseURL = process.env.REACT_APP_SERVER_URI;
+const baseURL = getDataProvider();//"MyDataprovider";
 const _myLocalStorageUtility = LocalStorage();
 function NewProduct() {
     const navigate = useNavigate();
     const toast = useRef(null);
     const showToast = (message) => {
-        const modalRoot = document.getElementById('modal-root');
+        const modalRoot = document.getElementById('root');
         render(createPortal(<Toast ref={toast} duration={3000} style={{ color: "#ebeb84" }}>{message}</Toast>, modalRoot), document.createElement("div"));
-        toast.current.show();
+        toast.current.open= true;
     };
     const [data, setData] = useState({
         "id": "new",
@@ -41,7 +43,7 @@ function NewProduct() {
     }
     const AddImage = (e) => {
         //  const modifieddata = data;
-        let modifieddata = Object.assign({}, data);
+        const modifieddata = Object.assign({}, data);
         modifieddata.images.push({ url: "" });
 
         console.log("image to be added", modifieddata)
@@ -50,7 +52,7 @@ function NewProduct() {
     }
     const updateImage = (e, dataId, newImageData) => {
         //  const newData = data;
-        let newData = Object.assign({}, data);
+        const newData = Object.assign({}, data);
         console.log(e, dataId, newImageData);
 
         const updatedImages = newData.images.map((image) => {
@@ -65,7 +67,7 @@ function NewProduct() {
     }
     const removeImage = (e, dataId, imageToRemove) => {
         console.log(dataId, imageToRemove);
-        let newData = Object.assign({}, data);
+        const newData = Object.assign({}, data);
         newData.images = newData.images.filter((image) => {
             return image.url !== imageToRemove
         });

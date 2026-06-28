@@ -11,12 +11,13 @@ import Overlay from "ol/Overlay";
 
 import { Point } from "ol/geom";
 import { fromLonLat } from "ol/proj";
+import {getDataProvider } from "../Data/ContextHandler/constant";
 function CountryDetailPage({ country, countryName }) {
-    var container = document.getElementById('popup');
-    var content = document.getElementById('popup-content');
+    const container = document.getElementById('popup');
+    const content = document.getElementById('popup-content');
     const [map, setMap] = useState(null);
     const [overlay, setOverlay] = useState(null);
-    var closer = document.getElementById('popup-closer');
+    const closer = document.getElementById('popup-closer');
     const [cities, setCities] = useState([]);
     const [citiesBackup, setCitiesBackup] = useState([]);
     const [countryDetail, setCountryDetail] = useState({"Country":"","ISO_Code":"","CountryCode2":"","CountryCode3":"","CurrencyName":"","CurrencyCode":"","CapitalCity":"","flag":""});
@@ -39,7 +40,7 @@ function CountryDetailPage({ country, countryName }) {
             .forEach(layer => map.removeLayer(layer));
     }
     const addSelectedCityLayer = (Lng, Lat) => {
-        let layer = new Vector({
+        const layer = new Vector({
             source: new VectorSrc({
                 features: [
                     new Feature({
@@ -65,7 +66,8 @@ function CountryDetailPage({ country, countryName }) {
 
 
     const fetchCitiesDetail = async () => {
-        const baseURL = process.env.REACT_APP_SERVER_URI;
+      //  const baseURL = process.env.REACT_APP_SERVER_URI;
+        const baseURL = getDataProvider();//"MyDataprovider";
         try {
             if (country) {
                 const response = await fetch(baseURL + '/countries/' + country.Country + "/cities", {
@@ -80,7 +82,7 @@ function CountryDetailPage({ country, countryName }) {
                 setCities(result);
                 setCitiesBackup(result);
 
-                let capitalCity = result.filter((item) => {
+                const capitalCity = result.filter((item) => {
                     if (item.City === country.CapitalCity) {
                         return item;
                     }
@@ -100,7 +102,7 @@ function CountryDetailPage({ country, countryName }) {
         if (filtervalue) {
             filtervalue = filtervalue.toLowerCase();
             console.log("Filter starts with", filtervalue);
-            let filteredCities = citiesBackup.filter(city => {
+            const filteredCities = citiesBackup.filter(city => {
                 return city.City.toLowerCase().startsWith(filtervalue);
             });
             setCities(filteredCities);
@@ -118,7 +120,7 @@ function CountryDetailPage({ country, countryName }) {
 
     }, [countryName]);
     useEffect(() => {
-        var map = new Map({
+        const map = new Map({
             layers: [
                 new TileLayer({ source: new OSM() }),
             ],
@@ -128,7 +130,7 @@ function CountryDetailPage({ country, countryName }) {
             }),
             target: 'map',
         });
-        var overlay = new Overlay({
+        const overlay = new Overlay({
             element: container,
             autoPan: true,
             autoPanAnimation: {
@@ -180,7 +182,7 @@ function CountryDetailPage({ country, countryName }) {
             <>
                 <div style={{ display: "flex", justifyContent: "space-between", height: "60px", background: "var(--sapContent_Illustrative_Color1)", color: "white" }}>
                     <h1 style={{ marginLeft: "10px", marginTop:"0px", marginBottom:"0px" }}> {country.Country} ( {countryDetail.CapitalCity} )</h1>
-                    <img src={countryDetail.flag} style={{ marginRight: "10px", borderRadius: "10px" }} />
+                    <img alt="countryflag" src={countryDetail.flag} style={{ marginRight: "10px", borderRadius: "10px" }} />
                 </div>
                  <Form
                     backgroundDesign="Solid"

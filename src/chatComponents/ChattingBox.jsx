@@ -1,19 +1,18 @@
 import { Icon } from "@ui5/webcomponents-react";
 import { useContext, useEffect, useRef, useState } from "react";
 import { OnlineUsersContext } from '../Data/ContextHandler/OnlineUsersContext';
-import ChatIcons from "./ChatIcons";
 import ChatMessage from "./ChatMessage";
 import { socket } from '../socket';
+import styles from "./ChatComponents.module.css";
 
 function ChatitingBox({ user, currentUser }) {
-    //  console.log("From Prop current User :", currentUser ,user.name);
     const [expandChat, setExpandChat] = useState(false);
-    const { activeChatsList, setActiveChatList, currentUserDetail } = useContext(OnlineUsersContext);
+    const { activeChatsList, setActiveChatList } = useContext(OnlineUsersContext);
     const [currentMessage, setCurrentMessage] = useState("");
     const [oldMessages, setOldMessages] = useState([]);
-    const [chattingUser, setChattingUser] = useState(user.name);
+    const [chattingUser] = useState(user.name);
     const [userTyping, setUserTyping] = useState(false);
-    let currentUserTyping = false;
+    const currentUserTypingRef = useRef(false);
     const sendChatMessage = (chatData) => {
         if (chatData) {
             socket.emit("chatMessage", chatData);
@@ -100,54 +99,96 @@ function ChatitingBox({ user, currentUser }) {
     })
     const handleOnMessageChange = (e) => {
         setCurrentMessage(e.target.value);
-        if (!currentUserTyping) {
+        if (!currentUserTypingRef.current) {
             socket.emit("typingEvent", { sender: currentUser, receiver: user.name });
-            currentUserTyping = true;
+            currentUserTypingRef.current = true;
             setTimeout(() => {
-                //socket.emit("stopTypingEvent", {sender :currentUser, receiver :user}); 
-                currentUserTyping = false;
-            }, 5000)
+                currentUserTypingRef.current = false;
+            }, 5000);
         }
     }
 
-    return <>
-        <div className="chatBoxContainer" >
-            <div id={`chatBtn_${user.name}`} style={{ width: "100%", border: "solid #a5c3d9", display: "flex", background: "#a5c3d9", marginRight: "10px" }}
+    const handleSendMessage = () => {
+        if (currentMessage.trim()) {
+            sendChatMessage({ sender: currentUser, receiver: user.name, currentMessage: currentMessage });
+            setCurrentMessage("");
+        }
+    }
+
+    const handleCloseChat = (e) => {
+        e.stopPropagation();
+        const otherActiveChats = activeChatsList.filter((item) => item.name !== user.name);
+        setActiveChatList([...otherActiveChats]);
+    }
+
+    return (
+        <div className={styles.chatBoxContainer}>
+            <div
+                id={`chatBtn_${user.name}`}
+                className={styles.chatHeader}
                 onClick={(e) => {
                     setExpandChat(!expandChat);
-                    e.target.parentElement.classList.remove("blinkDiv");
-                }}>
-                <button className="chatButton" style={{ width: "100%", color: "rebeccapurple" }}> {user.name}</button>
-                <Icon style={{ height: "30px", width: "30px", color: "rebeccapurple" }} name="decline" interactive onClick={(e) => {
-                    const otherActiveChats = activeChatsList.filter((item) => item.name !== user.name);
-                    setActiveChatList([...otherActiveChats]);
-                }} />
-                {/* <Button icon={expandChat ? "navigation-down-arrow" :"navigation-up-arrow"} /> */}
+                    e.currentTarget.classList.remove(styles.blinkDiv);
+                }}
+            >
+                <button className={styles.chatButton}>
+                    {user.name}
+                </button>
+                <Icon
+                    className={styles.chatHeaderIcon}
+                    name="decline"
+                    interactive
+                    onClick={handleCloseChat}
+                />
             </div>
-            <div className={expandChat ? "is-visible" : "is-invisible"} style={{ width: "100%", border: "solid #a5c3d9", background: "#3b4f3b" }}>
-                <div style={{ height: expandChat ? "400px" : "0px" }}>
-
-                    <div id={`chat_${user.name}`} style={{ height: "365px", overflow: "scroll", overflowX: "hidden" }}
-                    >
-                        <ChatMessage user={user} oldMessages={oldMessages} />
-                        <div ref={chatbox} style={{ height: "30px", padding: "5px", color: "white" }}>{userTyping && <span>{user.name} is typing...</span>}</div>
-                    </div>
-                    <div className="chatInputContainer">
-                        <input className="chatInput" value={currentMessage}
-                            placeholder="Write message.."
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                    sendChatMessage({ sender: currentUser, receiver: user.name, currentMessage: currentMessage });
-                                    setCurrentMessage("");
-                                }
-                            }}
-                            onChange={handleOnMessageChange} />
-
-                        <ChatIcons name="PaperPlane" height="30px" width="30px" fill="green" />
+            
+            {expandChat && (
+                <div className={styles.chatWindowWrapper}>
+                    <div className={styles.chatWindow}>
+                        <div
+                            id={`chat_${user.name}`}
+                            className={styles.chatMessagesContainer}
+                        >
+                            <ChatMessage user={user} oldMessages={oldMessages} />
+                            <div ref={chatbox} className={styles.typingIndicator}>
+                                {userTyping && (
+                                    <>
+                                        <span>{user.name} is typing</span>
+                                        <span className={styles.typingDots}>
+                                            <span className={styles.typingDot}></span>
+                                            <span className={styles.typingDot}></span>
+                                            <span className={styles.typingDot}></span>
+                                        </span>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                        
+                        <div className={styles.chatInputContainer}>
+                            <input
+                                className={styles.chatInput}
+                                value={currentMessage}
+                                placeholder="Type a message..."
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        handleSendMessage();
+                                    }
+                                }}
+                                onChange={handleOnMessageChange}
+                            />
+                            <button
+                                className={styles.sendButton}
+                                onClick={handleSendMessage}
+                                aria-label="Send message"
+                            >
+                                <Icon name="paper-plane" className={styles.sendIcon} />
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
         </div>
-    </>
+    );
 }
+
 export default ChatitingBox;

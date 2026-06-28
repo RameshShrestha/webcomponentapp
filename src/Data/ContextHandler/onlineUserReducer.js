@@ -6,7 +6,7 @@ export const initialState = {
 const onlineUserReducer = (usersList, action) => {
   switch (action.type) {
     case ADD_USER:
-      let user = usersList.users.filter((user)=> user.name === action.payload.name);
+      const user = usersList.users.filter((user)=> user.name === action.payload.name);
           if(user.length === 0){
             return{
             users: [...usersList.users, action.payload]
@@ -33,7 +33,7 @@ const onlineUserReducer = (usersList, action) => {
     }
     case "UPDATE_USER" : {
     //  console.log("User found",action.payload);
-      let newUserList = usersList.users.map((user)=> {
+      const newUserList = usersList.users.map((user)=> {
         if(user.name === action.payload.user.name){
           user.status = action.payload.user.status;
           

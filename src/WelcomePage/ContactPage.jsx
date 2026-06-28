@@ -1,6 +1,8 @@
 import { Form, FormGroup, FormItem, Input, Label, TextArea, Button } from "@ui5/webcomponents-react";
 import { useState } from "react";
-const baseURL = process.env.REACT_APP_SERVER_URI;
+import {getDataProvider } from "../Data/ContextHandler/constant";
+//const baseURL = process.env.REACT_APP_SERVER_URI;
+const baseURL = getDataProvider();//"MyDataprovider";
 function ContactPage() {
     const [messageContent,setMessageContent] =useState({
         name :"",
@@ -59,12 +61,14 @@ function ContactPage() {
                 </div>
                 <div className="contactRow"><label>LinkedIn </label><span>:</span> <a href="linkedin.com/in/shrestharamesh">linkedin.com/in/shrestharamesh</a></div>
                 <div className="contactRow"><label>Facebook </label><span>:</span> <a href="facebook.com/RameshShrestha1987">facebook.com/RameshShrestha1987</a></div>
-                <div className="contactRow"><label>Company </label><span>:</span> <div>Tata Consultancy Services</div></div>
-                <div className="contactRow"><label>Designation </label><span>:</span> <div>Associate Consultant</div></div>
+                
+                <div className="contactRow"><label>Company </label><span>:</span> <div>IBM India</div></div>
+                <div className="contactRow"><label>Designation </label><span>:</span> <div>Package Consultant</div></div>
                 <div className="contactRow"><label>Role </label><span>:</span> <div>SAP Fiori Developer / Consultant</div></div>
+            <div className="contactRow"><label>GitHub </label><span>:</span> <a href="https://github.com/RameshShrestha">https://github.com/RameshShrestha</a></div>
             </div>
             <div style={{ marginLeft: "auto", marginRight: "auto" }}>
-                <img src="/penguin.jpg" alt="Contact person"
+                <img src="./penguin.jpg" alt="Contact person"
                     height="200px" width="200px" style={{ borderRadius: "120px" }} />
             </div>
 

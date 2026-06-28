@@ -1,32 +1,54 @@
-import { Table, TableRow, TableCell, Label, TableColumn, Button, TableGrowingMode, Panel, Toolbar, Title, ToolbarSpacer, Icon, Toast, FilterBar, FilterItem, FilterGroupItem, Input, DateRangePicker } from '@ui5/webcomponents-react';
+import { Table, TableRow, TableCell, Label,FlexBox, Button,TableHeaderRow, TableHeaderCell,TableGrowing, Panel,  Title, Toast, FilterBar, FilterGroupItem, Input, DateRangePicker } from '@ui5/webcomponents-react';
 import { useEffect, useRef, useState } from 'react';
-import navigationRightArrow from "@ui5/webcomponents-icons/dist/navigation-right-arrow";
+// import { TableColumn } from '@ui5/webcomponents-react-compat';
+// import navigationRightArrow from "@ui5/webcomponents-icons/dist/navigation-right-arrow";
 import { useNavigate } from 'react-router-dom';
 import { LocalStorage } from "../Data/LocalStorage";
+import {getDataProvider } from "../Data/ContextHandler/constant";
 const _myLocalStorageUtility = LocalStorage();
-const baseURL = process.env.REACT_APP_SERVER_URI;
+//const baseURL = process.env.REACT_APP_SERVER_URI;
 
-
-
+const baseURL = getDataProvider();//"MyDataprovider";
 
 
 
 
 function AdminLogs() {
-    const [selectedRows, setSelectedRows] = useState([]);
+    // const [selectedRows, setSelectedRows] = useState([]);
     const [logs, setLogs] = useState([]);
     const [skip, setSkip] = useState(0);
     const [limit, setLimit] = useState(1000);
 
     const [maxRecord, setMaxRecord] = useState(10000);
+    const [filters ,setFilters]=useState({username :"",ip:"",path:"",createdAt:""});
     const [filterQuery, setFilterQuery] = useState("");
     //  var maxRecord = 100;
     const navigate = useNavigate();
     const toast = useRef(null);
     const showToast = (message) => {
         toast.current.innerHTML = message;
-        toast.current.show();
+        toast.current.open = true;
     };
+    const clearData =  (async ()=>{
+        const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+        const _token = loggedInUser?.token || "";
+        const url = `${baseURL}/logs/iplogs`;
+        try {
+            const response = await fetch(url, {
+              method: 'DELETE',
+              credentials: 'include',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${_token}`
+              }
+            });
+            showToast(response?.message || "Deleted Successfully");
+            fetchData("",true);
+          
+          } catch (error) {
+            console.log(error);
+          }
+    });
     const fetchData = async (filterString, goClicked) => {
         const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
         const _token = loggedInUser?.token || "";
@@ -107,17 +129,16 @@ function AdminLogs() {
 
                 //   console.log(e);
                 let filterString = "";
-                e.detail.filters.map((filter) => {
-                    let filterName = filter.name.replace("Filter", "");
-
-                    if (filter.value) {
-                        filterString += "&" + filterName + "=" + filter.value;
+                // let filterSet = ["ip", "path","created"];
+                 Object.keys(filters).map((filterName) => {
+                     if(filters[filterName]){
+                        filterString += "&" + filterName + "=" + filters[filterName];
                     }
-                });
-                console.log(filterString);
-                setFilterQuery(filterString);
-                setSkip(0)
-                setLimit(10);
+                 });
+                 console.log(filterString);
+             setFilterQuery(filterString);
+             //   setSkip(0)
+             //   setLimit(10);
                 fetchData(filterString, true);
 
                 //   filterQuery = filterString;
@@ -127,34 +148,50 @@ function AdminLogs() {
             onToggleFilters={function _a() { }}
 
         >
-            <FilterGroupItem label="IP address" >
-                <Input name="ipFilter" placeholder="IP address" />
+            
+            <FilterGroupItem label="Username" filterKey="ip" >
+                <Input name="ipFilter" placeholder="Username" onChange={function _a(oEvent){
+                    setFilters({...filters,"username":oEvent.currentTarget.value});
+                }}/>
+            </FilterGroupItem>
+            <FilterGroupItem label="IP address" filterKey="ip" >
+                <Input name="ipFilter" placeholder="IP address" onChange={function _a(oEvent){
+                    setFilters({...filters,"ip":oEvent.currentTarget.value});
+                }}/>
             </FilterGroupItem>
             <FilterGroupItem label="Path">
 
-                <Input name="pathFilter" placeholder="Path" />
+                <Input name="pathFilter" placeholder="Path" onChange={function _a(oEvent){
+                    setFilters({...filters,"path":oEvent.currentTarget.value});
+                }} />
             </FilterGroupItem>
             <FilterGroupItem label="Created On" >
                 {/* <Input name="createdAtFilter" placeholder="Created On" /> */}
-                <DateRangePicker name="createdAtFilter"
-                    onChange={function _a() { }}
+                
+                {/*Issue with Date Range and Date Range picker thus commented <DateRangePicker name="createdAtFilter"
+                    onChange={function _a(oEvent) {
+                        oEvent.preventDefault();
+                        setFilters({...filters,"createdAt":oEvent.currentTarget.value});
+
+                    }}
                     onInput={function _a() { }}
                     onValueStateChange={function _a() { }}
                     primaryCalendarType="Gregorian"
                     valueState="None"
-                />
+                /> */}
             </FilterGroupItem>
 
         </FilterBar>
 
         <Panel
             style={{ maxWidth: "100%" }}
-
-            header={<Toolbar><Title>Logs ({logs.length} / {maxRecord} )</Title><ToolbarSpacer />
-
-
-
-                <Toast ref={toast} duration={3000} style={{ color: "#ebeb84" }}></Toast></Toolbar>}
+            // header={<Toolbar><Title>Logs ({logs.length} / {maxRecord} )</Title><ToolbarSpacer />
+            //     <Toast ref={toast} duration={3000} style={{ color: "#ebeb84" }}></Toast></Toolbar>}
+            header={<FlexBox alignItems="Center" fitContainer style={{gap: '0.25rem'}}>
+            <Title level="H2">Logs  ({logs.length} / {maxRecord} )</Title><span style={{flexGrow: 1}} />
+            <Button design="Negative" icon="clear-all"  onClick={clearData}>Clear Logs</Button>
+            <Toast ref={toast} duration={3000} style={{ color: "#ebeb84" }}></Toast>
+            </FlexBox>}    
             headerText="Panel"
             onToggle={function _a() { }}
         >
@@ -164,23 +201,37 @@ function AdminLogs() {
                     mode="None"
                     stickyColumnHeader="true"
                     onLoadMore={onLoadMore}
-                    growing={TableGrowingMode.Scroll}
-                    //  growing={TableGrowingMode.Button}
+                    growing={TableGrowing.Scroll}
+                    //  growing={TableGrowing.Button}
                     growingButtonText='More'
                     no-data-text="No Data"
-                    columns={
-                        <>
-                            <TableColumn style={{ width: '2rem' }}><Label>IP Address</Label></TableColumn>
-                            <TableColumn style={{ width: '5rem' }} demandPopin minWidth={500} popinText="Path"><Label>Path</Label></TableColumn>
-                            <TableColumn style={{ width: '5rem' }} demandPopin minWidth={600} popinText="Created At"><Label>Created At</Label></TableColumn>
-                        </>
-                    }
+                    // columns={
+                    //     <>
+                    //         <TableColumn style={{ width: '2rem' }}><Label>IP Address</Label></TableColumn>
+                    //         <TableColumn style={{ width: '5rem' }} demandPopin minWidth={500} popinText="Path"><Label>Path</Label></TableColumn>
+                    //         <TableColumn style={{ width: '5rem' }} demandPopin minWidth={600} popinText=""><Label>Created At</Label></TableColumn>
+                    //     </>
+                    // }
+                    headerRow={
+                        <TableHeaderRow sticky>
+                            
+                            <TableHeaderCell>User</TableHeaderCell>
+                            <TableHeaderCell>IP Address</TableHeaderCell>
+                            <TableHeaderCell>Path</TableHeaderCell>
+                            <TableHeaderCell>Created At</TableHeaderCell>
+                            
+                        </TableHeaderRow>}
                     onPopinChange={function _a() { }}
                     onRowClick={function _a() { }}
                 >
                     {logs.length > 0 && logs.map((log) => {
                         return (
                             <TableRow key={log.id} id={log.id} >
+                                <TableCell>
+                                    <Label style={{ width: '2rem' }}>
+                                        {log.username}
+                                    </Label>
+                                </TableCell>
                                 <TableCell>
                                     <Label style={{ width: '2rem' }}>
                                         {log.ip}

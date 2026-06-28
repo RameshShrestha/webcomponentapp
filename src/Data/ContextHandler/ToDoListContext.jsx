@@ -1,11 +1,12 @@
-import React, { createContext, useContext, useEffect, useReducer, useState } from "react";
+import React, { createContext, useContext, useEffect, useReducer } from "react";
 
 import { LocalStorage } from "../LocalStorage";
+import {getDataProvider } from "./constant";
 const _myLocalStorageUtility = LocalStorage();
 const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
-const baseURL = process.env.REACT_APP_SERVER_URI;
-
-export let ToDoListContext = createContext({
+//const baseURL = process.env.REACT_APP_SERVER_URI;
+const baseURL = getDataProvider();// "MyDataprovider";
+export const ToDoListContext = createContext({
   contextData: {
     todoList: [],
     addToDo: async () => { },
@@ -31,7 +32,7 @@ const ToDoListReducer = (todoList, action) => {
     }
     case "UpdateToDo": {
         console.log("User found",action.payload);
-      let newToDoList = todoList.map((todo) => {
+      const newToDoList = todoList.map((todo) => {
         if (todo._id === action.payload._id) {
           return action.payload;//updated todo
         } else {
@@ -140,7 +141,8 @@ export default function ToDoListContextProvider({ children }) {
     })
   }
   const fetchIntialToDolist = async () => {
-    const baseURL = process.env.REACT_APP_SERVER_URI;
+   // const baseURL = process.env.REACT_APP_SERVER_URI;
+   // const baseURL = "MyDataprovider";
     try {
       const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
       const _token = loggedInUser?.token || "";
