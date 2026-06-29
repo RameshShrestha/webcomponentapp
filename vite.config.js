@@ -27,11 +27,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'ui5-core': [
-            '@ui5/webcomponents',
-            '@ui5/webcomponents-react',
-            '@ui5/webcomponents-fiori'
-          ],
+          'ui5-core': ['@ui5/webcomponents-react'],
           'vendor': ['react', 'react-dom', 'react-router-dom'],
           'socket': ['socket.io-client']
         }
@@ -45,9 +41,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
       '@components': path.resolve(__dirname, './src/components'),
       '@contexts': path.resolve(__dirname, './src/Data/ContextHandler'),
-      '@api': path.resolve(__dirname, './src/api'),
-      '@ui5/webcomponents': path.resolve(__dirname, 'node_modules/@ui5/webcomponents'),
-      '@ui5/webcomponents-fiori': path.resolve(__dirname, 'node_modules/@ui5/webcomponents-fiori'),
+      '@api': path.resolve(__dirname, './src/api')
     }
   },
   
