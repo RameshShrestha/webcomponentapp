@@ -15,25 +15,112 @@ const RegisterPage = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [errors, setErrors] = useState({
+    email: "",
+    username: "",
+    password: ""
+  });
   const navigate = useNavigate();
   // Access the register function from the authentication context
   const { contextData } = useAuth();
   const { register } = contextData;
 
-  // Handle data change for input fields
-  const handleDataChange =
-    (e, name) => {
-      // Update the corresponding field in the data state
-      setData({
-        ...data,
-        [name]: e.target.value,
-      });
-      setMessage("");
-    };
+  // Validation functions
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email) {
+      return "Email is required";
+    }
+    if (!emailRegex.test(email)) {
+      return "Please enter a valid email address";
+    }
+    return "";
+  };
+
+  const validateUsername = (username) => {
+    if (!username) {
+      return "Username is required";
+    }
+    if (username.length < 3) {
+      return "Username must be at least 3 characters long";
+    }
+    if (username.length > 20) {
+      return "Username must not exceed 20 characters";
+    }
+    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+      return "Username can only contain letters, numbers, and underscores";
+    }
+    return "";
+  };
+
+  const validatePassword = (password) => {
+    if (!password) {
+      return "Password is required";
+    }
+    if (password.length < 8) {
+      return "Password must be at least 8 characters long";
+    }
+    if (!/(?=.*[a-z])/.test(password)) {
+      return "Password must contain at least one lowercase letter";
+    }
+    if (!/(?=.*[A-Z])/.test(password)) {
+      return "Password must contain at least one uppercase letter";
+    }
+    if (!/(?=.*\d)/.test(password)) {
+      return "Password must contain at least one number";
+    }
+    if (!/(?=.*[@$!%*?&])/.test(password)) {
+      return "Password must contain at least one special character (@$!%*?&)";
+    }
+    return "";
+  };
+
+  // Handle data change for input fields with validation
+  const handleDataChange = (e, name) => {
+    const value = e.target.value;
+    // Update the corresponding field in the data state
+    setData({
+      ...data,
+      [name]: value,
+    });
+    
+    // Validate the field
+    let error = "";
+    if (name === "email") {
+      error = validateEmail(value);
+    } else if (name === "username") {
+      error = validateUsername(value);
+    } else if (name === "password") {
+      error = validatePassword(value);
+    }
+    
+    setErrors({
+      ...errors,
+      [name]: error
+    });
+    setMessage("");
+  };
 
   // Handle user registration
   const handleRegister = async () => await register(data);
   const registerClicked = async function (e) {
+    // Validate all fields before submission
+    const emailError = validateEmail(data.email);
+    const usernameError = validateUsername(data.username);
+    const passwordError = validatePassword(data.password);
+    
+    setErrors({
+      email: emailError,
+      username: usernameError,
+      password: passwordError
+    });
+    
+    // Check if there are any validation errors
+    if (emailError || usernameError || passwordError) {
+      setMessage("Please fix the validation errors before submitting");
+      return;
+    }
+    
     if (!Object.values(data).some((val) => !val)) {
       setIsLoading(true);
       const result = await handleRegister();
@@ -43,10 +130,15 @@ const RegisterPage = () => {
         setMessage(result?.message);
       }
       setData({
-      
         email: "",
         username: "",
         password: "",
+        role: "USER"
+      });
+      setErrors({
+        email: "",
+        username: "",
+        password: ""
       });
     }
   }
@@ -83,11 +175,14 @@ const RegisterPage = () => {
           value={data.email}
           onChange={(e) => { handleDataChange(e, "email") }}
         />
+        {errors.email && <small style={{ color: "red", marginTop: "-10px", marginBottom: "5px" }}>{errors.email}</small>}
+        
         <input className="loginInput"
           placeholder="Enter the username..."
           value={data.username}
           onChange={(e) => { handleDataChange(e, "username") }}
         />
+        {errors.username && <small style={{ color: "red", marginTop: "-10px", marginBottom: "5px" }}>{errors.username}</small>}
 
         <input className="loginInput"
           placeholder="Enter the password..."
@@ -95,6 +190,7 @@ const RegisterPage = () => {
           value={data.password}
           onChange={(e) => { handleDataChange(e, "password") }}
         />
+        {errors.password && <small style={{ color: "red", marginTop: "-10px", marginBottom: "5px" }}>{errors.password}</small>}
         {/* <select className="loginInput" name="cars" id="role" placeholder="Role" value={data.role}
         onChange={(e) => { handleDataChange(e, "role") }}>
           <option value="ADMIN">ADMIN</option>

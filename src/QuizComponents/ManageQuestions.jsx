@@ -8,11 +8,22 @@ function ManageQuestions() {
     const toast = useRef(null);
     const navigate = useNavigate();
     const [questionSet, setQuestionSet] = useState([]);
-    const [filteredQuestions, setFilteredQuestions] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [categoryFilter, setCategoryFilter] = useState('All');
     const [typeFilter, setTypeFilter] = useState('All');
     const [isLoading, setIsLoading] = useState(true);
+    
+    // Pagination state
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [pagination, setPagination] = useState({
+        currentPage: 1,
+        totalPages: 1,
+        totalCount: 0,
+        limit: 10,
+        hasNextPage: false,
+        hasPrevPage: false
+    });
 
     const showToast = (message) => {
         toast.current.innerHTML = message;
@@ -44,51 +55,46 @@ function ManageQuestions() {
 
     const fetchData = async () => {
         setIsLoading(true);
-        const response = await getDumpQuestions();
+        const params = {
+            page: currentPage,
+            limit: itemsPerPage,
+            category: categoryFilter !== 'All' ? categoryFilter : undefined,
+            questionType: typeFilter !== 'All' ? typeFilter : undefined,
+            search: searchTerm || undefined
+        };
+        
+        const response = await getDumpQuestions(null, params);
         if (response.dumpQuestions) {
             setQuestionSet(response.dumpQuestions);
-            setFilteredQuestions(response.dumpQuestions);
+            setPagination(response.pagination);
         }
         setIsLoading(false);
     };
 
     useEffect(() => {
         fetchData();
-    }, []);
-
-    // Filter questions based on search and filters
-    useEffect(() => {
-        let filtered = [...questionSet];
-
-        // Apply search filter
-        if (searchTerm) {
-            filtered = filtered.filter(q =>
-                q.questionText.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-        }
-
-        // Apply category filter
-        if (categoryFilter !== 'All') {
-            filtered = filtered.filter(q => q.category === categoryFilter);
-        }
-
-        // Apply type filter
-        if (typeFilter !== 'All') {
-            filtered = filtered.filter(q => q.questionType === typeFilter);
-        }
-
-        setFilteredQuestions(filtered);
-    }, [searchTerm, categoryFilter, typeFilter, questionSet]);
+    }, [currentPage, itemsPerPage, categoryFilter, typeFilter, searchTerm]);
 
     const getUniqueCategories = () => {
-        const categories = [...new Set(questionSet.map(q => q.category))];
-        return categories;
+        // This would ideally come from backend, but for now we'll use a static list
+        return ['SAP Fiori', 'Build', 'SAP CAPM', 'Python', 'Java', 'General'];
     };
 
     const clearFilters = () => {
         setSearchTerm('');
         setCategoryFilter('All');
         setTypeFilter('All');
+        setCurrentPage(1);
+    };
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const handleItemsPerPageChange = (newLimit) => {
+        setItemsPerPage(newLimit);
+        setCurrentPage(1);
     };
 
     if (isLoading) {
@@ -147,8 +153,8 @@ function ManageQuestions() {
                 <div className="stat-card">
                     <Icon name="filter" className="stat-icon" />
                     <div className="stat-info">
-                        <div className="stat-value">{filteredQuestions.length}</div>
-                        <div className="stat-label">Filtered Results</div>
+                        <div className="stat-value">{pagination.totalCount}</div>
+                        <div className="stat-label">Total Results</div>
                     </div>
                 </div>
                 <div className="stat-card">
@@ -221,41 +227,42 @@ function ManageQuestions() {
             </div>
 
             {/* Questions Table */}
-            {filteredQuestions.length === 0 ? (
+            {questionSet.length === 0 ? (
                 <MessageStrip design="Information" className="no-results">
-                    No questions found. {questionSet.length > 0 ? 'Try adjusting your filters.' : 'Add your first question to get started.'}
+                    No questions found. {pagination.totalCount > 0 ? 'Try adjusting your filters.' : 'Add your first question to get started.'}
                 </MessageStrip>
             ) : (
-                <div className="table-container">
-                    <Table
-                        className="questions-table"
-                        headerRow={
-                            <TableHeaderRow sticky>
-                                <TableHeaderCell width="60px">
-                                    <span className="header-text">#</span>
-                                </TableHeaderCell>
-                                <TableHeaderCell width="120px">
-                                    <span className="header-text">Category</span>
-                                </TableHeaderCell>
-                                <TableHeaderCell width="130px">
-                                    <span className="header-text">Type</span>
-                                </TableHeaderCell>
-                                <TableHeaderCell width="180px">
-                                    <span className="header-text">Created At</span>
-                                </TableHeaderCell>
-                                <TableHeaderCell minWidth="300px">
-                                    <span className="header-text">Question</span>
-                                </TableHeaderCell>
-                                <TableHeaderCell width="180px">
-                                    <span className="header-text">Actions</span>
-                                </TableHeaderCell>
-                            </TableHeaderRow>
-                        }
-                    >
-                        {filteredQuestions.map((question, index) => (
+                <>
+                    <div className="table-container">
+                        <Table
+                            className="questions-table"
+                            headerRow={
+                                <TableHeaderRow sticky>
+                                    <TableHeaderCell width="60px">
+                                        <span className="header-text">#</span>
+                                    </TableHeaderCell>
+                                    <TableHeaderCell width="120px">
+                                        <span className="header-text">Category</span>
+                                    </TableHeaderCell>
+                                    <TableHeaderCell width="130px">
+                                        <span className="header-text">Type</span>
+                                    </TableHeaderCell>
+                                    <TableHeaderCell width="180px">
+                                        <span className="header-text">Created At</span>
+                                    </TableHeaderCell>
+                                    <TableHeaderCell minWidth="300px">
+                                        <span className="header-text">Question</span>
+                                    </TableHeaderCell>
+                                    <TableHeaderCell width="180px">
+                                        <span className="header-text">Actions</span>
+                                    </TableHeaderCell>
+                                </TableHeaderRow>
+                            }
+                        >
+                            {questionSet.map((question, index) => (
                             <TableRow key={question._id} className="table-row">
                                 <TableCell>
-                                    <span className="row-number">{index + 1}</span>
+                                    <span className="row-number">{(currentPage - 1) * itemsPerPage + index + 1}</span>
                                 </TableCell>
                                 <TableCell>
                                     <span className="category-badge">{question.category}</span>
@@ -313,6 +320,84 @@ function ManageQuestions() {
                         ))}
                     </Table>
                 </div>
+
+                {/* Pagination Controls */}
+                <div className="pagination-container" style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '20px',
+                    backgroundColor: 'white',
+                    borderRadius: '8px',
+                    marginTop: '20px',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <span style={{ fontSize: '14px', color: '#666' }}>Items per page:</span>
+                        <Select
+                            value={itemsPerPage.toString()}
+                            onChange={(e) => handleItemsPerPageChange(parseInt(e.detail.selectedOption.textContent))}
+                            style={{ width: '80px' }}
+                        >
+                            <Option>5</Option>
+                            <Option>10</Option>
+                            <Option>20</Option>
+                            <Option>50</Option>
+                        </Select>
+                    </div>
+
+                    <div style={{ fontSize: '14px', color: '#666' }}>
+                        Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, pagination.totalCount)} of {pagination.totalCount} questions
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                        <Button
+                            icon="navigation-left-arrow"
+                            design="Transparent"
+                            disabled={!pagination.hasPrevPage}
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            tooltip="Previous Page"
+                        />
+                        
+                        <div style={{ display: 'flex', gap: '5px' }}>
+                            {[...Array(pagination.totalPages)].map((_, idx) => {
+                                const pageNum = idx + 1;
+                                // Show first page, last page, current page, and pages around current
+                                if (
+                                    pageNum === 1 ||
+                                    pageNum === pagination.totalPages ||
+                                    (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+                                ) {
+                                    return (
+                                        <Button
+                                            key={pageNum}
+                                            design={pageNum === currentPage ? "Emphasized" : "Transparent"}
+                                            onClick={() => handlePageChange(pageNum)}
+                                            style={{ minWidth: '40px' }}
+                                        >
+                                            {pageNum}
+                                        </Button>
+                                    );
+                                } else if (
+                                    pageNum === currentPage - 2 ||
+                                    pageNum === currentPage + 2
+                                ) {
+                                    return <span key={pageNum} style={{ padding: '0 5px' }}>...</span>;
+                                }
+                                return null;
+                            })}
+                        </div>
+
+                        <Button
+                            icon="navigation-right-arrow"
+                            design="Transparent"
+                            disabled={!pagination.hasNextPage}
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            tooltip="Next Page"
+                        />
+                    </div>
+                </div>
+                </>
             )}
 
             <Toast ref={toast} duration={3000}>Toast</Toast>

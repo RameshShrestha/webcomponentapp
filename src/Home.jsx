@@ -372,7 +372,7 @@ export default function Home() {
             </List>
           </Card>
         }
-        {settingConfig?.showProductCard &&
+        {/* {settingConfig?.showProductCard &&
           <Card
             header={
               <CardHeader
@@ -392,7 +392,7 @@ export default function Home() {
               visibleRows={6}
               rowHeight={60}
             />
-          </Card>}
+          </Card>} */}
      
         {role === "ADMIN" &&
           <Card
@@ -437,12 +437,10 @@ export default function Home() {
                   columns={[{
                     Header: "Name",
                     accessor: "fullName", // String-based value accessors!
-                    width: "160"
                   },
                   {
                     Header: "Status",
                     accessor: "status",
-                    width: "100",
                     Cell: (instance) => {
                       const { cell, row, data, webComponentsReactProperties } = instance;
                       const statusText = instance.data[row.index]?.status;
@@ -456,12 +454,10 @@ export default function Home() {
                   {
                     Header: "LoginTime",
                     accessor: "loginTime",
-                    width: "150"
                   },
                   {
                     Header: "Image",
                     accessor: "image",
-                    width: "100",
                     Cell: (instance) => {
                       //   console.log(instance);
                       const { cell, row, data, webComponentsReactProperties } = instance;
@@ -515,6 +511,8 @@ export default function Home() {
     }
     else if (selectedItem === "Take Quiz") {
       navigate("/quiz");
+    }else if(selectedItem === "Chat With AI"){
+      navigate("/chatwithai");
     }
 
   }}>
@@ -524,6 +522,7 @@ export default function Home() {
     <ListItemStandard text="Countries" />
     <ListItemStandard text="Manage My Questions" />
      <ListItemStandard text="Take Quiz" />
+      <ListItemStandard text="Chat With AI" />
   </List>
 </Card>
       </FlexBox>

@@ -44,7 +44,7 @@ import AddQuestions from "./QuizComponents/AddQuestions";
 import EditViewQuestion from "./QuizComponents/EditViewQuestion";
 import ManageQuestions from "./QuizComponents/ManageQuestions";
 import BulkUploadQuestions from "./QuizComponents/BulkUploadQuestions";
-
+import ChatAIMainScreen from "./ChatWithAIComponent/ChatAIMainScreen";
 import Quiz from "./QuizComponents/Quiz";
 export default function MyApp() {
   const { contextData } = useAuth();
@@ -125,7 +125,7 @@ export default function MyApp() {
           <Route exact path="/managequestion" element={<ManageQuestions />} />
           <Route exact path="/quiz" element={<Quiz />} />
           <Route exact path="/bulkupload" element={<BulkUploadQuestions />} /> 
-
+          <Route exact path="/chatwithai" element={<ChatAIMainScreen />} /> 
           
 
           <Route path="/" element={<Navigate replace to="/home" />} /> 

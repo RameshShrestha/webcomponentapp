@@ -2,10 +2,23 @@
 import {getDataProvider } from "../Data/ContextHandler/constant";
 const baseURL = getDataProvider();//"MyDataprovider";
 
-const getDumpQuestions = async (questionID) => {
+const getDumpQuestions = async (questionID, params = {}) => {
   let url = baseURL + "/dumpquestion";
   if(questionID){
     url = url + "/"+ questionID;
+  } else {
+    // Add query parameters for pagination and filtering
+    const queryParams = new URLSearchParams();
+    if (params.page) queryParams.append('page', params.page);
+    if (params.limit) queryParams.append('limit', params.limit);
+    if (params.category) queryParams.append('category', params.category);
+    if (params.questionType) queryParams.append('questionType', params.questionType);
+    if (params.search) queryParams.append('search', params.search);
+    
+    const queryString = queryParams.toString();
+    if (queryString) {
+      url = url + "?" + queryString;
+    }
   }
   try {
     const response = await fetch(url, { method: 'GET' });
