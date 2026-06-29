@@ -47,6 +47,7 @@ export default defineConfig({
       '@contexts': path.resolve(__dirname, './src/Data/ContextHandler'),
       '@api': path.resolve(__dirname, './src/api'),
       '@ui5/webcomponents': path.resolve(__dirname, 'node_modules/@ui5/webcomponents'),
+      '@ui5/webcomponents-fiori': path.resolve(__dirname, 'node_modules/@ui5/webcomponents-fiori'),
     }
   },
   
