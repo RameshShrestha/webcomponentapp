@@ -45,7 +45,8 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
       '@components': path.resolve(__dirname, './src/components'),
       '@contexts': path.resolve(__dirname, './src/Data/ContextHandler'),
-      '@api': path.resolve(__dirname, './src/api')
+      '@api': path.resolve(__dirname, './src/api'),
+      '@ui5/webcomponents': path.resolve(__dirname, 'node_modules/@ui5/webcomponents'),
     }
   },
   
