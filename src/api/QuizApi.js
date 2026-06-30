@@ -91,4 +91,41 @@ const updateDumpQuestion = async (payload) => {
 
 
 
-export { getDumpQuestions, addDumpQuestion ,removeDumpQuestion,updateDumpQuestion};
+const getCategories = async () => {
+  const url = baseURL + "/dumpquestion/category";
+  try {
+    const response = await fetch(url, { method: 'GET' });
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error(error.message);
+    return { categories: [], count: 0 };
+  }
+}
+
+const getTakeQuiz = async (user, category) => {
+  const url = baseURL + "/dumpquestion/takequiz";
+  const queryParams = new URLSearchParams();
+  if (user) queryParams.append('user', user);
+  if (category) queryParams.append('category', category);
+  
+  const queryString = queryParams.toString();
+  const finalUrl = queryString ? `${url}?${queryString}` : url;
+  
+  try {
+    const response = await fetch(finalUrl, { method: 'GET' });
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error(error.message);
+    return error;
+  }
+}
+
+export { getDumpQuestions, addDumpQuestion ,removeDumpQuestion,updateDumpQuestion, getTakeQuiz, getCategories};

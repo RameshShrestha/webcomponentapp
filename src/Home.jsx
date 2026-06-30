@@ -394,7 +394,7 @@ export default function Home() {
             />
           </Card>} */}
      
-        {role === "ADMIN" &&
+     
           <Card
             header={
               <CardHeader
@@ -479,7 +479,7 @@ export default function Home() {
                 />)}
             </div>
           </Card>
-        }
+        
        <Card
   header={<CardHeader  avatar={<Icon name="chain-link" />}  titleText="Quick Links"/>}
   style={{

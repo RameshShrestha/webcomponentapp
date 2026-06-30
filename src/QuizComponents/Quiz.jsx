@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { getDumpQuestions } from "../api/QuizApi";
-import { Button, MessageStrip } from '@ui5/webcomponents-react';
+import { getDumpQuestions, getTakeQuiz, getCategories } from "../api/QuizApi";
+import { Button, MessageStrip, Input, Select, Option } from '@ui5/webcomponents-react';
+import { useAuth } from "../Data/ContextHandler/AuthContext";
 import './Quiz.css';
 
 function Quiz() {
@@ -12,27 +13,52 @@ function Quiz() {
   const [timeRemaining, setTimeRemaining] = useState(null);
   const [quizStartTime, setQuizStartTime] = useState(null);
   const [quizEndTime, setQuizEndTime] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showCategorySelection, setShowCategorySelection] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [categories, setCategories] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
+  
+  const { contextData } = useAuth();
+  const { user } = contextData;
 
   // Quiz settings
   const QUIZ_TIME_LIMIT = 30 * 60; // 30 minutes in seconds
   const ENABLE_TIMER = false; // Set to true to enable timer
 
+  // Fetch categories on component mount
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      const response = await getDumpQuestions();
-      if (response.dumpQuestions) {
-        setQuestionSet(response.dumpQuestions);
-        setQuizStartTime(new Date());
-        if (ENABLE_TIMER) {
-          setTimeRemaining(QUIZ_TIME_LIMIT);
-        }
+    const fetchCategories = async () => {
+      setLoadingCategories(true);
+      const response = await getCategories();
+      if (response.categories && response.categories.length > 0) {
+        setCategories(response.categories);
       }
-      setIsLoading(false);
+      setLoadingCategories(false);
     };
-    fetchData();
+    fetchCategories();
   }, []);
+
+  const startQuiz = async () => {
+    if (!selectedCategory) {
+      alert('Please select a category');
+      return;
+    }
+    
+    setIsLoading(true);
+    const response = await getTakeQuiz(user || 'anonymous', selectedCategory);
+    if (response.questions && response.questions.length > 0) {
+      setQuestionSet(response.questions);
+      setQuizStartTime(new Date());
+      setShowCategorySelection(false);
+      if (ENABLE_TIMER) {
+        setTimeRemaining(QUIZ_TIME_LIMIT);
+      }
+    } else {
+      alert('No questions available for this category');
+    }
+    setIsLoading(false);
+  };
 
   // Timer effect
   useEffect(() => {
@@ -154,17 +180,9 @@ function Quiz() {
     setCurrentQuestion(0);
     setShowScore(false);
     setScore(0);
-    setQuizStartTime(new Date());
-    if (ENABLE_TIMER) {
-      setTimeRemaining(QUIZ_TIME_LIMIT);
-    }
-    // Reset all selections
-    const resetQuestions = questionSet.map(q => ({
-      ...q,
-      selectedAnswer: "",
-      answerOptions: q.answerOptions.map(opt => ({ ...opt, selected: false }))
-    }));
-    setQuestionSet(resetQuestions);
+    setShowCategorySelection(true);
+    setSelectedCategory('');
+    setQuestionSet([]);
   };
 
   const navigateToQuestion = (index) => {
@@ -188,6 +206,61 @@ function Quiz() {
     return `${mins}m ${secs}s`;
   };
 
+  if (showCategorySelection) {
+    return (
+      <div className="quiz-container">
+        <div className="score-section">
+          <div className="score-icon">📚</div>
+          <h1 className="score-title">Select Quiz Category</h1>
+          <p style={{ marginBottom: '2rem', color: '#666' }}>
+            Choose a category to start your quiz. You'll get 20 random questions.
+          </p>
+          
+          <div style={{ width: '100%', maxWidth: '400px', margin: '0 auto' }}>
+            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 'bold' }}>
+              Category:
+            </label>
+            {loadingCategories ? (
+              <div style={{ textAlign: 'center', padding: '1rem' }}>
+                <div className="loading-spinner" style={{ width: '30px', height: '30px', margin: '0 auto' }}></div>
+                <p style={{ marginTop: '0.5rem', color: '#666' }}>Loading categories...</p>
+              </div>
+            ) : categories.length === 0 ? (
+              <MessageStrip design="Warning" style={{ marginBottom: '1.5rem' }}>
+                No categories available. Please add questions first.
+              </MessageStrip>
+            ) : (
+              <Select
+                style={{ width: '100%', marginBottom: '1.5rem' }}
+                onChange={(e) => setSelectedCategory(e.detail.selectedOption.textContent)}
+              >
+                <Option>Select a category</Option>
+                {categories.map((cat) => (
+                  <Option key={cat} value={cat}>{cat}</Option>
+                ))}
+              </Select>
+            )}
+            
+            {user && (
+              <p style={{ marginBottom: '1rem', fontSize: '0.9rem', color: '#666' }}>
+                Taking quiz as: <strong>{user}</strong>
+              </p>
+            )}
+            
+            <button
+              className="nav-button primary"
+              onClick={startQuiz}
+              disabled={!selectedCategory || isLoading}
+              style={{ width: '100%' }}
+            >
+              {isLoading ? '⏳ Loading...' : '🚀 Start Quiz'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   if (isLoading) {
     return (
       <div className="quiz-container">
@@ -203,8 +276,15 @@ function Quiz() {
     return (
       <div className="quiz-container">
         <MessageStrip design="Warning">
-          No questions available. Please add questions first.
+          No questions available for this category. Please try another category.
         </MessageStrip>
+        <button
+          className="nav-button primary"
+          onClick={() => setShowCategorySelection(true)}
+          style={{ marginTop: '1rem' }}
+        >
+          ← Back to Category Selection
+        </button>
       </div>
     );
   }

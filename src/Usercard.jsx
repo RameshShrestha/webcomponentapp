@@ -1,7 +1,8 @@
 import { Button, Label,Text } from "@ui5/webcomponents-react";
 import { Link, useNavigate } from "react-router-dom";
-function Usercard ({user,deleteUser}){
+function Usercard ({user,deleteUser,role}){
     const navigate = useNavigate();
+    console.log("UserRole",role)
     //console.log(user);
     if(!user){
         return <>No Data</>
@@ -17,7 +18,7 @@ function Usercard ({user,deleteUser}){
            
             }>
                 {user.firstName}  {user.lastName } 
-              {deleteUser && <Button icon="decline" tooltip="Delete User" style={{float:"right"}} onClick={(e)=>{
+              {deleteUser && role === "ADMIN" && user.username !== "ramesh" && <Button icon="decline" tooltip="Delete User" style={{float:"right"}} onClick={(e)=>{
                     e.preventDefault();
                     console.log("Button Pressed", user._id);
                     deleteUser(user._id);

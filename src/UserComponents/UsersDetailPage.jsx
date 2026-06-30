@@ -289,18 +289,18 @@ function UsersDetailPage({ navigation, route }) {
                         <FormItem label="" labelContent={<Label>Blood Group</Label>}>
                             <StandardField editMode={editMode} value={userData.bloodGroup} onChange={handleInput} name="bloodGroup" maxLength={3} />
                         </FormItem>
-                        <FormItem label="" labelContent={<Label>Height</Label>}>
+                        {/* <FormItem label="" labelContent={<Label>Height</Label>}>
                             <StandardField editMode={editMode} value={userData.height} onChange={handleInput} name="height" type="Number" />
                         </FormItem>
                         <FormItem label="" labelContent={<Label>Weight</Label>}>
                             <StandardField editMode={editMode} value={userData.weight} onChange={handleInput} name="weight" type="Number" />
-                        </FormItem>
-                        <FormItem label="" labelContent={<Label>Eye Color</Label>}>
+                        </FormItem> */}
+                        {/* <FormItem label="" labelContent={<Label>Eye Color</Label>}>
                             <StandardField editMode={editMode} value={userData.eyeColor} onChange={handleInput} name="eyeColor" maxLength={15} />
-                        </FormItem>
-                        <FormItem label="University">
+                        </FormItem> */}
+                        {/* <FormItem label="University">
                             <StandardField editMode={editMode} value={userData.university} onChange={handleInput} name="university" maxLength={30} />
-                        </FormItem>
+                        </FormItem> */}
 
                     </Form>
                 </ObjectPageSection>

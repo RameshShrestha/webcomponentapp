@@ -8,6 +8,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { render, createPortal } from 'react-dom';
 import { LocalStorage } from "./Data/LocalStorage";
 import {getDataProvider } from "./Data/ContextHandler/constant";
+import { useAuth } from "./Data/ContextHandler/AuthContext";
 const _myLocalStorageUtility = LocalStorage();
 //const baseURL = process.env.REACT_APP_SERVER_URI;
 const baseURL = getDataProvider();// "MyDataprovider";
@@ -19,7 +20,8 @@ function UserContainer() {
   const [userTotal, setUserTotal] = useState(50);
   const [allDataLoaded, setAllDataLoaded] = useState(true);
   const [filters, setFilters] = useState({"firstName":"",lastName:"",UserId:"",Age:""});
- 
+   const { contextData } = useAuth();
+   const { role,userDetail} = contextData;
   let filterQuery = "";
  // console.log(usersData);
   const controller = new AbortController();
@@ -65,6 +67,7 @@ function UserContainer() {
           setAllDataLoaded(false);
         } else {
           setAllDataLoaded(true);
+          console.log("All dataloaded true");
         }
       })
 
@@ -117,7 +120,7 @@ setFilters(newFilter);
            // console.log("All data not loaded");
           } else {
             setAllDataLoaded(true);
-           // console.log("All data  loaded");
+           console.log("All data  loaded");
           }
           setFetching(false);
           addInitialUsers([...usersData.users, ...data.users]);
@@ -128,6 +131,12 @@ setFilters(newFilter);
     const signal = controller.signal;
     const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
     const _token = loggedInUser?.token || "";
+
+    if(userId === loggedInUser?.user){
+      showToast("You can't delete yourself");
+      return;
+
+    }
     const url = `${baseURL}/realusers/${userId}`;
     const response = await fetch(url, {
       method: 'DELETE',
@@ -267,10 +276,10 @@ setFilters(newFilter);
       }
 
     </div> */}
-    <div id="scrollableDiv" style={{ overflow: "auto" ,height:"58vh"}}>
+    <div id="scrollableDiv" style={{ height: "calc(100vh - 400px)", overflow: "auto" }}>
 
 
-      <InfiniteScroll style={{ display: "flex", flexWrap: "wrap", background: 'var(--sapShellColor)' }}
+      <InfiniteScroll style={{ display: "flex", flexWrap: "wrap", gap:"20px", background: 'var(--sapShellColor)' }}
         dataLength={userTotal} //This is important field to render the next data
         next={loadMoreData}
         hasMore={!allDataLoaded}
@@ -284,7 +293,7 @@ setFilters(newFilter);
         scrollableTarget="scrollableDiv"
 
       >
-        {usersData?.users.map((user) => { return <Usercard key={user._id} user={user} deleteUser={deleteUser} />; })
+        {usersData?.users.map((user) => { return <Usercard key={user._id} user={user} deleteUser={deleteUser} role={role}/>; })
         }
       </InfiniteScroll>
     </div>

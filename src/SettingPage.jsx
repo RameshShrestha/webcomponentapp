@@ -136,11 +136,11 @@ function SettingPage() {
                                 inputType="Select" selectOptions={["En", "De"]}
                                 onChange={onChangeValue} name="defaultLanguage" />
                         </FormItem>
-                        <FormItem labelContent={<Label>Theme</Label>}>
+                        {/* <FormItem labelContent={<Label>Theme</Label>}>
                             <StandardField editMode={editMode} value={settingData.theme}
                                 inputType="Select" selectOptions={["" ,"sap_horizon","sap_horizon_dark", "sap_fiori_3", "sap_fiori_3_dark", "sap_belize"]}
                                 onChange={onChangeValue} name="theme" />
-                        </FormItem>
+                        </FormItem> */}
                         <FormItem labelContent={<Label>Show Notifications</Label>}>
                        
                             <CheckBox
@@ -160,14 +160,14 @@ function SettingPage() {
                             />
                         </FormItem>
                        
-                        <FormItem labelContent={<Label>Show Product Card</Label>}>
+                        {/* <FormItem labelContent={<Label>Show Product Card</Label>}>
                             <CheckBox
                                 disabled={!editMode}
                                 onChange={onChangeValue}
                                 name="showProductCard"
                                 checked={settingData.showProductCard}
                             />
-                        </FormItem>
+                        </FormItem> */}
                       
                         <FormItem labelContent={<Label>Show MyActivity Card</Label>}>
                             <CheckBox
@@ -178,14 +178,14 @@ function SettingPage() {
                             />
                         </FormItem>
                      
-                        <FormItem labelContent={<Label>Show Stock Price Card</Label>}>
+                        {/* <FormItem labelContent={<Label>Show Stock Price Card</Label>}>
                             <CheckBox
                                 disabled={!editMode}
                                 onChange={onChangeValue}
                                 name="showStockPriceCard"
                                 checked={settingData.showStockPriceCard}
                             />
-                        </FormItem>
+                        </FormItem> */}
                     </FormGroup>
                 </Form>
             </div>
