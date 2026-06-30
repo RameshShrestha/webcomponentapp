@@ -1,6 +1,9 @@
 //https://myapp2025.cfapps.us10-001.hana.ondemand.com/dumpquestion
 import {getDataProvider } from "../Data/ContextHandler/constant";
+import { LocalStorage } from "../Data/LocalStorage";
+
 const baseURL = getDataProvider();//"MyDataprovider";
+const _myLocalStorageUtility = LocalStorage();
 
 const getDumpQuestions = async (questionID, params = {}) => {
   let url = baseURL + "/dumpquestion";
@@ -20,8 +23,17 @@ const getDumpQuestions = async (questionID, params = {}) => {
       url = url + "?" + queryString;
     }
   }
+  const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+  const _token = loggedInUser?.token || "";
   try {
-    const response = await fetch(url, { method: 'GET' });
+    const response = await fetch(url, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${_token}`
+      }
+    });
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
@@ -36,11 +48,15 @@ const getDumpQuestions = async (questionID, params = {}) => {
 const addDumpQuestion = async (payload) => {
   const url = baseURL + "/dumpquestion/addquestions";
   payload.questionId = new Date().getTime().toString();
+  const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+  const _token = loggedInUser?.token || "";
   try {
     const response = await fetch(url, {
       method: 'POST',
+      credentials: 'include',
       headers: {
-        "Content-Type": 'application/json'
+        "Content-Type": 'application/json',
+        'Authorization': `Bearer ${_token}`
       },
       body: JSON.stringify(payload),
     });
@@ -56,8 +72,17 @@ const addDumpQuestion = async (payload) => {
 }
 const removeDumpQuestion = async (id) => {
   const url = baseURL + "/dumpquestion/removeItem/"+id ;
+  const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+  const _token = loggedInUser?.token || "";
   try {
-    const response = await fetch(url, { method: 'DELETE' });
+    const response = await fetch(url, {
+      method: 'DELETE',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${_token}`
+      }
+    });
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
@@ -70,11 +95,15 @@ const removeDumpQuestion = async (id) => {
 }
 const updateDumpQuestion = async (payload) => {
   const url = baseURL + "/dumpquestion/updateItem/"+ payload._id;
+  const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+  const _token = loggedInUser?.token || "";
   try {
     const response = await fetch(url, {
       method: 'PUT',
+      credentials: 'include',
       headers: {
-        "Content-Type": 'application/json'
+        "Content-Type": 'application/json',
+        'Authorization': `Bearer ${_token}`
       },
       body: JSON.stringify(payload),
     });
@@ -93,8 +122,17 @@ const updateDumpQuestion = async (payload) => {
 
 const getCategories = async () => {
   const url = baseURL + "/dumpquestion/category";
+  const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+  const _token = loggedInUser?.token || "";
   try {
-    const response = await fetch(url, { method: 'GET' });
+    const response = await fetch(url, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${_token}`
+      }
+    });
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
@@ -115,8 +153,18 @@ const getTakeQuiz = async (user, category) => {
   const queryString = queryParams.toString();
   const finalUrl = queryString ? `${url}?${queryString}` : url;
   
+  const loggedInUser = _myLocalStorageUtility.getLoggedInUserData();
+  const _token = loggedInUser?.token || "";
+  
   try {
-    const response = await fetch(finalUrl, { method: 'GET' });
+    const response = await fetch(finalUrl, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${_token}`
+      }
+    });
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
